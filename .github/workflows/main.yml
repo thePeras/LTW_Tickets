@@ -1,8 +1,5 @@
 name: Lint and check formatting
-on:
-  pull_request:
-    types:
-      - ready_for_review
+on: pull_request
 
 jobs:
   linter:
