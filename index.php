@@ -1,5 +1,5 @@
 <?php
-    include 'components/navbar/navbar.php';
+    require 'components/navbar/navbar.php';
 ?>
 
 <!DOCTYPE html>

@@ -1,5 +1,8 @@
 <?php
-function navbar() {
+
+
+function navbar()
+{
     return <<<HTML
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
 
@@ -51,4 +54,5 @@ function navbar() {
             </div>
         </nav>
     HTML;
+
 }
