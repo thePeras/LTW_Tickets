@@ -10,6 +10,7 @@
     <title>Tickets</title>
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/remixicon.css">
 </head>
 <body>
 

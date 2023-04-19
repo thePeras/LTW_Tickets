@@ -29,6 +29,11 @@ nav.sidebar ul li a{
     transition: all 0.1s ease-out;
 }
 
+nav.sidebar ul li a i{
+    font-size: 1.2rem;
+    margin-right: 0.2rem;
+}
+
 nav.sidebar ul li a:hover{
     background-color: #cacfda3c;
 }
@@ -62,11 +67,13 @@ nav.sidebar div.user div p{
     font-weight: 400;
     color: var(--black-secondary);
 }
-nav.sidebar div.user img.logout{
-    width: 20px;
-    height: 20px;
+
+nav.sidebar div.user .logout{
     cursor: pointer;
     margin-left: 0.5rem;
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: black;
 }
 
 @media screen and (max-width: 1000px){
