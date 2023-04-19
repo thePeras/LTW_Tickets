@@ -1,87 +1,89 @@
 nav.sidebar {
-    padding: 2rem;
-    border-right: 2px solid #e6e6ee;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+  padding: 2rem;
+  border-right: 2px solid #e6e6ee;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
-nav div.logo {
-    margin-bottom: 3rem;
+nav.sidebar div.logo {
+  margin-bottom: 3rem;
 }
 
 nav.sidebar ul {
-    list-style-type: none;
-    width: 100%;
+  list-style-type: none;
+  width: 100%;
 }
 
 nav.sidebar ul li {
-    width: 100%;
+  width: 100%;
 }
 
 nav.sidebar ul li a {
-    display: block;
-    padding: 0.8rem;
-    margin: 0.5rem 0;
-    text-decoration: none;
-    color: var(--black-color);
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.1s ease-out;
+  display: block;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  text-decoration: none;
+  color: var(--black-color);
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.1s ease-out;
 }
 
 nav.sidebar ul li a i {
-    font-size: 1.2rem;
-    margin-right: 0.2rem;
+  font-size: 1.2rem;
+  margin-right: 0.2rem;
 }
 
 nav.sidebar ul li a:hover {
-    background-color: #cacfda3c;
+  background-color: rgba(202, 207, 218, 0.2352941176);
 }
 
 nav.sidebar ul li.active a {
-    background-color: var(--primary-color);
-    color: #fff;
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 nav.sidebar div.user {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 nav.sidebar div.user img.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 nav.sidebar div.user div {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 nav.sidebar div.user div h3 {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--black-color);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--black-color);
 }
 
 nav.sidebar div.user div p {
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: var(--black-secondary);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--black-secondary);
 }
 
 nav.sidebar div.user .logout {
-    cursor: pointer;
-    margin-left: 0.5rem;
-    text-decoration: none;
-    font-size: 1.5rem;
-    color: black;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: black;
 }
 
 @media screen and (max-width: 1000px) {
-    nav.sidebar {
-        display: none;
-    }
+  nav.sidebar {
+    display: none;
+  }
 }
+
+/*# sourceMappingURL=navbar.css.map */
