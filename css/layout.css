@@ -8,10 +8,17 @@
 body {
     background: linear-gradient(0, #f9faff, #f0f1f9);
     font-family: 'Anuphan', 'Open Sans', sans-serif;
-    display: inline-flex;
+    display: grid;
     min-height: 100vh;
+    grid-template-columns: auto 1fr;
 }
 
 main {
     padding: 2rem;
+}
+
+@media screen and (max-width: 950px) {
+    body {
+        grid-template-columns: auto;
+    }
 }

@@ -80,7 +80,7 @@ nav.sidebar div.user .logout {
   color: black;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 950px) {
   nav.sidebar {
     display: none;
   }

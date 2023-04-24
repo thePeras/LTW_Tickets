@@ -13,7 +13,7 @@
     color: #363c4c;
     display: block;
     padding: 0.8rem;
-    margin: 0.5rem 1rem 0 0;
+    margin: 0rem 1rem 0.5rem 0;
     text-decoration: none;
     color: #363c4c;
     border-radius: 8px;
@@ -50,6 +50,6 @@
 }
 
 #filters li.active {
-    background-color: #5449f0;
-    color: #fff;
+    border-radius: 0;
+    border-bottom: #5449f0 2px solid;
 }
