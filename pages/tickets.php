@@ -1,5 +1,6 @@
 <?php
     require 'components/navbar/navbar.php';
+    require 'components/ticket-card/ticket-card.php';
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +20,7 @@
     echo navbar();
 ?>
 <main>
-<h1>Tickets</h1>
+    <h1>Tickets</h1>
     <ul id = "buttons">
         <li><button type = "button"> Sort by</button></li>
         <li><button type = "button" class = "active"> New ticket</button></li>
@@ -30,6 +31,7 @@
         <li>All tickets</li>
         <li>Archived</li>
     </ul>
+    <?php echo ticketCard(); ?>
 </main>
     
 </body>

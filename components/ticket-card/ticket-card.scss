@@ -1,0 +1,49 @@
+.ticket-card {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
+    margin: 1rem 0;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr auto;
+
+    h4 {
+        font-size: small;
+    }
+
+    p {
+        margin: 0.2rem 0 1rem 0;
+    }
+
+    footer {
+        grid-column: 1 / -1;
+    }
+
+    .tag {
+        padding: 0.3rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+        border: 1px solid #e8e8e9;
+        color: #535353;
+    }
+
+    .tag.urgent {
+        background-color: #ffd8e4;
+        color: #ec1557;
+        border: none;
+    }
+
+    .tag.medium {
+        background-color: #e4f5ff;
+        color: #3b7ee0;
+        border: none;
+    }
+
+    .tag.low {
+        background-color: #e3fce7;
+        color: #229542;
+        border: none;
+    }
+}
