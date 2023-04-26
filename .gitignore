@@ -1,3 +1,4 @@
 vendor/
+database/tickets.db
 .vscode/
 *.css.map
