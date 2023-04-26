@@ -1,5 +1,6 @@
 <?php
     require 'components/navbar/navbar.php';
+    require 'database/database.php';
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +16,8 @@
 <body>
 
 <?php
-    echo navbar();
+    $db = get_database();
+    echo navbar($db);
 ?>
 <main>
     <h1>Tickets</h1>
