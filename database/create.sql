@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS Agents;
 DROP TABLE IF EXISTS Departments;
 DROP TABLE IF EXISTS Comments;
 DROP TABLE IF EXISTS Tickets;
+DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS Clients;
 
 
@@ -19,6 +20,13 @@ CREATE TABLE Clients(
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     displayName TEXT NOT NULL
+);
+
+CREATE TABLE Sessions(
+    user TEXT PRIMARY KEY,
+    token TEXT UNIQUE NOT NULL,
+    lastUsedDate NUMBER NOT NULL,
+    FOREIGN KEY(user) REFERENCES Clients(username)
 );
 
 CREATE TABLE Agents(
