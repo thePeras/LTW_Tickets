@@ -5,8 +5,8 @@ function ticketCard()
 {
     return <<<HTML
         <link rel="stylesheet" type="text/css" href="components/ticket-card/ticket-card.css">
-    
-        <div class="ticket-card">
+        
+        <div class="ticket-card" data-id="1">
             <h3>Cannot access the system</h3>
             <h5>3h ago</h5>
             <p>Life seasons open have. Air have of. Lights fill after let third darkness replenish fruitful let. Wherein set image. Creepeth said above gathered bring</p>
@@ -21,6 +21,15 @@ function ticketCard()
                 </comments>
             </footer>
         </div>
+
+        <script>
+            document.querySelectorAll(".ticket-card").forEach((ticketCard) => {
+                ticketCard.addEventListener("click", (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    window.location.href = '/ticket?id=' + id;
+                });
+            });
+        </script>
     HTML;
 
 }
