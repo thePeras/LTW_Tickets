@@ -1,4 +1,5 @@
 <?php
+
 $pagesDir = __DIR__.'/pages';
 $exp      = "/\/([[:alpha:]]*)/";
 $matches  = [];
