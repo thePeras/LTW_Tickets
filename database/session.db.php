@@ -26,6 +26,10 @@ class Session
 
 function create_new_session(Session $session, PDO $db) : bool
 {
+    $deleteSql  = "DELETE FROM Sessions WHERE user = :username";
+    $deleteStmt = $db->prepare($deleteSql);
+    $deleteStmt->bindParam(':username', $session->username, PDO::PARAM_STR);
+    $deleteStmt->execute();
     $sql = "INSERT INTO Sessions VALUES (:username, :token, :last_used)";
 
     $epoch = $session->lastUsed->getTimestamp();
@@ -61,6 +65,8 @@ function remove_session(string $token, PDO $db) : bool
     $sql  = "DELETE FROM Sessions WHERE token = :token";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+
+    setcookie('session', '', (time() - 3600), '/');
 
     return $stmt->execute();
 

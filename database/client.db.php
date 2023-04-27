@@ -50,7 +50,7 @@ function user_already_exists(string $username, PDO $db) : bool
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
 
-    return $stmt->rowCount() > 0;
+    return $stmt->fetch() !== false;
 
 }
 
