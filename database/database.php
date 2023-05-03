@@ -5,7 +5,6 @@ declare(strict_types=1);
 function get_database()
 {
     $dbPath = "database/tickets.db";
-    echo $dbPath;
     if (is_file($dbPath) === true) {
         return new PDO("sqlite:".$dbPath);
     }
