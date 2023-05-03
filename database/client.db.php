@@ -13,15 +13,17 @@ class Client
 
     public string $password;
 
+    public ?string $image;
+
 
     public function __construct(string $_username, string $_email,
-        string $_password, string $_displayName
+        string $_password, string $_displayName, ?string $_image = null
     ) {
         $this->username    = $_username;
         $this->email       = $_email;
         $this->password    = $_password;
         $this->displayName = $_displayName;
-
+        $this->image       = $_image;
     }
 
 
@@ -30,7 +32,7 @@ class Client
 
 function insert_new_client(Client $client, PDO $db) : bool
 {
-    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name)";
+    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, NULL)";
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
@@ -67,6 +69,6 @@ function get_user(string $username, PDO $db) : ?Client
         return null;
     }
 
-    return new Client($row['username'], $row['email'], $row['password'], $row['displayName']);
+    return new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row['image']);
 
 }

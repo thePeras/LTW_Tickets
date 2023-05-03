@@ -4,27 +4,28 @@ require_once __DIR__.'/../../utils/session.php';
 
 require_once __DIR__.'/../../database/client.db.php';
 
-
 function get_navbar_user(?Client $client) : string
 {
     if ($client === null) {
         return '';
     }
 
-    return  <<<HTML
-        <div class="user">
-            <img class="avatar" src="assets/images/person.png" alt="user">
-            <div>
-                <h3>$client->displayName</h3>
-                <p>$client->email</p>
-            </div>
+    $imageSrc = $client->image ? base64_encode($client->image) : 'assets/images/default_user.png';
+
+    return <<<HTML
+        <div class="user" onclick="location.href='/profile'">
+                <img class="avatar" src=$imageSrc alt="user">
+                <div>
+                    <h3>$client->displayName</h3>
+                    <p>$client->email</p>
+                </div>
             <a href="/logout" class="logout">
                 <i class="ri-logout-box-line"></i>
             </a>
         </div>
     HTML;
-
 }
+
 
 
 function get_login_button() : string
