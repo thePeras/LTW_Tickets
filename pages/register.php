@@ -10,6 +10,8 @@ if (is_session_valid($db) !== null) {
     exit();
 }
 
+$registered = false;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name     = $_POST['name'];
     $username = $_POST['username'];
@@ -72,6 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <br>
                 <input type="submit" value="Create account">
             </form>
+
+            <?php if ($registered === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>
+                <p class="error">
+                    Username or email has already been taken.
+                </p>
+            <?php endif; ?>
 
             <p>If you already have an account, <a href="/login">sign in here</a>.</p>
         </div>
