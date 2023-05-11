@@ -40,4 +40,72 @@
 .comment-box button {
   margin-left: auto;
   margin-right: 0;
+}
+
+.ticket-description {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ebebeb;
+}
+
+.user-comment {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ebebeb;
+}
+.user-comment .user {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+.user-comment .user .avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #ebebeb;
+}
+.user-comment .user p::before {
+  content: "";
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  margin-right: 0.5rem;
+}
+.user-comment > p {
+  margin: 0.5rem 0;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+.ticket-comment {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ticket-comment .comment-header {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+.ticket-comment .comment-header .comment-author {
+  font-weight: bold;
+}
+.ticket-comment .comment-header .comment-date {
+  color: #929292;
+}
+.ticket-comment .comment-body {
+  color: #353537;
 }/*# sourceMappingURL=ticket.css.map */

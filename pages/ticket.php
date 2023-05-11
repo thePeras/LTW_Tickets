@@ -28,19 +28,24 @@
                 <li><button type = "button" class = "active"> Close </button></li>
             </ul>
 
-            <description>
+            <div class="user-comment">
+                <div class="user">
+                    <img class="avatar" src="assets/images/person.png" alt="user">
+                    <h3>Agostinho Amorim</h3>
+                    <p>15 min ago</p>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Quisquam, voluptatum. Quisquam, voluptatum. Quisquam, voluptatum
+                    Fe fugiat, quibusdam, voluptatum, quod quia quas voluptates
+                </p>
+            </div>
 
-
-            </description>
-
-            <!-- Create a comment box -->
             <div class="comment-box">
                 <h3>New comment</h3>
                 <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Write your comment"></textarea>
                 <button type="button" class="primary">Submit</button>
             </div>
-
-            <input type="text">
         </div>
         <div class="action-panel">
             <div class="side-card">
@@ -61,12 +66,23 @@
                 </div>
             </div>
             <div class="side-card">
-                <h4 class="task-label">labels</h4>
+                <h4 class="task-label">Labels</h4>
                 <div>
                     <p>
                         <i class="ri-price-tag-3-line"></i>
                         No labels assigned
                     </p>
+                </div>
+            </div>
+            <div class="side-card">
+                <h4 class="task-label">Department</h4>
+                <div>
+                    <select name="departments">
+                        <option value="1">Department 1</option>
+                        <option value="2">Department 2</option>
+                        <option value="3">Department 3</option>
+                        <option value="3">Department 4</option>
+                    </select>
                 </div>
             </div>
         </div>
