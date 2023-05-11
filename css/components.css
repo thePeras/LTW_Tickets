@@ -18,11 +18,16 @@ button:hover {
   background-color: rgba(111, 113, 119, 0.235);
 }
 button.primary {
-  background-color: #3b7ee0;
+  background-color: #5449f0;
   color: white;
 }
 button.primary:hover {
-  background-color: #3b7ee0;
+  background-color: #6158e1;
+}
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  border-color: #5449f0;
 }
 
 select {
@@ -35,7 +40,7 @@ select {
   background-size: 16px;
   padding: 10px 40px 10px 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
 }
 select:focus {
@@ -55,6 +60,8 @@ input {
   transition: 0.2s;
   margin-bottom: 0.5rem;
   margin-top: 0.1rem;
+  background-color: white;
+  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
 }
 input:focus {
   outline: none;
@@ -68,10 +75,10 @@ input.success {
   border-color: #229542;
 }
 input::-moz-placeholder {
-  color: #a3a3a3;
+  color: #929292;
 }
 input::placeholder {
-  color: #a3a3a3;
+  color: #929292;
 }
 
 input[type=submit] {
@@ -85,4 +92,26 @@ input[type=submit] {
 }
 input[type=submit]:hover {
   opacity: 0.8;
+}
+
+textarea {
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 16px;
+  resize: none;
+  height: 100px;
+  background-color: white;
+  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
+}
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  border-color: #5449f0;
+}
+textarea::-moz-placeholder {
+  color: #929292;
+}
+textarea::placeholder {
+  color: #929292;
 }/*# sourceMappingURL=components.css.map */

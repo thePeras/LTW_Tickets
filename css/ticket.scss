@@ -1,6 +1,7 @@
 .ticket-page {
     display: grid;
     grid-template-columns: 1fr 30%;
+    gap: 0.5rem;
 }
 
 .action-panel {
@@ -30,5 +31,18 @@
         font-weight: 400;
         color: #929292;
         cursor: pointer;
+    }
+}
+
+
+.comment-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    button {
+        // align on right
+        margin-left: auto;
+        margin-right: 0;
     }
 }
