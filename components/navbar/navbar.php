@@ -48,6 +48,11 @@ function navbar(PDO $db)
         $client = get_user($session->username, $db);
     }
 
+    $path = $_SERVER['REQUEST_URI'];
+    $path = explode('?', $path)[0];
+    $path = explode('/', $path);
+    $path = $path[(count($path) - 1)];
+
     return <<<HTML
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
 
@@ -56,32 +61,32 @@ function navbar(PDO $db)
                 <h1>Tickets Manager</h1>
             </div>
             <ul>
-                <li class="active">
-                    <a href="#">
+                <li data-active="true">
+                    <a href="/">
                         <i class="ri-ticket-line"></i>
                         Tickets
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/faq">
                         <i class="ri-question-line"></i>
                         FAQ
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/departments">
                         <i class="ri-building-line"></i>
                         Departments
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/analytics">
                         <i class="ri-line-chart-line"></i>
                         Analytics
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/users">
                         <i class="ri-group-line"></i>
                         Users
                     </a>

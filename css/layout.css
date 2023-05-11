@@ -15,3 +15,9 @@ body {
 main {
     padding: 2rem;
 }
+
+.v-h-center {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}

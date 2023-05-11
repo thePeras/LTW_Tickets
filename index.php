@@ -11,6 +11,6 @@ if ($_SERVER["REQUEST_URI"] === "/") {
     if (is_file($fullpath) === true) {
         include $fullpath;
     } else {
-        include $pagesDir."/notFound.php";
+        include $pagesDir."/not-found.php";
     }
 }
