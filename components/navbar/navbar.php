@@ -85,12 +85,6 @@ function navbar(PDO $db)
                         Analytics
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="ri-group-line"></i>
-                        Users
-                    </a>
-                </li>
                 <?php if (is_current_user_admin($db) === true) :?>
                 <li <?php
                 if (str_contains($_SERVER['REQUEST_URI'], "/admin") === true) {

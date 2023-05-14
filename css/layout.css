@@ -8,10 +8,11 @@
 body {
     background: linear-gradient(0, #f9faff, #f0f1f9);
     font-family: 'Anuphan', 'Open Sans', sans-serif;
-    display: inline-flex;
+    display: flex;
     min-height: 100vh;
 }
 
 main {
     padding: 2rem;
+    flex: 1;
 }

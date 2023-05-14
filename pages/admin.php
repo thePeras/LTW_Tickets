@@ -26,6 +26,7 @@ if (is_current_user_admin($db) === false) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tickets</title>
     <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
 </head>
@@ -33,10 +34,26 @@ if (is_current_user_admin($db) === false) {
 
 <?php
     navbar($db);
+
 ?>
 <main>
     <h1>Admin page</h1>
-    <p>Siuuu</p>
+
+    <ul class="tabSelector">
+        <li <?php
+        if ($_GET["tab"] === "users" || $_GET["tab"] === null) {
+            echo 'class="active"';
+        }?>>
+            <a href="?tab=users">Users</a>
+        </li>
+        <li
+        <?php
+        if ($_GET["tab"] === "departments") {
+            echo 'class="active"';
+        }?>>
+            <a href="?tab=departments">Departments</a>
+        </li>
+    </ul>
 </main>
     
 </body>

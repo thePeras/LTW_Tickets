@@ -1,0 +1,42 @@
+
+.tabSelector{
+    display: flex;
+    padding: 1rem;
+    > li{
+        list-style-type: none;
+        flex:1;
+        border-radius: 8px;
+        
+        > a {
+            padding: 1rem 0rem;
+            text-decoration: none;
+            color: var(--black-color);
+            margin: 0 auto; 
+            text-align: center;
+            display: block;
+            font-weight: 500;
+        }
+        margin: 0rem 0.5rem;
+    }
+    > li.active{
+        background-color: var(--primary-color);
+        > a {
+            color: white;
+        }
+
+    }
+    > li:not(.active) {
+        background-color: var(--hover-color);
+
+    }
+
+    > li:hover:not(.active) {
+        background-color: #989ba13c;
+
+    }
+
+    > hr {
+        color: #41444983;
+
+    }
+}
