@@ -17,13 +17,14 @@ class Client
 
 
     public function __construct(string $_username, string $_email,
-        string $_password, string $_displayName, ?string $_image = null
+        string $_password, string $_displayName, ?string $_image=null
     ) {
         $this->username    = $_username;
         $this->email       = $_email;
         $this->password    = $_password;
         $this->displayName = $_displayName;
         $this->image       = $_image;
+
     }
 
 

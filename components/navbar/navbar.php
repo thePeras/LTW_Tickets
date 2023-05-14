@@ -4,13 +4,14 @@ require_once __DIR__.'/../../utils/session.php';
 
 require_once __DIR__.'/../../database/client.db.php';
 
+
 function get_navbar_user(?Client $client) : string
 {
     if ($client === null) {
         return '';
     }
 
-    $imageSrc = $client->image ? base64_encode($client->image) : 'assets/images/default_user.png';
+    $imageSrc = ($client->image === null) ? 'assets/images/default_user.png' : base64_encode($client->image);
 
     return <<<HTML
         <div class="user" onclick="location.href='/profile'">
@@ -24,8 +25,8 @@ function get_navbar_user(?Client $client) : string
             </a>
         </div>
     HTML;
-}
 
+}
 
 
 function get_login_button() : string
