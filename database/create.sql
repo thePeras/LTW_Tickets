@@ -19,7 +19,8 @@ CREATE TABLE Clients(
     username TEXT PRIMARY KEY,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
-    displayName TEXT NOT NULL
+    displayName TEXT NOT NULL,
+    passwordInvalidated INTEGER DEFAULT 0
 );
 
 CREATE TABLE Sessions(

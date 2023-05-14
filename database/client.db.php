@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__."/../utils/hash.php";
+
 class Client
 {
 
@@ -68,5 +70,31 @@ function get_user(string $username, PDO $db) : ?Client
     }
 
     return new Client($row['username'], $row['email'], $row['password'], $row['displayName']);
+
+}
+
+
+function change_password(string $username, string $newPassword, PDO $db) : bool
+{
+    $hashedPassword = hash_text($newPassword);
+    $sql            = "UPDATE Clients SET password=:password, passwordInvalidated=0 WHERE username=:username";
+    $stmt           = $db->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+
+    return $stmt->execute();
+
+}
+
+
+function is_user_password_invalidated(string $username, PDO $db) : bool
+{
+    $sql  = "SELECT passwordInvalidated FROM Clients WHERE username=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    return $stmt->fetchColumn() === 1;
 
 }

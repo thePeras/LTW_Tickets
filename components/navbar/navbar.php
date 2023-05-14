@@ -61,7 +61,7 @@ function navbar(PDO $db)
                 if (str_contains($_SERVER['REQUEST_URI'], "/tickets") === true) {
                     echo 'class="active"';
                 }
-                ?>>>
+                ?>>
                     <a href="#">
                         <i class="ri-ticket-line"></i>
                         Tickets

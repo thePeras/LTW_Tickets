@@ -38,7 +38,7 @@ function make_default_admin(PDO $db)
     $password = $env["DEFAULT_ADMIN_PASSWORD"];
     $email    = $env["DEFAULT_ADMIN_EMAIL"];
     $name     = "Admin";
-    $sql      = "INSERT INTO Clients VALUES (:user, :email, :password, :name);";
+    $sql      = "INSERT INTO Clients VALUES (:user, :email, :password, :name, 1);";
     $stmt     = $db->prepare($sql);
     $stmt->bindParam(":user", $username);
     $stmt->bindParam(":password", hash_text($password));
