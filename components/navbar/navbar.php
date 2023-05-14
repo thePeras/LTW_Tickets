@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__.'/../../utils/render_utils.php';
 require_once __DIR__.'/../../utils/session.php';
+require_once __DIR__.'/../../utils/roles.php';
+
 
 require_once __DIR__.'/../../database/client.db.php';
 
@@ -47,8 +49,7 @@ function navbar(PDO $db)
     if ($session !== null) {
         $client = get_user($session->username, $db);
     }
-
-    return <<<HTML
+    ?>
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
 
         <nav class="sidebar">
@@ -56,7 +57,11 @@ function navbar(PDO $db)
                 <h1>Tickets Manager</h1>
             </div>
             <ul>
-                <li class="active">
+                <li <?php
+                if (str_contains($_SERVER['REQUEST_URI'], "/tickets") === true) {
+                    echo 'class="active"';
+                }
+                ?>>>
                     <a href="#">
                         <i class="ri-ticket-line"></i>
                         Tickets
@@ -86,9 +91,27 @@ function navbar(PDO $db)
                         Users
                     </a>
                 </li>
+                <?php if (is_current_user_admin($db) === true) :?>
+                <li <?php
+                if (str_contains($_SERVER['REQUEST_URI'], "/admin") === true) {
+                    echo 'class="active"';
+                }
+                ?>>
+                    <a href="/admin">
+                        <i class="ri-admin-line"></i>
+                        Admin settings
+                    </a>
+                </li>
+                <?php endif;?>
             </ul>
-            {$ifHtml(($session !== null), get_navbar_user($client), get_login_button())}
+            <?php
+            if ($session !== null) {
+                echo get_navbar_user($client);
+            } else {
+                echo get_login_button();
+            }
+            ?>
         </nav>
-    HTML;
+    <?php
 
 }
