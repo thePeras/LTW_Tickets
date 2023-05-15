@@ -41,6 +41,15 @@ function get_login_button() : string
 
 function navbar(PDO $db)
 {
+
+    $isActive = function (string $path, string $current) : string {
+        if ($path === $current) {
+            return 'true';
+        } else {
+            return 'false';
+        };
+    };
+
     global $ifHtml;
     $session = is_session_valid($db);
     $client  = null;
@@ -61,31 +70,31 @@ function navbar(PDO $db)
                 <h1>Tickets Manager</h1>
             </div>
             <ul>
-                <li data-active="true">
+                <li data-active="{$isActive($path, '')}">
                     <a href="/">
                         <i class="ri-ticket-line"></i>
                         Tickets
                     </a>
                 </li>
-                <li>
+                <li data-active="{$isActive($path, 'faq')}">
                     <a href="/faq">
                         <i class="ri-question-line"></i>
                         FAQ
                     </a>
                 </li>
-                <li>
+                <li data-active="{$isActive($path, 'departments')}">
                     <a href="/departments">
                         <i class="ri-building-line"></i>
                         Departments
                     </a>
                 </li>
-                <li>
+                <li data-active="{$isActive($path, 'analytics')}">
                     <a href="/analytics">
                         <i class="ri-line-chart-line"></i>
                         Analytics
                     </a>
                 </li>
-                <li>
+                <li data-active="{$isActive($path, 'users')}">
                     <a href="/users">
                         <i class="ri-group-line"></i>
                         Users
