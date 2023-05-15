@@ -1,8 +1,18 @@
+.sticky {
+  position: sticky;
+  top: 0;
+}
+
 nav.sidebar {
+  height: calc(100svh - 4rem);
   padding: 2rem;
   border-right: 2px solid #e6e6ee;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+nav.sidebar > .inital-sidebar {
+  flex: 1;
 }
 nav.sidebar div.logo {
   margin-bottom: 3rem;

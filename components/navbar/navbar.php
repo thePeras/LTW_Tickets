@@ -51,53 +51,54 @@ function navbar(PDO $db)
     }
     ?>
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
-
-        <nav class="sidebar">
-            <div class="logo">
-                <h1>Tickets Manager</h1>
+        <nav class="sidebar sticky">
+            <div class="inital-sidebar">
+                <div class="logo">
+                    <h1>Tickets Manager</h1>
+                </div>
+                <ul>
+                    <li <?php
+                    if (str_contains($_SERVER['REQUEST_URI'], "/tickets") === true) {
+                        echo 'class="active"';
+                    }
+                    ?>>
+                        <a href="#">
+                            <i class="ri-ticket-line"></i>
+                            Tickets
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="ri-question-line"></i>
+                            FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="ri-building-line"></i>
+                            Departments
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="ri-line-chart-line"></i>
+                            Analytics
+                        </a>
+                    </li>
+                    <?php if (is_current_user_admin($db) === true) :?>
+                    <li <?php
+                    if (str_contains($_SERVER['REQUEST_URI'], "/admin") === true) {
+                        echo 'class="active"';
+                    }
+                    ?>>
+                        <a href="/admin">
+                            <i class="ri-admin-line"></i>
+                            Admin settings
+                        </a>
+                    </li>
+                    <?php endif;?>
+                </ul>
             </div>
-            <ul>
-                <li <?php
-                if (str_contains($_SERVER['REQUEST_URI'], "/tickets") === true) {
-                    echo 'class="active"';
-                }
-                ?>>
-                    <a href="#">
-                        <i class="ri-ticket-line"></i>
-                        Tickets
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="ri-question-line"></i>
-                        FAQ
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="ri-building-line"></i>
-                        Departments
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="ri-line-chart-line"></i>
-                        Analytics
-                    </a>
-                </li>
-                <?php if (is_current_user_admin($db) === true) :?>
-                <li <?php
-                if (str_contains($_SERVER['REQUEST_URI'], "/admin") === true) {
-                    echo 'class="active"';
-                }
-                ?>>
-                    <a href="/admin">
-                        <i class="ri-admin-line"></i>
-                        Admin settings
-                    </a>
-                </li>
-                <?php endif;?>
-            </ul>
             <?php
             if ($session !== null) {
                 echo get_navbar_user($client);
