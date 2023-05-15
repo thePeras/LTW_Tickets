@@ -8,6 +8,11 @@ require_once __DIR__."/../utils/hash.php";
 function get_database()
 {
     $dbPath = "database/tickets.db";
+    //this is a bit hacky but it will work for now
+    if (str_contains(getcwd(), "api") === true) {
+        $dbPath = "../database/tickets.db";
+    }
+
     if (is_file($dbPath) === true) {
         return new PDO("sqlite:".$dbPath);
     }

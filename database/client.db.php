@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__."/../utils/hash.php";
 
-class Client
+class Client implements JsonSerializable
 {
 
     public string $username;
@@ -18,6 +18,20 @@ class Client
     public string $type;
 
     public int $createdAt;
+
+
+    public function jsonSerialize()
+    {
+        return [
+            "username"    => $this->username,
+            "email"       => $this->email,
+            "displayName" => $this->displayName,
+            "type"        => $this->type,
+            "createdAt"   => $this->createdAt,
+
+        ];
+
+    }
 
 
     public function __construct(string $_username, string $_email,
