@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($_POST["action"] === "deleteUser" && isset($_POST["username"]) === true) {
-        if ($_POST["username"] !== $session) {
+        if ($_POST["username"] !== $session->username) {
             delete_client($_POST["username"], $db);
         }
 
