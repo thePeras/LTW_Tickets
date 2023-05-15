@@ -73,3 +73,16 @@ function get_user(string $username, PDO $db) : ?Client
     return new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row['image']);
 
 }
+
+
+function edit_user(Client $client, PDO $db) : bool
+{
+    $sql  = "UPDATE Clients SET email = :email, displayName = :display_name WHERE username = :username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':email', $client->email, PDO::PARAM_STR);
+    $stmt->bindParam(':display_name', $client->displayName, PDO::PARAM_STR);
+    $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
+
+    return $stmt->execute();
+
+}
