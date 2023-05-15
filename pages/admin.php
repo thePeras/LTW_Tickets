@@ -6,15 +6,39 @@ require_once __DIR__.'/../components/navbar/navbar.php';
 require_once __DIR__.'/../database/client.db.php';
 
 
-$db = get_database();
-
-if (is_session_valid($db) === false) {
+$db      = get_database();
+$session = is_session_valid($db);
+if ($session === null) {
     header("Location: /login");
     exit();
 }
 
 if (is_current_user_admin($db) === false) {
     header("Location: /");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    //TODO: check for csrf token
+    if (isset($_POST["action"]) === false) {
+        header("Location: /");
+        exit();
+    }
+
+    if ($_POST["action"] === "deleteUser" && isset($_POST["username"]) === true) {
+        if ($_POST["username"] !== $session) {
+            delete_client($_POST["username"], $db);
+        }
+
+        //TODO: make error message
+    }
+
+    if (isset($_POST["lastHref"]) === true) {
+        header("Location: ".$_POST["lastHref"]);
+    } else {
+        header("Location: /admin");
+    }
+
     exit();
 }
 
@@ -30,19 +54,23 @@ $offset = intval(($_GET["offset"] ?? 0))
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tickets</title>
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
 </head>
 <body>
+<div class="modal">
+        <div class="modal-content">
 
-<?php
+        </div>
+    </div>
+    <?php
     navbar($db);
 
-?>
+    ?>
 <main>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/modal.css">
     <h1>Admin page</h1>
-
     <ul class="tabSelector">
         <li <?php
         if ($_GET["tab"] === "users" || $_GET["tab"] === null) {
@@ -63,6 +91,7 @@ $offset = intval(($_GET["offset"] ?? 0))
         <?php
             $clients = get_clients($limit, $offset, $db);
         ?>
+        <script src="js/user-table.js"></script>
         
         <table class="user-table">
             <thead>
@@ -90,7 +119,7 @@ $offset = intval(($_GET["offset"] ?? 0))
                         </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="user-table-body">
                 <?php foreach ($clients as $client) :?>
                 <tr class="user-entry">
                     <td>
@@ -111,15 +140,16 @@ $offset = intval(($_GET["offset"] ?? 0))
                     </td>
                     <td>
                         <p><?php
-                            $dateTime = new DateTime("@".$client->createdAt);
-                            echo date_format($dateTime, "H:i d/m/o");
+                            $dateTime = date_create("@".$client->createdAt);
+                            $dateTime->setTimezone(new DateTimeZone("Europe/Lisbon"));
+                            echo $dateTime->format("H:i d/m/o");
                         ?></p>
                     </td>
                     <td>
                         <i class="ri-edit-line icon"></i>
                     </td>
                     <td>
-                        <i class="ri-delete-bin-line icon" style="color: var(--delete-color)"></i>
+                        <i class="ri-delete-bin-line icon" style="color: var(--delete-color)" onclick="makeDeleteModal('<?php echo $client->username?>')")></i>
                     </td>
                 </tr>
                 <?php endforeach;?>

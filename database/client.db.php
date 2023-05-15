@@ -168,3 +168,36 @@ function get_clients(int $limit, int $offset, PDO $db) : array
     return array_map($clientBuilder, $result);
 
 }
+
+
+function delete_client(string $username, PDO $db) : bool
+{
+    //TODO: handle all other cases where an client might have an interaction and therefore it
+    //might not be succesful when deleting...
+    $sql  = "DELETE FROM Sessions WHERE user=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+
+    $stmt->execute();
+
+    $sql  = "DELETE FROM Admins WHERE username=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+
+    $stmt->execute();
+
+    $sql  = "DELETE FROM Agents WHERE username=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+
+    $stmt->execute();
+
+    $sql  = "DELETE FROM Clients WHERE username=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+
+    $stmt->execute();
+
+    return $stmt->rowCount() === 1;
+
+}

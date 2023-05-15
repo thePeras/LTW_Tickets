@@ -25,6 +25,7 @@ function is_session_valid(PDO $db) : ?Session
 
     $session = get_session($_COOKIE['sessionID'], $db);
     if ($session === null) {
+        setcookie('sessionID', '', (time() - 3600), '/', httponly:true);
         return null;
     }
 
