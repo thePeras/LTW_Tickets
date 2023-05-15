@@ -15,14 +15,23 @@ class Client
 
     public string $password;
 
+    public string $type;
+
+    public int $createdAt;
+
 
     public function __construct(string $_username, string $_email,
-        string $_password, string $_displayName
+        string $_password, string $_displayName, ?int $_createdAt=null
     ) {
         $this->username    = $_username;
         $this->email       = $_email;
         $this->password    = $_password;
         $this->displayName = $_displayName;
+        if ($_createdAt === null) {
+            $this->createdAt = time();
+        } else {
+            $this->createdAt = $_createdAt;
+        }
 
     }
 
@@ -32,13 +41,14 @@ class Client
 
 function insert_new_client(Client $client, PDO $db) : bool
 {
-    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name)";
+    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, :createdAt)";
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
     $stmt->bindParam(':email', $client->email, PDO::PARAM_STR);
     $stmt->bindParam(':password', $client->password, PDO::PARAM_STR);
     $stmt->bindParam(':display_name', $client->displayName, PDO::PARAM_STR);
+    $stmt->bindParam(":createdAt", $client->createdAt, PDO::PARAM_INT);
 
     return $stmt->execute();
 
@@ -69,7 +79,7 @@ function get_user(string $username, PDO $db) : ?Client
         return null;
     }
 
-    return new Client($row['username'], $row['email'], $row['password'], $row['displayName']);
+    return new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row["createdAt"]);
 
 }
 
@@ -96,5 +106,51 @@ function is_user_password_invalidated(string $username, PDO $db) : bool
     $stmt->execute();
 
     return $stmt->fetchColumn() === 1;
+
+}
+
+
+function get_clients(int $limit, int $offset, PDO $db) : array
+{
+    $sql = "SELECT * FROM Clients LIMIT :limit OFFSET :offset";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    $sqlAgent    = "SELECT * FROM Agents";
+    $resultAgent = array_map(
+        function (array $a) : string {
+            return $a[0];
+        },
+        $db->query($sqlAgent)->fetchAll()
+    );
+
+    $sqlAdmin    = "SELECT * FROM Admins";
+    $resultAdmin = array_map(
+        function (array $a) : string {
+            return $a[0];
+        },
+        $db->query($sqlAdmin)->fetchAll()
+    );
+
+    $result = $stmt->fetchAll();
+
+    $clientBuilder = function (array $a) use ($resultAgent, $resultAdmin): Client {
+        $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+        $client->type = "client";
+        if (in_array($client->username, $resultAgent) === true) {
+            $client->type = "agent";
+            if (in_array($client->username, $resultAdmin) === true) {
+                $client->type = "admin";
+            }
+        }
+
+        return $client;
+    };
+
+    return array_map($clientBuilder, $result);
 
 }

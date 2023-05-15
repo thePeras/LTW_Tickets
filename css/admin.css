@@ -31,4 +31,53 @@
 }
 .tabSelector > hr {
   color: rgba(65, 68, 73, 0.5137254902);
+}
+
+.user-table {
+  border-collapse: collapse;
+  padding: 1em 0em;
+}
+.user-table th {
+  padding: 0.5rem 0rem;
+  border-bottom: 2px solid var(--hover-color);
+}
+.user-table .user-name > p:nth-child(1) {
+  color: var(--black-primary);
+}
+.user-table .user-name > p:nth-child(2) {
+  color: var(--black-secondary);
+  font-size: 0.9rem;
+}
+.user-table .user-info {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.user-table .user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.user-table td {
+  padding: 0.5rem 1rem;
+}
+.user-table .icon {
+  font-size: 1.4em;
+  cursor: pointer;
+}
+.user-table .user-entry {
+  border-bottom: 2px solid var(--hover-color);
+}
+.user-table .role {
+  border-radius: 8px;
+  padding: 0.3rem 1rem;
+}
+.user-table .client {
+  background-color: #06ad00;
+}
+.user-table .agent {
+  background-color: #ad9c01;
+}
+.user-table .admin {
+  background-color: #c90101;
 }/*# sourceMappingURL=admin.css.map */

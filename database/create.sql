@@ -20,6 +20,7 @@ CREATE TABLE Clients(
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     displayName TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
     passwordInvalidated INTEGER DEFAULT 0
 );
 

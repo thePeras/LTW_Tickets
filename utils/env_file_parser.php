@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 function parse_env_file(string $filePath) : array
 {
-    $envFilePattern = "/([[:word:]]*)\ +=\ +([[:word:]]*)/";
+    $envFilePattern = "/([[:word:]]*)\ +=\ +(.*)/";
 
     if (is_file($filePath) === false) {
         return [];
