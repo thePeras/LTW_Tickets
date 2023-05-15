@@ -1,8 +1,53 @@
 <?php
+require_once __DIR__.'/../../utils/render_utils.php';
+require_once __DIR__.'/../../utils/session.php';
+
+require_once __DIR__.'/../../database/client.db.php';
 
 
-function navbar()
+function get_navbar_user(?Client $client) : string
 {
+    if ($client === null) {
+        return '';
+    }
+
+    return  <<<HTML
+        <div class="user">
+            <img class="avatar" src="assets/images/person.png" alt="user">
+            <div>
+                <h3>$client->displayName</h3>
+                <p>$client->email</p>
+            </div>
+            <a href="/logout" class="logout">
+                <i class="ri-logout-box-line"></i>
+            </a>
+        </div>
+    HTML;
+
+}
+
+
+function get_login_button() : string
+{
+    return <<<HTML
+        <a href="/login" class="login">
+            <i class="ri-login-box-line"></i>
+            Login
+        </a>
+    HTML;
+
+}
+
+
+function navbar(PDO $db)
+{
+    global $ifHtml;
+    $session = is_session_valid($db);
+    $client  = null;
+    if ($session !== null) {
+        $client = get_user($session->username, $db);
+    }
+
     return <<<HTML
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
 
@@ -42,16 +87,7 @@ function navbar()
                     </a>
                 </li>
             </ul>
-            <div class="user">
-                <img class="avatar" src="assets/images/person.png" alt="user">
-                <div>
-                    <h3>Agostinho Amorim</h3>
-                    <p>agostinho@gmail.com</p>
-                </div>
-                <a href="#" class="logout">
-                    <i class="ri-logout-box-line"></i>
-                </a>
-            </div>
+            {$ifHtml(($session !== null), get_navbar_user($client), get_login_button())}
         </nav>
     HTML;
 

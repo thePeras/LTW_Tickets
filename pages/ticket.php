@@ -1,5 +1,6 @@
 <?php
     require 'components/navbar/navbar.php';
+    require 'database/database.php';
 
     $id = $_GET['id'];
 ?>
@@ -18,7 +19,8 @@
 </head>
 <body>
     <?php
-        echo navbar();
+        $db = get_database();
+        echo navbar($db);
     ?>
     <main class="ticket-page">
         <div>
