@@ -23,7 +23,7 @@
     <main class="ticket-page">
         <div>
             <h1>Issue about log in #2</h1>
-            <ul id = "buttons">
+            <ul id="buttons">
                 <li><button type = "button"> Status </button></li>
                 <li><button type = "button" class = "active"> Close </button></li>
             </ul>
@@ -39,6 +39,37 @@
                     Quisquam, voluptatum. Quisquam, voluptatum. Quisquam, voluptatum
                     Fe fugiat, quibusdam, voluptatum, quod quia quas voluptates
                 </p>
+            </div>
+
+            <div class="event">
+                <img class="avatar" src="assets/images/person.png" alt="user">
+                <div>
+                    <h4>Agostinho Amorim</h4>
+                    <p>close this</p>
+                    <p>15 min ago</p>
+                </div>
+            </div>
+
+            <div class="user-comment">
+                <div class="user">
+                    <img class="avatar" src="assets/images/person.png" alt="user">
+                    <h3>Agostinho Amorim</h3>
+                    <p>15 min ago</p>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Quisquam, voluptatum. Quisquam, voluptatum. Quisquam, voluptatum
+                    Fe fugiat, quibusdam, voluptatum, quod quia quas voluptates
+                </p>
+            </div>
+
+            <div class="event">
+                <img class="avatar" src="assets/images/person.png" alt="user">
+                <div>
+                    <h4>Agostinho Amorim</h4>
+                    <p>close this</p>
+                    <p>15 min ago</p>
+                </div>
             </div>
 
             <div class="comment-box">
