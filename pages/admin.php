@@ -19,7 +19,7 @@ if (is_current_user_admin($db) === false) {
 }
 
 $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
-$offset = intval(($_GET["limit"] ?? 0))
+$offset = intval(($_GET["offset"] ?? 0))
 ?>
 
 

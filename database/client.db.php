@@ -41,7 +41,7 @@ class Client
 
 function insert_new_client(Client $client, PDO $db) : bool
 {
-    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, :createdAt)";
+    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, :createdAt, 0)";
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
