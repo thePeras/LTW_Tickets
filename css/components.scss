@@ -1,0 +1,128 @@
+@import "theme.scss";
+
+$border-radius: 8px;
+$placeholder-color: #929292;
+
+button {
+    flex: 1;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #363c4c;
+    display: block;
+    padding: 0.8rem;
+    margin: 0rem 1rem 0.5rem 0;
+    text-decoration: none;
+    color: #363c4c;
+    border-radius: $border-radius;
+    background-color: rgba(111, 113, 119, 0.235);
+    border: none;
+
+    &:hover {
+        background-color: rgba(111, 113, 119, 0.235);
+    }
+
+    &.primary {
+        background-color: $primary-color;
+        color: white;
+    }
+
+    &.primary:hover {
+        background-color: desaturate($primary-color, 15%);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+        border-color: $primary-color;
+    }
+}
+
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' fill='%23000000' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.707 7.707a1 1 0 00-1.414-1.414L10 13.586 4.707 8.293a1 1 0 00-1.414 1.414l6 6a1 1 0 001.414 0l6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding: 10px 40px 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: $border-radius;
+    font-size: 16px;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+        border-color: $primary-color;
+    }
+}
+
+
+input {
+    border: none;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border-radius: $border-radius;
+    background-color: transparent;
+    border: 1px solid rgb(215, 217, 250);
+    font-size: 1rem;
+    transition: 0.2s;
+    margin-bottom: 0.5rem;
+    margin-top: 0.1rem;
+
+    background-color: white;
+    box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+        border-color: $primary-color;
+    }
+
+    &.error {
+        border-color: #ec1557;
+    }
+
+    &.success {
+        border-color: #229542;
+    }
+
+    &::placeholder {
+        color: $placeholder-color;
+    }
+}
+
+input[type="submit"] {
+    background-color: #5449f0;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem;
+    border-radius: $border-radius;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+textarea {
+    border: 1px solid #ebebeb;
+    border-radius: $border-radius;
+    padding: 1rem;
+    font-size: 16px;
+    resize: none;
+    height: 100px;
+    background-color: white;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+        border-color: $primary-color;
+    }
+
+    &::placeholder {
+        color: $placeholder-color;
+    }
+}
