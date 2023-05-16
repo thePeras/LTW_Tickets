@@ -132,7 +132,16 @@ function makeDeleteModal(username) {
     ], { duration: 200, iterations: 1 }).onfinish = (event) => {
         modalElement.style.opacity = 1;
     }
+}
 
+function makeEditModal(){
+    const body = document.querySelector("body");
+    body.style.overflow = "hidden";
 
+    const modalElement = document.querySelector(".modal");
+    if (modalElement === null) return;
 
+    const modalContentElement = document.querySelector(".modal-content");
+    modalContentElement.classList.toggle("edit-user-modal");
+    if (modalContentElement === null) return;
 }

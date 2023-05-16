@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         exit();
     }
 
+    
     $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
     $offset = intval(($_GET["offset"] ?? 0));
 
