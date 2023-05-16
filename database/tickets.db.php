@@ -22,8 +22,8 @@ class Ticket
     public readonly string $department;
 
 
-    public function __construct($id, string $title, string $description, string $status,
-        string $hashtags, string $assignee, string $createdByUser, string $department
+    public function __construct(string $title, string $description, $id=null, string $status="",
+        string $hashtags="", string $assignee="", string $createdByUser="", string $department=""
     ) {
         $this->id            = $id;
         $this->title         = $title;
@@ -36,5 +36,19 @@ class Ticket
 
     }
 
+
+}
+
+
+function insert_new_ticket(Session $session, Ticket $ticket, PDO $db) : bool
+{
+    $sql = "INSERT INTO Tickets(title, description, createByUser) VALUES (:title, :description, :createByUser)";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':title', $ticket->title, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $ticket->description, PDO::PARAM_STR);
+    $stmt->bindParam(':createByUser', $session->username, PDO::PARAM_INT);
+
+    return $stmt->execute();
 
 }

@@ -38,7 +38,7 @@
   cursor: pointer;
 }
 
-.comment-box::before {
+.top-line::before {
   background-color: #e7e7e7;
   bottom: 0;
   content: "";

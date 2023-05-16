@@ -2,6 +2,25 @@
     require 'components/navbar/navbar.php';
     require 'database/database.php';
 
+    $db = get_database();
+
+if (is_session_valid($db) === null) {
+    header('Location: /login');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title       = $_POST['username'];
+    $description = $_POST['password'];
+    $created     = create_ticket($title, $description, $db);
+    if ($created === false) {
+        // Um handle qualquer, qual?
+    }
+
+    header('Location: /'); //ir para a página ticket criado
+    exit();
+}
+
     $id = $_GET['id'];
 ?>
 
@@ -74,7 +93,7 @@
                 </div>
             </div>
 
-            <div class="comment-box">
+            <div class="comment-box top-line">
                 <h3>New comment</h3>
                 <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Write your comment"></textarea>
                 <button type="button" class="primary">Submit</button>

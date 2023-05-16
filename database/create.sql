@@ -63,14 +63,14 @@ CREATE TABLE AgentDepartments(
 );
 
 CREATE TABLE Tickets(
-    id NUMBER PRIMARY KEY,
+    id NUMBER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     status TEXT,
     hashtags TEXT,
     assignee TEXT,
+    department TEXT,
     createdByUser TEXT NOT NULL,
-    department TEXT NOT NULL,
 
     FOREIGN KEY (assignee) REFERENCES Agents(username),
     FOREIGN KEY (createdByUser) REFERENCES Clients(username),

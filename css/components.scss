@@ -3,7 +3,8 @@
 $border-radius: 8px;
 $placeholder-color: #929292;
 
-button {
+button,
+input[type="submit"] {
     flex: 1;
     cursor: pointer;
     text-align: center;
@@ -90,20 +91,6 @@ input {
 
     &::placeholder {
         color: $placeholder-color;
-    }
-}
-
-input[type="submit"] {
-    background-color: #5449f0;
-    color: white;
-    font-weight: bold;
-    padding: 0.5rem;
-    border-radius: $border-radius;
-    padding: 0.5rem 1.5rem;
-    cursor: pointer;
-
-    &:hover {
-        opacity: 0.8;
     }
 }
 
