@@ -19,7 +19,6 @@
 
 <?php
     $db = get_database();
-    echo navbar($db);
 
     global $ifHtml;
     $session = is_session_valid($db);
@@ -29,10 +28,16 @@ if ($session !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username    = $_POST['username'];
     $displayName = $_POST['displayName'];
     $email       = $_POST['email'];
-    edit_profile($client->username, $email, $displayName, $db);
+    if (edit_profile($client, $username, $email, null, $displayName, null, $db) === true) {
+        $client = get_user($username, $db);
+    };
 }
+
+echo navbar($db);
+
 
 ?>
 <main>
@@ -45,18 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="assets/images/default_user.png" alt="Default User Image">
             <?php endif; ?>
         </div>
-        <div class="fields-container">
-            <p>Username: <?php echo $client->username; ?></p>
-            <form action="profile" method="post">
-                <label for="email">Email:                 
-                    <input type="email" name="email" id="email" value="<?php echo $client->email; ?>">
-                </label>
-                <label for="displayName">Display Name:                 
-                    <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>">
-                </label>
-                <input type="submit" value="Save">
-            </form>
-        </div>
+        <form action="profile" method="post">
+        <label for="displayName">Name
+                <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>">
+            </label>
+            <label for="username">Username
+                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>">
+            </label>
+            <label for="email">Email
+                <input type="email" name="email" id="email" value="<?php echo $client->email; ?>">
+            </label>
+            <input type="submit" value="Save">
+        </form>
     </div>
 </main>
 

@@ -75,13 +75,30 @@ function get_user(string $username, PDO $db) : ?Client
 }
 
 
-function edit_user(Client $client, PDO $db) : bool
-{
-    $sql  = "UPDATE Clients SET email = :email, displayName = :display_name WHERE username = :username";
+function edit_user(Client $oldUser,
+    ?string $newUsername,
+    ?string $newEmail,
+    ?string $newPassword,
+    ?string $newDisplayName,
+    ?string $newImage,
+    PDO $db
+) : bool {
+
+    $sql  = "UPDATE Clients SET username = :new_username, email = :new_email, password = :new_password, displayName = :new_display_name, image = :new_image WHERE username = :old_username";
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(':email', $client->email, PDO::PARAM_STR);
-    $stmt->bindParam(':display_name', $client->displayName, PDO::PARAM_STR);
-    $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
+
+    $newUsername    = ($newUsername ?? $oldUser->username);
+    $newEmail       = ($newEmail ?? $oldUser->email);
+    $newPassword    = ($newPassword ?? $oldUser->password);
+    $newDisplayName = ($newDisplayName ?? $oldUser->displayName);
+    $newImage       = ($newImage ?? $oldUser->image);
+
+    $stmt->bindParam(':new_username', $newUsername, PDO::PARAM_STR);
+    $stmt->bindParam(':new_email', $newEmail, PDO::PARAM_STR);
+    $stmt->bindParam(':new_password', $newPassword, PDO::PARAM_STR);
+    $stmt->bindParam(':new_display_name', $newDisplayName, PDO::PARAM_STR);
+    $stmt->bindParam(':new_image', $newImage, PDO::PARAM_STR);
+    $stmt->bindParam(':old_username', $oldUser->username, PDO::PARAM_STR);
 
     return $stmt->execute();
 

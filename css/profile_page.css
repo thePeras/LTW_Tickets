@@ -5,16 +5,11 @@
 }
 
 .image-container {
-    margin-right: 20px;
+    margin: 40px;
 }
 
 img {
     width: 200px;
-}
-
-.fields-container {
-    display: flex;
-    flex-direction: column;
 }
 
 p {
@@ -32,6 +27,7 @@ input {
     transition: 0.2s;
     margin-bottom: 0.5rem;
     margin-top: 0.1rem;
+    width: 100%;
 }
 
 input[type=submit] {
@@ -44,13 +40,21 @@ input[type=submit] {
     padding: 0.5rem 1.5rem;
     cursor: pointer;
     width: 100px;
+    margin-top: 10px;
 }
 
 input[type=submit]:hover {
     opacity: 0.8;
 }
 
+
 form {
+    margin: 20px 40px;
     display: flex;
     flex-direction: column;
+}
+
+label {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
 }

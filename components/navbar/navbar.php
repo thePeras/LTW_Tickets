@@ -11,7 +11,12 @@ function get_navbar_user(?Client $client) : string
         return '';
     }
 
-    $imageSrc = ($client->image === null) ? 'assets/images/default_user.png' : base64_encode($client->image);
+    $imageSrc = '';
+    if ($client->image === null) {
+        $imageSrc = 'assets/images/default_user.png';
+    } else {
+        $imageSrc = base64_encode($client->image);
+    }
 
     return <<<HTML
         <div class="user" onclick="location.href='/profile'">
