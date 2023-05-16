@@ -30,6 +30,12 @@ input {
     width: 100%;
 }
 
+#cancelButton{
+    width: 100px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
 input[type=submit], #editButton {
     background-color: #5449f0;
     color: white;

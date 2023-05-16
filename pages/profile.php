@@ -51,18 +51,21 @@ echo navbar($db);
                 <img src="assets/images/default_user.png" alt="Default User Image">
             <?php endif; ?>
         </div>
-        <form action="profile" method="post" onsubmit="toggleEditableFields()">
+        <form action="profile" method="post">
             <label for="displayName">Name
                 <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
             </label>
             <label for="username">Username
-                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" required readonly>
+                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" required readonly pattern="^\S+$">
             </label>
             <label for="email">Email
                 <input type="email" name="email" id="email" value="<?php echo $client->email; ?>" required readonly>
             </label>
             <input type="button" id="editButton" value="Edit">
-            <input type="submit" id="saveButton" value="Save" style="display: none;">
+            <div id = "editButtons">
+                <input type="button" id="cancelButton" value="Cancel" style="display: none;" onclick = "handleCancelClick()">
+                <input type="submit" id="saveButton" value="Save" style="display: none;" onclick = "handleSaveClick()">
+            </div>
         </form>
     </div>
 </main>
