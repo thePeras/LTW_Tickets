@@ -28,3 +28,16 @@ function no_api_route() : void
     exit();
 
 }
+
+
+function handle_page_route(string $path, string $fileName) : void
+{
+    //append to regex the url parms and the / after the string
+    $path = (substr($path, 0, (strlen($path) - 1))."\/?(?:\?.*)?$/");
+    //match only the uri after
+    if (preg_match($path, substr($_SERVER["REQUEST_URI"], 4)) === 1) {
+        include $fileName;
+        exit();
+    }
+
+}
