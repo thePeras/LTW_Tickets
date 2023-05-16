@@ -32,9 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username    = $_POST['username'];
     $displayName = $_POST['displayName'];
     $email       = $_POST['email'];
+
     if (edit_profile($client, $username, $email, null, $displayName, null, $db) === true) {
         $client = get_user($username, $db);
-    };
+    }
 }
 
 echo navbar($db);
@@ -46,9 +47,9 @@ echo navbar($db);
     <div class="profile-container">
         <div class="image-container">
             <?php if ($client->image !== null) : ?>
-                <img src="<?php echo base64_encode($client->image); ?>" alt="Client Image">
+                <img src="<?php echo base64_encode($client->image); ?>" alt="Client Image" id = "profilePicture">
             <?php else : ?>
-                <img src="assets/images/default_user.png" alt="Default User Image">
+                <img src="assets/images/default_user.png" alt="Default User Image" id = "profilePicture">
             <?php endif; ?>
         </div>
         <form action="profile" method="post">
@@ -67,6 +68,7 @@ echo navbar($db);
                 <input type="submit" id="saveButton" value="Save" style="display: none;" onclick = "handleSaveClick()">
             </div>
         </form>
+        <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
     </div>
 </main>
 

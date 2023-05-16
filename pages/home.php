@@ -1,7 +1,6 @@
 <?php
     require 'components/navbar/navbar.php';
     require 'database/database.php';
-    //require 'utils/action_logout.php';
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +17,6 @@
 
 <?php
     $db = get_database();
-    //logout($db);
     echo navbar($db);
 ?>
 <main>

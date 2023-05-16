@@ -1,4 +1,5 @@
 function toggleEditableFields() {
+    var profilePicture = document.getElementById('profilePicture');
     var displayNameInput = document.getElementById('displayName');
     var usernameInput = document.getElementById('username');
     var emailInput = document.getElementById('email');
@@ -11,10 +12,14 @@ function toggleEditableFields() {
 function handleEditClick() {
     toggleEditableFields();
 
+    var profilePicture = document.getElementById('profilePicture');
+
     var editButton = document.getElementById('editButton');
     var saveButton = document.getElementById('saveButton');
     var cancelButton = document.getElementById('cancelButton');
 
+    profilePicture.addEventListener('click', openFileExplorer);
+    profilePicture.style.cursor = 'pointer';
     editButton.style.display = 'none';
     saveButton.style.display = 'inline-block';
     cancelButton.style.display = 'inline-block';
@@ -44,3 +49,28 @@ function handleSaveClick() {
 }
 
 document.getElementById('editButton').addEventListener('click', handleEditClick);
+
+function openFileExplorer() {
+    document.getElementById('fileInput').click();
+}
+
+function handleFileSelect(event) {
+    var file = event.target.files[0];
+
+    if (!file.type.match('image.*')) {
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = (function(theFile) {
+        return function(e) {
+            var image = document.getElementById('profilePicture');
+            image.src = e.target.result;
+
+            image.style.borderRadius = '50%';
+            image.style.height = '200px';
+            image.style.objectFit = 'cover';
+        };
+    })(file);
+    reader.readAsDataURL(file);
+}
