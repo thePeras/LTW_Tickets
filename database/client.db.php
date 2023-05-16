@@ -152,7 +152,7 @@ function get_clients(int $limit, int $offset, PDO $db) : array
 
     $result = $stmt->fetchAll();
 
-    $clientBuilder = function (array $a) use ($resultAgent, $resultAdmin): Client {
+    $clientBuilder = function (array $a) use ($resultAgent, $resultAdmin): ?Client {
         $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
         $client->type = "client";
         if (in_array($client->username, $resultAgent) === true) {
@@ -166,6 +166,69 @@ function get_clients(int $limit, int $offset, PDO $db) : array
     };
 
     return array_map($clientBuilder, $result);
+
+}
+
+
+function get_clients_only(int $limit, int $offset, PDO $db) : array
+{
+    $sql  = "SELECT * FROM Clients c WHERE username NOT IN (SELECT * FROM Agents) LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return array_map(
+        function (array $a) : Client {
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client->type = "client";
+            return $client;
+        },
+        $result
+    );
+
+}
+
+
+function get_agents(int $limit, int $offset, PDO $db) : array
+{
+    $sql  = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return array_map(
+        function (array $a) : Client {
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client->type = "agent";
+            return $client;
+        },
+        $result
+    );
+
+}
+
+
+function get_admins(int $limit, int $offset, PDO $db) : array
+{
+    $sql  = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return array_map(
+        function (array $a) : Client {
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client->type = "admin";
+            return $client;
+        },
+        $result
+    );
 
 }
 

@@ -16,7 +16,16 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
     $offset = intval(($_GET["offset"] ?? 0));
 
-    $clients = get_clients($limit, $offset, $db);
+    $clients = [];
+    if (isset($_GET["sort"]) === false) {
+        $clients = get_clients($limit, $offset, $db);
+    } else if ($_GET["sort"] === "client") {
+        $clients = get_clients_only($limit, $offset, $db);
+    } else if ($_GET["sort"] === "agent") {
+        $clients = get_agents($limit, $offset, $db);
+    } else if ($_GET["sort"] === "admin") {
+        $clients = get_admins($limit, $offset, $db);
+    }
 
     echo json_encode($clients);
 }

@@ -70,6 +70,8 @@ $offset = intval(($_GET["offset"] ?? 0))
 <main>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/dropdown.css">
+
     <h1>Admin page</h1>
     <ul class="tabSelector">
         <li <?php
@@ -89,9 +91,19 @@ $offset = intval(($_GET["offset"] ?? 0))
 
     <?php if ($_GET["tab"] === "users" || $_GET["tab"] === null) :?>
         <?php
+        $clients = [];
+        if (isset($_GET["sort"]) === false) {
             $clients = get_clients($limit, $offset, $db);
+        } else if ($_GET["sort"] === "client") {
+            $clients = get_clients_only($limit, $offset, $db);
+        } else if ($_GET["sort"] === "agent") {
+            $clients = get_agents($limit, $offset, $db);
+        } else if ($_GET["sort"] === "admin") {
+            $clients = get_admins($limit, $offset, $db);
+        }
         ?>
         <script src="js/user-table.js"></script>
+        
         
         <table class="user-table">
             <thead>
@@ -114,7 +126,16 @@ $offset = intval(($_GET["offset"] ?? 0))
                     <th>
                         </th>
                         <th>
-                            <i class="ri-filter-line icon"></i>
+                            <div class="dropdown-hover">
+                                <i class="ri-filter-line icon">
+                                </i>
+                                <div class="dropdown-content role-filter">
+                                        <h3>Sort by role:</h3>
+                                        <a href="?sort=client" >Client</a>
+                                        <a href="?sort=agent" >Agent</a>
+                                        <a href="?sort=admin" >Admin</a>
+                                </div>
+                            </div>
 
                         </th>
                 </tr>

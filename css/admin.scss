@@ -100,4 +100,27 @@
         background-color: #c90101;
 
     }
+
+    .role-filter{
+        background: linear-gradient(0, #f8f8f8, #f2f3f8);
+        max-width: 10em;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        border: 1px solid var(--hover-color);
+        > h3{
+            padding: 1em 1em;
+        }
+        > a{
+            display: block;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            color: var(--black-color);
+            font-weight: 500;
+        }
+
+        > a:hover{
+            background-color: var(--hover-color);
+        }
+    }
 }
+
+

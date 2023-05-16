@@ -1,5 +1,6 @@
 
-var offset = (new URLSearchParams((location.href.split("?")[1] ?? ''))).get("offset") ?? 0;
+const currentSearchParams = new URLSearchParams((location.href.split("?")[1] ?? ''));
+var offset = currentSearchParams.get("offset") ?? 0;
 var end = false;
 var fetchingUsers = false;
 const limit = 10;
@@ -14,7 +15,7 @@ function isOnScreen(element) {
 function drawNewRow(jsonObject) {
     const element = document.querySelector(".user-table-body");
     const tr = document.createElement("tr");
-    const date = new Date(jsonObject["createdAt"]*1000);
+    const date = new Date(jsonObject["createdAt"] * 1000);
     tr.classList.add("user-entry");
     tr.innerHTML = `                  
     <td>
@@ -57,7 +58,8 @@ const getNewTableData = async (ev) => {
         fetchingUsers = true;
         console.log("fetching new user data...");
         //fetch
-        const res = await fetch(`/api/clients.php?limit=10&offset=${offset + element.children.length}`,
+        const sortBy = currentSearchParams.get("sort");
+        const res = await fetch(`/api/clients.php?limit=10&offset=${offset + element.children.length}${sortBy !== null ? "&sort=" + sortBy : ''}`,
             { method: "GET" });
 
         if (res.status !== 200) {
