@@ -33,6 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         //TODO: make error message
     }
 
+    if ($_POST["action"] === "editUser" && isset($_POST["username"]) === true) {
+        if (update_user($_POST["username"], $_POST["displayName"], ($_POST["password"] ?? ""), $_POST["email"], $db) === false) {
+            log_to_stdout("Error while updating user ".$_POST["username"], "e");
+            //TODO: make error message
+        }
+    }
+
+
     if (isset($_POST["lastHref"]) === true) {
         header("Location: ".$_POST["lastHref"]);
     } else {
@@ -109,9 +117,6 @@ $offset = intval(($_GET["offset"] ?? 0))
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox">
-                    </th>
-                    <th>
                         User
                     </th>
                     <th>
@@ -143,9 +148,6 @@ $offset = intval(($_GET["offset"] ?? 0))
             <tbody class="user-table-body">
                 <?php foreach ($clients as $client) :?>
                 <tr class="user-entry">
-                    <td>
-                        <input type="checkbox">
-                    </td>
                     <td class="user-info">
                         <img class="user-photo" src="assets/images/person.png" alt="user">
                         <div class="user-name">

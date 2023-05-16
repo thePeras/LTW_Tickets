@@ -18,9 +18,6 @@ function drawNewRow(jsonObject) {
     const date = new Date(jsonObject["createdAt"] * 1000);
     tr.classList.add("user-entry");
     tr.innerHTML = `                  
-    <td>
-        <input type="checkbox">
-    </td>
     <td class="user-info">
         <img class="user-photo" src="assets/images/person.png" alt="user">
         <div class="user-name">
@@ -163,7 +160,7 @@ async function makeEditModal(username) {
                 <img class="user-photo" src="assets/images/person.png" alt="user">
                 <p class="username">${resJson["username"]}</p>
             </div>
-            <form name="editUserForm", action="admin" class="edit-user-form">
+            <form name="editUserForm", action="admin" class="edit-user-form" method="post">
                 <input type="hidden" name="action" value="editUser">
                 <input type="hidden" name="username" value="${username}">
                 <input type="hidden" name="lastHref" value="${location.href}">

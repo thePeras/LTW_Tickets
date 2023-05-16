@@ -288,3 +288,38 @@ function delete_client(string $username, PDO $db) : bool
     return $stmt->rowCount() === 1;
 
 }
+
+
+function update_user(string $username, string $displayName, string $password, string $email, PDO $db) : bool
+{
+    if (strlen($password) === 0) {
+        $sql  = "UPDATE Clients SET displayName=:displayName, email=:email WHERE username=:username";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":displayName", $displayName);
+        $stmt->bindParam(":email", $email);
+
+        return $stmt->execute();
+    }
+
+    $hash = hash_text($password);
+    $sql  = "UPDATE Clients SET displayName=:displayName, email=:email, password=:password, passwordInvalidated=1 WHERE username=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":displayName", $displayName);
+    $stmt->bindParam(":email", $email);
+    $stmt->bindParam(":password", $hash);
+
+    $updateSucessful = $stmt->execute() && $stmt->rowCount() === 1;
+
+    if ($updateSucessful === false) {
+        return false;
+    }
+
+    //remove sessions
+    $sql  = "DELETE FROM Sessions WHERE user=:username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+    return $stmt->execute();
+
+}
