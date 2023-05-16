@@ -38,10 +38,10 @@ function drawNewRow(jsonObject) {
         <p>${date.getHours().toString().padStart(2, "0") + ":" + date.getMinutes().toString().padStart(2, "0") + " " + date.getDate().toString().padStart(2, "0") + "/" + (date.getMonth() + 1).toString().padStart(2, "0") + "/" + date.getFullYear().toString().padStart(2, "0")}</p>
     </td>
     <td>
-        <i class="ri-edit-line icon"></i>
+        <i class="ri-edit-line icon" onclick="makeEditModal('${jsonObject["username"]}')"></i>
     </td>
     <td>
-        <i class="ri-delete-bin-line icon" style="color: var(--delete-color)" onclick="makeDeleteModal(${jsonObject["username"]})"></i>
+        <i class="ri-delete-bin-line icon" style="color: var(--delete-color)" onclick="makeDeleteModal('${jsonObject["username"]}')"></i>
     </td>`
     element.appendChild(tr);
 
@@ -113,7 +113,7 @@ function makeDeleteModal(username) {
     modalContentElement.innerHTML = `
     <h1>Delete User</h1>
     <p>Are you sure that you want to delete user <b>${username}</b>? This action is irreversible...</p>
-    <div class="delete-modal-buttons">
+    <div class="modal-buttons">
         <button class="cancel-button" onclick="closeModal()"><p>Cancel</p></button>
         <form method="post" action="admin">
             <input type="hidden" name="action" value="deleteUser">
@@ -121,7 +121,7 @@ function makeDeleteModal(username) {
             <input type="hidden" name="lastHref" value="${location.href}">
 
 
-            <input type="submit" class="delete-button" onclick="deleteUser('${username}')" value="Delete">
+            <input type="submit" class="delete-button" value="Delete">
         </form>
         </div>`;
     modalElement.style.display = "block";
@@ -134,9 +134,18 @@ function makeDeleteModal(username) {
     }
 }
 
-function makeEditModal(){
+async function makeEditModal(username) {
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
+
+    const res = await fetch(`/api/clients/${username}`, { method: "GET" });
+
+    if (res.status !== 200) {
+        console.log(`failed to get ${username} data... with status ${res.status}`);
+        return;
+    }
+
+    const resJson = await res.json();
 
     const modalElement = document.querySelector(".modal");
     if (modalElement === null) return;
@@ -144,4 +153,49 @@ function makeEditModal(){
     const modalContentElement = document.querySelector(".modal-content");
     modalContentElement.classList.toggle("edit-user-modal");
     if (modalContentElement === null) return;
+
+    //TODO: get csrf token
+
+    modalContentElement.innerHTML = `
+        <h2>Edit user</h2>
+        <div class="main-edit-content">
+            <div class="image-username">
+                <img class="user-photo" src="assets/images/person.png" alt="user">
+                <p class="username">${resJson["username"]}</p>
+            </div>
+            <form name="editUserForm", action="admin" class="edit-user-form">
+                <input type="hidden" name="action" value="editUser">
+                <input type="hidden" name="username" value="${username}">
+                <input type="hidden" name="lastHref" value="${location.href}">
+
+                <label for="displayName">
+                    <p>Display Name:</p>
+                </label>
+                <input type="text" name="displayName" value="${resJson["displayName"]}">
+                <label for="email">
+                    <p>Email:</p>
+                </label>
+                <input type="text" name="email" value="${resJson["email"]}">
+                <label for="password">
+                    <p>New password (single-time use):</p>
+                </label>
+                <input type="password" name="password">
+
+
+                <div class="modal-buttons">
+                    <button type="button" class="cancel-button" onclick="closeModal()"><p>Exit</p></button>
+                    <input type="submit" class="edit-button" value="Edit User">
+
+                </div>
+            </form>
+        </div>
+    `;
+    modalElement.style.display = "block";
+    modalElement.style.opacity = 0;
+    modalElement.animate([
+        { opacity: 0 },
+        { opacity: 1, visbility: "visible" },
+    ], { duration: 200, iterations: 1 }).onfinish = (event) => {
+        modalElement.style.opacity = 1;
+    }
 }

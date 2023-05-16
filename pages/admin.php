@@ -167,7 +167,7 @@ $offset = intval(($_GET["offset"] ?? 0))
                         ?></p>
                     </td>
                     <td>
-                        <i class="ri-edit-line icon"></i>
+                        <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $client->username?>')"></i>
                     </td>
                     <td>
                         <i class="ri-delete-bin-line icon" style="color: var(--delete-color)" onclick="makeDeleteModal('<?php echo $client->username?>')")></i>
