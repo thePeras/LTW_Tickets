@@ -18,10 +18,10 @@ handle_api_route(
             exit();
         }
 
-            $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
-            $offset = intval(($_GET["offset"] ?? 0));
+        $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
+        $offset = intval(($_GET["offset"] ?? 0));
 
-            $clients = [];
+        $clients = [];
         if (isset($_GET["sort"]) === false) {
             $clients = get_clients($limit, $offset, $db);
         } else if ($_GET["sort"] === "client") {
@@ -33,6 +33,36 @@ handle_api_route(
         }
 
             echo json_encode($clients);
+    }
+);
+
+
+handle_api_route(
+    "/^\/clients\/(.*)/",
+    "GET",
+    function () use ($db) {
+        if (is_session_valid($db) === null) {
+            http_response_code(403);
+            echo '{"error":"user not authenticated"}';
+            exit();
+        }
+
+        $matches = [];
+        if (preg_match("/\/clients\/(.*)/", $_SERVER["REQUEST_URI"], $matches) === 0) {
+            log_to_stdout("Something went wrong while parsing username...", "e");
+            http_response_code(500);
+            echo '{"error":"unexpected error..."}';
+            exit();
+        }
+
+        $client = get_user($matches[1], $db);
+        if ($client === null) {
+            http_response_code(404);
+            echo '{"error":"username not found"}';
+            exit();
+        }
+
+        echo json_encode($client);
     }
 );
 

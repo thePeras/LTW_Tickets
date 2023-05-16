@@ -59,7 +59,7 @@ const getNewTableData = async (ev) => {
         console.log("fetching new user data...");
         //fetch
         const sortBy = currentSearchParams.get("sort");
-        const res = await fetch(`/api/clients.php?limit=10&offset=${offset + element.children.length}${sortBy !== null ? "&sort=" + sortBy : ''}`,
+        const res = await fetch(`/api/clients?limit=10&offset=${offset + element.children.length}${sortBy !== null ? "&sort=" + sortBy : ''}`,
             { method: "GET" });
 
         if (res.status !== 200) {

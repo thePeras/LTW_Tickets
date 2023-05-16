@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__."/../utils/hash.php";
+require_once __DIR__."/../utils/roles.php";
 
 class Client implements JsonSerializable
 {
@@ -93,7 +94,30 @@ function get_user(string $username, PDO $db) : ?Client
         return null;
     }
 
-    return new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row["createdAt"]);
+    $client = new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row["createdAt"]);
+
+    $client->type = "client";
+
+    $sql  = "SELECT COUNT(*) FROM Agents WHERE username = :username";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $isAgent = $stmt->fetchColumn() === 1;
+
+    if ($isAgent === true) {
+        $client->type = "agent";
+        $sql          = "SELECT COUNT(*) FROM Admins WHERE username = :username";
+        $stmt         = $db->prepare($sql);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $isAdmin = $stmt->fetchColumn() === 1;
+        if ($isAdmin === true) {
+            $client->type = "admin";
+        }
+    }
+
+    return $client;
 
 }
 

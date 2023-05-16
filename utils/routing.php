@@ -22,7 +22,7 @@ function handle_api_route(string $path, string $method, Closure $handler) : void
 
 function no_api_route() : void
 {
-    log_to_stdout($_SERVER["REQUEST_METHOD"]." - ".$_SERVER["REQUEST_URI"]." has no api handler on ".__FILE__);
+    log_to_stdout($_SERVER["REQUEST_METHOD"]." - ".$_SERVER["REQUEST_URI"]." has no api handler on ".__FILE__, "e");
     http_response_code(403);
     echo '{"error":"no suitable api route handler..."}';
     exit();
