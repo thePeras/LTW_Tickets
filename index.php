@@ -6,8 +6,8 @@ $pagesDir = __DIR__.'/pages';
 $apiDir   = __DIR__.'/api';
 
 $contentExp = "/\.(?:3gp|apk|avi|bmp|css|csv|doc|docx|flac|gif|gz|gzip|htm|html|ics|jpe|jpeg|jpg|js|kml|kmz|m4a|mov|mp3|mp4|mpeg|mpg|odp|ods|odt|oga|ogg|ogv|pdf|pdf|png|pps|pptx|qt|svg|swf|tar|text|tif|txt|wav|webm|wmv|xls|xlsx|xml|xsl|xsd|zip|woff|ttf)/";
-$apiExp     = "/^\/api\/([[:alpha:]]*)(\/.*)*$/";
-$exp        = "/^\/([[:alpha:]]*)(\/.*)*$/";
+$apiExp     = "/^\/api\/([[:alpha:]]*)(\/.*)?(?:\?.*)?$/";
+$exp        = "/^\/([[:alpha:]]*)(\/.*)?(?:\?.*)?$/";
 $matches    = [];
 
 
@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_URI"] === "/") {
     } else {
         if (preg_match("/^\/api\//", $_SERVER["REQUEST_URI"]) === 1) {
             api_route_error();
+            exit();
         } else {
             include $pagesDir."/notFound.php";
             log_to_stdout($_SERVER["REQUEST_METHOD"]." - ".$_SERVER["REQUEST_URI"]." - no such page route.", "e");
