@@ -1,5 +1,7 @@
 button,
-input[type=submit] {
+input[type=submit],
+a.button {
+  text-decoration: none;
   flex: 1;
   cursor: pointer;
   text-align: center;
@@ -16,20 +18,24 @@ input[type=submit] {
   border: none;
 }
 button:hover,
-input[type=submit]:hover {
+input[type=submit]:hover,
+a.button:hover {
   background-color: rgba(111, 113, 119, 0.235);
 }
 button.primary,
-input[type=submit].primary {
+input[type=submit].primary,
+a.button.primary {
   background-color: #5449f0;
   color: white;
 }
 button.primary:hover,
-input[type=submit].primary:hover {
+input[type=submit].primary:hover,
+a.button.primary:hover {
   background-color: #6158e1;
 }
 button:focus,
-input[type=submit]:focus {
+input[type=submit]:focus,
+a.button:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
   border-color: #5449f0;

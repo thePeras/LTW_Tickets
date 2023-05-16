@@ -7,9 +7,9 @@ class Ticket
 
     public readonly int $id;
 
-    public readonly string $title;
+    public string $title;
 
-    public readonly string $description;
+    public string $description;
 
     public readonly string $status;
 
@@ -17,12 +17,12 @@ class Ticket
 
     public readonly string $assignee;
 
-    public readonly string $createdByUser;
+    public string $createdByUser;
 
     public readonly string $department;
 
 
-    public function __construct(string $title, string $description, $id=null, string $status="",
+    public function __construct(string $title, string $description, $id=0, string $status="",
         string $hashtags="", string $assignee="", string $createdByUser="", string $department=""
     ) {
         $this->id            = $id;
@@ -40,15 +40,19 @@ class Ticket
 }
 
 
-function insert_new_ticket(Session $session, Ticket $ticket, PDO $db) : bool
+function insert_new_ticket(Session $session, Ticket $ticket, PDO $db) : int
 {
-    $sql = "INSERT INTO Tickets(title, description, createByUser) VALUES (:title, :description, :createByUser)";
+    $sql = "INSERT INTO Tickets(title, description, createdByUser) VALUES (:title, :description, :createByUser)";
 
     $stmt = $db->prepare($sql);
+    $stmt->bindParam(':createByUser', $session->username, PDO::PARAM_STR);
     $stmt->bindParam(':title', $ticket->title, PDO::PARAM_STR);
     $stmt->bindParam(':description', $ticket->description, PDO::PARAM_STR);
-    $stmt->bindParam(':createByUser', $session->username, PDO::PARAM_INT);
 
-    return $stmt->execute();
+    if ($stmt->execute() === false) {
+        return 0;
+    }
+
+    return (int) $db->lastInsertId();
 
 }

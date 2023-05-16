@@ -4,7 +4,9 @@ $border-radius: 8px;
 $placeholder-color: #929292;
 
 button,
-input[type="submit"] {
+input[type="submit"],
+a.button {
+    text-decoration: none;
     flex: 1;
     cursor: pointer;
     text-align: center;

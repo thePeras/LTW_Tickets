@@ -23,12 +23,12 @@
     <main class="ticket-page">
         <div>
             <h1>Creating a new Ticket</h1>
-            <form action="/ticket" method="POST">
+            <form method="POST" action="ticket">
                 <div class="comment-box">
                     <h3>Title</h3>
-                    <input type="text" placeholder="Title">
+                    <input type="text" placeholder="Title" name="title">
                     <h3>Description</h3>
-                    <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Describe your issue"></textarea>
+                    <textarea cols="30" rows="10" placeholder="Describe your issue" name="description"></textarea>
                     <input type="submit" class="primary" value="Create" />
                 </div>
             </form>

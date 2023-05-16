@@ -63,7 +63,7 @@ CREATE TABLE AgentDepartments(
 );
 
 CREATE TABLE Tickets(
-    id NUMBER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     status TEXT,

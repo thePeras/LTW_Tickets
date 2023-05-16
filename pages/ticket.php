@@ -1,6 +1,7 @@
 <?php
     require 'components/navbar/navbar.php';
     require 'database/database.php';
+    require 'utils/action_create_ticket.php';
 
     $db = get_database();
 
@@ -10,14 +11,13 @@ if (is_session_valid($db) === null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title       = $_POST['username'];
-    $description = $_POST['password'];
+    $title       = $_POST['title'];
+    $description = $_POST['description'];
     $created     = create_ticket($title, $description, $db);
     if ($created === false) {
         // Um handle qualquer, qual?
     }
 
-    header('Location: /'); //ir para a página ticket criado
     exit();
 }
 
