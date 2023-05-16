@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
     <link rel="stylesheet" href="css/profile_page.css">
+    <script src="js/profile_page.js" defer></script>
 </head>
 <body>
 
@@ -50,17 +51,18 @@ echo navbar($db);
                 <img src="assets/images/default_user.png" alt="Default User Image">
             <?php endif; ?>
         </div>
-        <form action="profile" method="post">
-        <label for="displayName">Name
-                <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>">
+        <form action="profile" method="post" onsubmit="toggleEditableFields()">
+            <label for="displayName">Name
+                <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
             </label>
             <label for="username">Username
-                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>">
+                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" required readonly>
             </label>
             <label for="email">Email
-                <input type="email" name="email" id="email" value="<?php echo $client->email; ?>">
+                <input type="email" name="email" id="email" value="<?php echo $client->email; ?>" required readonly>
             </label>
-            <input type="submit" value="Save">
+            <input type="button" id="editButton" value="Edit">
+            <input type="submit" id="saveButton" value="Save" style="display: none;">
         </form>
     </div>
 </main>

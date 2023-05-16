@@ -49,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="name">
                     <p>Name:</p>
                 </label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required autocomplete="off">
 
                 <label for="username">
                     <p>Username:</p>
                 </label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" autocomplete="off" required pattern="^\S+$">
 
                 <label for="email">
                     <p>Email:</p>
