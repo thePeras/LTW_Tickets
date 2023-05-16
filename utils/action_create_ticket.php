@@ -6,7 +6,8 @@ require_once __DIR__.'/../database/tickets.db.php';
 
 function create_ticket(string $title, string $description, PDO $db) : bool
 {
-    $ticket  = new Ticket($title, $description);
+
+    $ticket  = new Ticket($title, $description, time());
     $session = is_session_valid($db);
 
     $ticketId = insert_new_ticket($session, $ticket, $db);

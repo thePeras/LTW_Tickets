@@ -21,7 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-    $id = $_GET['id'];
+    $id     = $_GET['id'];
+    $ticket = get_ticket($id, $db);
+if ($ticket === null) {
+    header('Location: /tickets');
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ?>
     <main class="ticket-page">
         <div>
-            <h1>Issue about log in #2</h1>
+            <h1><?php echo "$ticket->title #$ticket->id"?></h1>
             <ul id="buttons">
                 <li><button type = "button"> Status </button></li>
                 <li><button type = "button" class = "active"> Close </button></li>
@@ -56,9 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>15 min ago</p>
                 </div>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quisquam, voluptatum. Quisquam, voluptatum. Quisquam, voluptatum
-                    Fe fugiat, quibusdam, voluptatum, quod quia quas voluptates
+                    <?php echo $ticket->description ?>
                 </p>
             </div>
 

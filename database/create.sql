@@ -71,6 +71,7 @@ CREATE TABLE Tickets(
     assignee TEXT,
     department TEXT,
     createdByUser TEXT NOT NULL,
+    createdAt NUMBER NOT NULL,
 
     FOREIGN KEY (assignee) REFERENCES Agents(username),
     FOREIGN KEY (createdByUser) REFERENCES Clients(username),
