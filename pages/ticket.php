@@ -7,6 +7,14 @@
 
     $error = null;
 
+    $session = is_session_valid($db);
+
+    $loggedUser = null;
+if ($session !== null) {
+    $loggedUser = get_user($session->username, $db);
+}
+
+
     // Adding a new comment
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_session_valid($db) === null) {
@@ -135,16 +143,12 @@ if ($ticket === null) {
             <div class="side-card">
                 <div>
                     <h4 class="task-label">Assignee</h4>
-                    <p onclick="makeUserAssignModal()">
+                    <p onclick="makeUserAssignModal(
+                        <?php
+                            echo "'$loggedUser->type'";
+                        ?>
+                    )">
                         <i class="ri-account-circle-line"></i>
-                        Unassigned
-                    </p>
-                </div>
-
-                <div>
-                    <h4 class="task-label">Team</h4>
-                    <p>
-                        <i class="ri-group-2-line"></i> 
                         Unassigned
                     </p>
                 </div>
@@ -152,7 +156,11 @@ if ($ticket === null) {
             <div class="side-card">
                 <h4 class="task-label">Labels</h4>
                 <div>
-                    <p>
+                    <p onclick="makeLabelsModal(
+                        <?php
+                            echo "'$loggedUser->type'";
+                        ?> 
+                    )">
                         <i class="ri-price-tag-3-line"></i>
                         No labels assigned
                     </p>

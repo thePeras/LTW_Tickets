@@ -51,10 +51,12 @@ function make_default_admin(PDO $db)
     $sql      = "INSERT INTO Clients VALUES (:user, :email, :password, :name,:createdAt, 1);";
     $stmt     = $db->prepare($sql);
     $stmt->bindParam(":user", $username);
-    $stmt->bindParam(":password", hash_text($password));
+    $password = hash_text($password);
+    $stmt->bindParam(":password", $password);
     $stmt->bindParam(":email", $email);
     $stmt->bindParam(":name", $name);
-    $stmt->bindParam(":createdAt", time(), PDO::PARAM_INT);
+    $time = time();
+    $stmt->bindParam(":createdAt", $time, PDO::PARAM_INT);
 
     if ($stmt->execute() === false) {
         throw new ErrorException("Query failed while creating default admin");
