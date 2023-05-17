@@ -1,3 +1,5 @@
+@import "../../css/theme.scss";
+
 nav.sidebar {
     padding: 2rem;
     border-right: 2px solid #e6e6ee;
@@ -37,7 +39,7 @@ nav.sidebar {
         }
 
         li.active a {
-            background-color: var(--primary-color);
+            background-color: $primary-color;
             color: #fff;
         }
 
@@ -81,7 +83,7 @@ nav.sidebar {
     }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 950px) {
     nav.sidebar {
         display: none;
     }
