@@ -1,0 +1,106 @@
+.tabSelector {
+  display: flex;
+  padding: 1rem;
+}
+.tabSelector > li {
+  list-style-type: none;
+  flex: 1;
+  border-radius: 8px;
+  margin: 0rem 0.5rem;
+}
+.tabSelector > li > a {
+  padding: 1rem 0rem;
+  text-decoration: none;
+  color: #363c4c;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+  font-weight: 500;
+}
+.tabSelector > li.active {
+  background-color: #5449f0;
+}
+.tabSelector > li.active > a {
+  color: white;
+}
+.tabSelector > li:not(.active) {
+  background-color: rgba(202, 207, 218, 0.2352941176);
+}
+.tabSelector > li:hover:not(.active) {
+  background-color: rgba(152, 155, 161, 0.2352941176);
+}
+.tabSelector > hr {
+  color: rgba(65, 68, 73, 0.5137254902);
+}
+
+.user-table {
+  border-collapse: collapse;
+  padding: 1em 0em;
+}
+.user-table th {
+  padding: 0.5rem 0rem;
+  border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
+}
+.user-table .user-name > p:nth-child(1) {
+  color: #363c4c;
+}
+.user-table .user-name > p:nth-child(2) {
+  color: rgba(54, 60, 76, 0.7803921569);
+  font-size: 0.9rem;
+}
+.user-table .user-info {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.user-table .user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.user-table td {
+  padding: 0.5rem 1rem;
+}
+.user-table .icon {
+  font-size: 1.4em;
+  cursor: pointer;
+}
+.user-table .user-entry {
+  border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
+}
+.user-table .role {
+  border-radius: 8px;
+  padding: 0.3rem 1rem;
+}
+.user-table .client {
+  background-color: #06ad00;
+}
+.user-table .agent {
+  background-color: #ad9c01;
+}
+.user-table .admin {
+  background-color: #c90101;
+}
+.user-table .role-filter {
+  background: linear-gradient(0, #f8f8f8, #f2f3f8);
+  max-width: 10em;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(202, 207, 218, 0.2352941176);
+}
+.user-table .role-filter > h3 {
+  padding: 1em 1em;
+}
+.user-table .role-filter > a {
+  display: block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  color: #363c4c;
+  font-weight: 500;
+}
+.user-table .role-filter > a:hover {
+  background-color: rgba(202, 207, 218, 0.2352941176);
+}
+
+i.delete {
+  color: #c01104;
+}/*# sourceMappingURL=admin.css.map */
