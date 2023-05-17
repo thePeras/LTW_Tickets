@@ -47,15 +47,7 @@ handle_api_route(
             exit();
         }
 
-        $matches = [];
-        if (preg_match("/\/clients\/(.*)/", $_SERVER["REQUEST_URI"], $matches) === 0) {
-            log_to_stdout("Something went wrong while parsing username...", "e");
-            http_response_code(500);
-            echo '{"error":"unexpected error..."}';
-            exit();
-        }
-
-        $client = get_user($matches[1], $db);
+        $client = get_user($id, $db);
         if ($client === null) {
             http_response_code(404);
             echo '{"error":"username not found"}';

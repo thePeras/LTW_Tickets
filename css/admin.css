@@ -11,20 +11,20 @@
 .tabSelector > li > a {
   padding: 1rem 0rem;
   text-decoration: none;
-  color: var(--black-color);
+  color: #363c4c;
   margin: 0 auto;
   text-align: center;
   display: block;
   font-weight: 500;
 }
 .tabSelector > li.active {
-  background-color: var(--primary-color);
+  background-color: #5449f0;
 }
 .tabSelector > li.active > a {
   color: white;
 }
 .tabSelector > li:not(.active) {
-  background-color: var(--hover-color);
+  background-color: rgba(202, 207, 218, 0.2352941176);
 }
 .tabSelector > li:hover:not(.active) {
   background-color: rgba(152, 155, 161, 0.2352941176);
@@ -39,13 +39,13 @@
 }
 .user-table th {
   padding: 0.5rem 0rem;
-  border-bottom: 2px solid var(--hover-color);
+  border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
 }
 .user-table .user-name > p:nth-child(1) {
-  color: var(--black-primary);
+  color: #363c4c;
 }
 .user-table .user-name > p:nth-child(2) {
-  color: var(--black-secondary);
+  color: rgba(54, 60, 76, 0.7803921569);
   font-size: 0.9rem;
 }
 .user-table .user-info {
@@ -66,7 +66,7 @@
   cursor: pointer;
 }
 .user-table .user-entry {
-  border-bottom: 2px solid var(--hover-color);
+  border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
 }
 .user-table .role {
   border-radius: 8px;
@@ -85,7 +85,7 @@
   background: linear-gradient(0, #f8f8f8, #f2f3f8);
   max-width: 10em;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--hover-color);
+  border: 1px solid rgba(202, 207, 218, 0.2352941176);
 }
 .user-table .role-filter > h3 {
   padding: 1em 1em;
@@ -94,9 +94,13 @@
   display: block;
   padding: 0.5em 1em;
   text-decoration: none;
-  color: var(--black-color);
+  color: #363c4c;
   font-weight: 500;
 }
 .user-table .role-filter > a:hover {
-  background-color: var(--hover-color);
+  background-color: rgba(202, 207, 218, 0.2352941176);
+}
+
+i.delete {
+  color: #c01104;
 }/*# sourceMappingURL=admin.css.map */

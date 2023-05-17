@@ -9,12 +9,12 @@ function handle_api_route(string $path, string $method, Closure $handler) : void
 {
     $originalPath  = $path;
     $matches       = [];
-    $argumentRegex = "/<([[:alpha:]]+)>/";
+    $argumentRegex = "/<([[:alnum:]]+)>/";
     if (preg_match($argumentRegex, $path, $matches) !== 0) {
         array_shift($matches);
     }
 
-    $path = preg_replace($argumentRegex, "([[:alpha:]]*)", $path);
+    $path = preg_replace($argumentRegex, "([[:alnum:]]*)", $path);
     $path = preg_replace("/\//", "\/", $path);
 
     $reflection = new ReflectionFunction($handler);
@@ -50,6 +50,7 @@ function handle_api_route(string $path, string $method, Closure $handler) : void
     //remove /api regex
     if (preg_match($pathRegex, substr($_SERVER["REQUEST_URI"], 4), $closureArguments) === 1) {
         if ($_SERVER["REQUEST_METHOD"] === $method) {
+            array_shift($closureArguments);
             call_user_func_array($handler, $closureArguments);
             exit();
         }
@@ -71,12 +72,12 @@ function no_api_route() : void
 function handle_page_route(string $path, string $fileName) : void
 {
     $matches       = [];
-    $argumentRegex = "/<([[:alpha:]]+)>/";
+    $argumentRegex = "/<([[:alnum:]]+)>/";
     if (preg_match($argumentRegex, $path, $matches) !== 0) {
         array_shift($matches);
     }
 
-    $path = preg_replace($argumentRegex, "([[:alpha:]]*)", $path);
+    $path = preg_replace($argumentRegex, "([[:alnum:]]*)", $path);
     $path = preg_replace("/\//", "\/", $path);
 
     //append to regex the url parms and the / after the string

@@ -171,7 +171,7 @@ async function makeEditModal(username) {
 
 
                 <div class="modal-buttons">
-                    <button type="button" class="cancel-button" onclick="closeModal()"><p>Cancel</p></button>
+                    <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
                     <input type="submit" class="edit-button" value="Save">
 
                 </div>

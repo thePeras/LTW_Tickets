@@ -6,8 +6,8 @@ $pagesDir = __DIR__.'/pages';
 $apiDir   = __DIR__.'/api';
 
 $contentExp = "/\.(?:3gp|apk|avi|bmp|css|csv|doc|docx|flac|gif|gz|gzip|htm|html|ics|jpe|jpeg|jpg|js|kml|kmz|m4a|mov|mp3|mp4|mpeg|mpg|odp|ods|odt|oga|ogg|ogv|pdf|pdf|png|pps|pptx|qt|svg|swf|tar|text|tif|txt|wav|webm|wmv|xls|xlsx|xml|xsl|xsd|zip|woff|woff2|ttf|map)(?:\?.*)?$/";
-$apiExp     = "/^\/api\/([[:alpha:]]*)(\/.*)?(?:\?.*)?$/";
-$exp        = "/^\/([[:alpha:]]*)(\/.*)?(?:\?.*)?$/";
+$apiExp     = "/^\/api\/([[:alnum:]]*)(\/.*)?(?:\?.*)?$/";
+$exp        = "/^\/([[:alnum:]]*)(\/.*)?(?:\?.*)?$/";
 $matches    = [];
 
 

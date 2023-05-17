@@ -20,8 +20,7 @@
     navbar($db);
 ?>
 <main>
-    <h1>Tickets</h1>
-    <p>Content to be added</p>
+    
 </main>
     
 </body>

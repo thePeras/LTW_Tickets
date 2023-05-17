@@ -8,12 +8,26 @@
 body {
     background: linear-gradient(0, #f9faff, #f0f1f9);
     font-family: 'Anuphan', 'Open Sans', sans-serif;
-    display: flex;
+    display: grid;
     min-height: 100vh;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+}
 
+textarea,
+input,
+button,
+select,
+a {
+    font-family: 'Anuphan', 'Open Sans', sans-serif;
 }
 
 main {
     padding: 2rem;
-    flex: 1;
+}
+
+@media screen and (max-width: 950px) {
+    body {
+        grid-template-columns: auto;
+    }
 }

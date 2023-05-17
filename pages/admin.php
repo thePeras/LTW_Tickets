@@ -79,6 +79,8 @@ $offset = intval(($_GET["offset"] ?? 0))
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/dropdown.css">
+    <link rel="stylesheet" href="css/components.css">
+
 
     <h1>Admin page</h1>
     <ul class="tabSelector">
@@ -175,7 +177,7 @@ $offset = intval(($_GET["offset"] ?? 0))
                         <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $client->username?>')"></i>
                     </td>
                     <td>
-                        <i class="ri-delete-bin-line icon" style="color: var(--delete-color)" onclick="makeDeleteModal('<?php echo $client->username?>')")></i>
+                        <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo $client->username?>')")></i>
                     </td>
                 </tr>
                 <?php endforeach;?>

@@ -1,3 +1,4 @@
+@import "theme.scss";
 
 .tabSelector{
     display: flex;
@@ -10,7 +11,7 @@
         > a {
             padding: 1rem 0rem;
             text-decoration: none;
-            color: var(--black-color);
+            color: $black-color;
             margin: 0 auto; 
             text-align: center;
             display: block;
@@ -19,14 +20,14 @@
         margin: 0rem 0.5rem;
     }
     > li.active{
-        background-color: var(--primary-color);
+        background-color: $primary-color;
         > a {
             color: white;
         }
 
     }
     > li:not(.active) {
-        background-color: var(--hover-color);
+        background-color: $hover-color;
 
     }
 
@@ -45,17 +46,17 @@
 .user-table{
     th{
         padding: 0.5rem 0rem;
-        border-bottom: 2px solid var(--hover-color);
+        border-bottom: 2px solid $hover-color;
     }
 
     border-collapse: collapse;
     padding: 1em 0em;
     .user-name > p:nth-child(1){
-        color: var(--black-primary);
+        color: $black-color;
     
     }
     .user-name > p:nth-child(2){
-        color: var(--black-secondary);
+        color: $black-secondary;
         font-size: 0.9rem;
     }
 
@@ -79,7 +80,7 @@
     }
 
     .user-entry{
-        border-bottom: 2px solid var(--hover-color);
+        border-bottom: 2px solid $hover-color;
     }
 
     .role{
@@ -105,7 +106,7 @@
         background: linear-gradient(0, #f8f8f8, #f2f3f8);
         max-width: 10em;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        border: 1px solid var(--hover-color);
+        border: 1px solid $hover-color;
         > h3{
             padding: 1em 1em;
         }
@@ -113,14 +114,17 @@
             display: block;
             padding: 0.5em 1em;
             text-decoration: none;
-            color: var(--black-color);
+            color: $black-color;
             font-weight: 500;
         }
 
         > a:hover{
-            background-color: var(--hover-color);
+            background-color: $hover-color;
         }
     }
 }
 
 
+i.delete{
+    color: $delete-color;
+}

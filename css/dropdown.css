@@ -11,7 +11,7 @@
 }
 
 .dropdown-hover:hover {
-  background-color: var(--hover-color);
+  background-color: rgba(202, 207, 218, 0.2352941176);
   border-radius: 8px;
 }
 .dropdown-hover:hover .dropdown-content {

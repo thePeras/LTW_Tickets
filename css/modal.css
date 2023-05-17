@@ -3,11 +3,6 @@
   border-radius: 8px;
   border: 0;
   font-weight: 600;
-  font-size: 1.2em;
-}
-.cancel-button > p, .edit-user-modal > .main-edit-content .modal-buttons .edit-button > p, .delete-user-modal > .modal-buttons > form > .delete-button > p {
-  font-weight: 600;
-  font-size: 1.2em;
 }
 
 .modal {
@@ -44,7 +39,7 @@
   gap: 2em;
 }
 .delete-user-modal > .modal-buttons > form > .delete-button {
-  background-color: var(--delete-color);
+  background-color: #c01104;
   color: white;
 }
 .delete-user-modal > .modal-buttons > form > .delete-button:hover {
@@ -74,20 +69,10 @@
   border-radius: 50%;
 }
 .edit-user-modal > .main-edit-content > .image-username .username {
-  color: var(--black-secondary);
+  color: rgba(54, 60, 76, 0.7803921569);
 }
 .edit-user-modal > .main-edit-content > .edit-user-form > input, .edit-user-modal > .main-edit-content > .edit-user-form > select {
   margin-bottom: 1em;
-  border: none;
-  padding: 0.5rem;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  background-color: transparent;
-  border: 1px solid rgb(215, 217, 250);
-  font-size: 1rem;
-  transition: 0.2s;
-  margin-bottom: 0.5rem;
-  margin-top: 0.1rem;
 }
 .edit-user-modal > .main-edit-content .modal-buttons .edit-button {
   background-color: #06ad00;
@@ -98,8 +83,8 @@
 }
 
 .cancel-button {
-  background-color: var(--hover-color);
-  color: var(--black-color);
+  background-color: rgba(202, 207, 218, 0.2352941176);
+  color: #363c4c;
 }
 
 .cancel-button:hover {
