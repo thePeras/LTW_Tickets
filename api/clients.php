@@ -9,7 +9,7 @@ $db = get_database();
 header("Content-Type: application/json");
 
 handle_api_route(
-    "/^\/clients/",
+    "/clients",
     "GET",
     function () use ($db) {
         if (is_session_valid($db) === null) {
@@ -38,9 +38,9 @@ handle_api_route(
 
 
 handle_api_route(
-    "/^\/clients\/(.*)/",
+    "/clients/<id>",
     "GET",
-    function () use ($db) {
+    function (mixed $id) use ($db) {
         if (is_session_valid($db) === null) {
             http_response_code(403);
             echo '{"error":"user not authenticated"}';
