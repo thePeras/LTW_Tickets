@@ -57,6 +57,9 @@ if ($ticket === null) {
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/ticket.css">
     <link rel="stylesheet" href="css/modal.css">
+    <script src="js/ticket-page.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/snackbar.js"></script>
 </head>
 <body>
     <?php
@@ -128,9 +131,6 @@ if ($ticket === null) {
             </form>
         </div>
 
-        <script src="js/ticket-page.js"></script>
-        <script src="js/modal.js"></script>
-
         <div class="action-panel">
             <div class="side-card">
                 <div>
@@ -143,7 +143,7 @@ if ($ticket === null) {
 
                 <div>
                     <h4 class="task-label">Team</h4>
-                    <p onClick="makeUserAssignModal()">
+                    <p>
                         <i class="ri-group-2-line"></i> 
                         Unassigned
                     </p>

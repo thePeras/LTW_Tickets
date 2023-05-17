@@ -117,9 +117,6 @@ $tab = ($_GET["tab"] ?? "users");
         <script src="js/user-table.js"></script>
         <script src="js/modal.js"></script>
 
-
-        
-        
         <table class="user-table">
             <thead>
                 <tr>

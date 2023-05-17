@@ -48,14 +48,25 @@ async function makeLabelsModal() {
     }
 }
 
-async function makeUserAssignModal() {
+async function makeUserAssignModal(usertype) {
+    if (usertype != "agent" && usertype != "admin") {
+        return snackbar("Only agents can assign users to tickets", "error");
+    }
+
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
 
+
+
     const res = await fetch(`/api/clients`, { method: "GET" });
+
+
 
     const modalElement = document.createElement("div");
     modalElement.classList.add("modal");
+    modalElement.onclick = (event) => {
+        if (event.target === modalElement) closeModal();
+    }
 
     const modalContentElement = document.createElement("div");
     modalContentElement.classList.add("modal-content");
