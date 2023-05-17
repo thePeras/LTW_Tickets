@@ -2,3 +2,5 @@ vendor/
 database/tickets.db
 .vscode/
 *.css.map
+user_data/profile_pictures/*
+*.DS_Store
