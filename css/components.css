@@ -1,5 +1,4 @@
 button {
-  flex: 1;
   cursor: pointer;
   text-align: center;
   font-size: 1rem;
@@ -7,7 +6,6 @@ button {
   color: #363c4c;
   display: block;
   padding: 0.8rem;
-  margin: 0rem 1rem 0.5rem 0;
   text-decoration: none;
   color: #363c4c;
   border-radius: 8px;
