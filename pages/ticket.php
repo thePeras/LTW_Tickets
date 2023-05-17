@@ -1,24 +1,36 @@
 <?php
     require 'components/navbar/navbar.php';
     require 'database/database.php';
-    require 'utils/action_create_ticket.php';
+    require 'utils/action_ticket.php';
 
     $db = get_database();
 
-if (is_session_valid($db) === null) {
-    header('Location: /login');
-    exit();
-}
+    $error = null;
 
+    // Adding a new comment
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title       = $_POST['title'];
-    $description = $_POST['description'];
-    $created     = create_ticket($title, $description, $db);
-    if ($created === false) {
-        // Um handle qualquer, qual?
+    if (is_session_valid($db) === null) {
+        header('Location: /login');
+        exit();
     }
 
-    exit();
+    $content = $_POST['content'];
+    $ticket  = $_POST['ticketId'];
+
+    if ($content === null || $ticket === null) {
+        $error = 'Invalid comment';
+    }
+
+    if ($content === '') {
+        $error = 'Comment cannot be empty';
+    }
+
+    if ($error === null) {
+        $created = create_comment($content, $ticket, $db);
+        if ($created === false) {
+            $error = 'Error creating comment';
+        }
+    }
 }
 
     $id     = $_GET['id'];
@@ -58,20 +70,13 @@ if ($ticket === null) {
                 <div class="user">
                     <img class="avatar" src="assets/images/person.png" alt="user">
                     <h3>Agostinho Amorim</h3>
-                    <p>15 min ago</p>
+                    <p>
+                        <?php echo $ticket->createdAt->format('Y-m-d H:i:s') ?>
+                    </p>
                 </div>
                 <p>
                     <?php echo $ticket->description ?>
                 </p>
-            </div>
-
-            <div class="event">
-                <img class="avatar" src="assets/images/person.png" alt="user">
-                <div>
-                    <h4>Agostinho Amorim</h4>
-                    <p>close this</p>
-                    <p>15 min ago</p>
-                </div>
             </div>
 
             <div class="user-comment">
@@ -96,11 +101,24 @@ if ($ticket === null) {
                 </div>
             </div>
 
-            <div class="comment-box top-line">
-                <h3>New comment</h3>
-                <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Write your comment"></textarea>
-                <button type="button" class="primary">Submit</button>
+            <div class="event">
+                <img class="avatar" src="assets/images/person.png" alt="user">
+                <div>
+                    <h4>Agostinho Amorim</h4>
+                    <p>close this</p>
+                    <p>15 min ago</p>
+                </div>
             </div>
+
+            <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                <div class="comment-box top-line">
+                    <h3>New comment</h3>
+                    <textarea name="content" cols="30" rows="10" placeholder="Write your comment"></textarea>
+                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                    <input type="submit" class="primary" value="Send">
+                </div>
+            </form>
+
         </div>
         <div class="action-panel">
             <div class="side-card">

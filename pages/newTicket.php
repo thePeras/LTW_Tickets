@@ -1,6 +1,7 @@
 <?php
     require 'components/navbar/navbar.php';
     require 'database/database.php';
+    require 'utils/action_ticket.php';
 ?>
 
 <!DOCTYPE html>
@@ -19,11 +20,27 @@
     <?php
         $db = get_database();
         echo navbar($db);
+
+    if (is_session_valid($db) === null) {
+        header('Location: /login');
+        exit();
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $title       = $_POST['title'];
+        $description = $_POST['description'];
+        $created     = create_ticket($title, $description, $db);
+        if ($created === false) {
+            // Um handle qualquer, qual?
+        }
+
+        exit();
+    }
     ?>
     <main class="ticket-page">
         <div>
             <h1>Creating a new Ticket</h1>
-            <form method="POST" action="ticket">
+            <form method="POST" action="newTicket">
                 <div class="comment-box">
                     <h3>Title</h3>
                     <input type="text" placeholder="Title" name="title">

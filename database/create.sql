@@ -40,7 +40,7 @@ CREATE TABLE Admins(
 );
 
 CREATE TABLE FAQs(
-    id NUMBER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     createdByUser TEXT NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE AgentDepartments(
 );
 
 CREATE TABLE Tickets(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     status TEXT,
@@ -79,16 +79,17 @@ CREATE TABLE Tickets(
 );
 
 CREATE TABLE Comments(
-    id NUMBER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     content TEXT NOT NULL,
     createdByUser TEXT NOT NULL,
+    createdAt NUMBER NOT NULL,
     ticket NUMBER NOT NULL,
     FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
 
 CREATE TABLE Changes(
-    id NUMBER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     timestamp NUMBER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
