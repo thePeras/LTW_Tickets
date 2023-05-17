@@ -14,10 +14,15 @@ function get_database()
     }
 
     if (is_file($dbPath) === true) {
-        return new PDO("sqlite:".$dbPath);
+        $pdo = new PDO("sqlite:".$dbPath);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('pragma foreign_keys = ON');
+        return $pdo;
     }
 
-    $pdo        = new PDO("sqlite:".$dbPath);
+    $pdo = new PDO("sqlite:".$dbPath);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->exec('pragma foreign_keys = ON');
     $schemaFile = fopen("database/create.sql", "r");
     $schema     = fread($schemaFile, filesize("database/create.sql"));
 

@@ -76,23 +76,6 @@ const getNewTableData = async (ev) => {
 };
 document.addEventListener("scroll", getNewTableData);
 
-function closeModal() {
-    const body = document.querySelector("body");
-    body.style.overflow = "auto";
-    const modalElement = document.querySelector(".modal");
-    if (modalElement === null) return;
-    modalElement.animate([
-        { opacity: 1 },
-        { opacity: 0, visbility: "hidden" },
-    ], { duration: 200, iterations: 1 }).onfinish = (event) => {
-        modalElement.style.display = "none";
-        const modalContentElement = document.querySelector(".modal-content");
-        modalContentElement.classList = ["modal-content"] //reset classes
-        if (modalContentElement === null) return;
-        modalContentElement.innerHTML = '';
-    };
-
-}
 
 
 function makeDeleteModal(username) {
@@ -177,6 +160,14 @@ async function makeEditModal(username) {
                     <p>New password (single-time use):</p>
                 </label>
                 <input type="password" name="password">
+                <label for="role">
+                    <p>Role:</p>
+                </label>
+                <select name="role">
+                    <option value="client" ${resJson["type"] === "client" ? "selected" : ""}>Client</option>
+                    <option value="agent" ${resJson["type"] === "agent" ? "selected" : ""}>Agent</option>
+                    <option value="admin" ${resJson["type"] === "admin" ? "selected" : ""}>Admin</option>
+                </select>
 
 
                 <div class="modal-buttons">

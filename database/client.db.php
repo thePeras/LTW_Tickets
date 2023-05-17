@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once __DIR__."/../utils/hash.php";
 require_once __DIR__."/../utils/roles.php";
+require_once __DIR__."/../utils/logger.php";
+
 
 class Client implements JsonSerializable
 {
@@ -290,8 +292,55 @@ function delete_client(string $username, PDO $db) : bool
 }
 
 
-function update_user(string $username, string $displayName, string $password, string $email, PDO $db) : bool
+function change_user_type(Client $client, string $newType, PDO $db)
 {
+    if ($client->type === $newType) {
+        return;
+    }
+
+    //TODO: do other table migrations
+
+    //spaghetti code, but oh well crunching time
+    if ($newType === "agent" && $client->type === "client") {
+        promote_to_agent($client->username, $db);
+    }
+
+    if ($newType === "admin" && $client->type === "client") {
+        promote_to_agent($client->username, $db);
+        promote_to_admin($client->username, $db);
+    }
+
+    if ($newType === "admin" && $client->type === "agent") {
+        promote_to_admin($client->username, $db);
+    }
+
+    if ($newType === "client" && $client->type === "admin") {
+        demote_to_agent($client->username, $db);
+        demote_to_client($client->username, $db);
+    }
+
+    if ($newType === "agent" && $client->type === "admin") {
+        demote_to_agent($client->username, $db);
+    }
+
+    if ($newType === "client" && $client->type === "agent") {
+        demote_to_client($client->username, $db);
+    }
+
+}
+
+
+function update_user(string $username, string $displayName, string $password, string $email, string $type, PDO $db) : bool
+{
+
+    $client = get_user($username, $db);
+    if ($client === null) {
+        log_to_stdout("Failed to get user ".$username, "e");
+        return false;
+    }
+
+    change_user_type($client, $type, $db);
+
     if (strlen($password) === 0) {
         $sql  = "UPDATE Clients SET displayName=:displayName, email=:email WHERE username=:username";
         $stmt = $db->prepare($sql);

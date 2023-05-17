@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($_POST["action"] === "editUser" && isset($_POST["username"]) === true) {
-        if (update_user($_POST["username"], $_POST["displayName"], ($_POST["password"] ?? ""), $_POST["email"], $db) === false) {
+        if (update_user($_POST["username"], $_POST["displayName"], ($_POST["password"] ?? ""), $_POST["email"], $_POST["role"], $db) === false) {
             log_to_stdout("Error while updating user ".$_POST["username"], "e");
             //TODO: make error message
         }
@@ -111,6 +111,9 @@ $offset = intval(($_GET["offset"] ?? 0))
         }
         ?>
         <script src="js/user-table.js"></script>
+        <script src="js/modal.js"></script>
+
+
         
         
         <table class="user-table">

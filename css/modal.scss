@@ -88,12 +88,13 @@
 
             }
 
-            .username{
+            .username {
                 color: var(--black-secondary);
             }
         }
-        > .edit-user-form{
-            > input{
+
+        >.edit-user-form {
+            >input, >select{
                 margin-bottom: 1em;
                 border: none;
                 padding: 0.5rem;
@@ -106,15 +107,17 @@
                 margin-bottom: 0.5rem;
                 margin-top: 0.1rem;
             }
+
         }
 
-        .modal-buttons{
-            .edit-button{
+        .modal-buttons {
+            .edit-button {
                 background-color: #06ad00;
                 color: white;
                 @extend %button;
             }
-            .edit-button:hover{
+
+            .edit-button:hover {
                 background-color: #059e00;
             }
         }

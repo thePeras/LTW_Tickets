@@ -76,7 +76,7 @@
 .edit-user-modal > .main-edit-content > .image-username .username {
   color: var(--black-secondary);
 }
-.edit-user-modal > .main-edit-content > .edit-user-form > input {
+.edit-user-modal > .main-edit-content > .edit-user-form > input, .edit-user-modal > .main-edit-content > .edit-user-form > select {
   margin-bottom: 1em;
   border: none;
   padding: 0.5rem;
