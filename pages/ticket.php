@@ -39,6 +39,10 @@ if ($ticket === null) {
     header('Location: /tickets');
 }
 
+    $author = get_ticket_author($ticket->createdByUser, $db);
+
+    $comments = get_comments($id, $db);
+
 ?>
 
 <!DOCTYPE html>
@@ -66,32 +70,43 @@ if ($ticket === null) {
                 <li><button type = "button" class = "active"> Close </button></li>
             </ul>
 
-            <div class="user-comment">
-                <div class="user">
-                    <img class="avatar" src="assets/images/person.png" alt="user">
-                    <h3>Agostinho Amorim</h3>
+            <!-- Ticket description -->
+            <div class="ticket-comment">
+                <div class="user-comment">
+                    <div class="user">
+                        <img class="avatar" src="assets/images/person.png" alt="user">
+                        <h3>
+                            <?php echo $author->displayName ?>
+                        </h3>
+                        <p>
+                            <?php echo $ticket->createdAt->format('Y-m-d H:i:s') ?>
+                        </p>
+                    </div>
                     <p>
-                        <?php echo $ticket->createdAt->format('Y-m-d H:i:s') ?>
+                        <?php echo $ticket->description ?>
                     </p>
                 </div>
-                <p>
-                    <?php echo $ticket->description ?>
-                </p>
             </div>
 
-            <div class="user-comment">
-                <div class="user">
-                    <img class="avatar" src="assets/images/person.png" alt="user">
-                    <h3>Agostinho Amorim</h3>
-                    <p>15 min ago</p>
+            <!-- Comments -->
+            <?php foreach ($comments as $comment) : ?>
+                <div class="ticket-comment">
+                    <div class="user-comment">
+                        <div class="user">
+                            <img class="avatar" src="assets/images/person.png" alt="user" />
+                            <h3><?php echo $comment["displayName"] ?></h3>
+                            <p>
+                                <?php echo $comment["comment"]->createdAt->format('Y-m-d H:i:s') ?>
+                            </p>
+                        </div>
+                        <p>
+                            <?php echo $comment["comment"]->content ?>
+                        </p>
+                    </div>
                 </div>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quisquam, voluptatum. Quisquam, voluptatum. Quisquam, voluptatum
-                    Fe fugiat, quibusdam, voluptatum, quod quia quas voluptates
-                </p>
-            </div>
+            <?php endforeach; ?>
 
+            <!--
             <div class="event">
                 <img class="avatar" src="assets/images/person.png" alt="user">
                 <div>
@@ -100,15 +115,7 @@ if ($ticket === null) {
                     <p>15 min ago</p>
                 </div>
             </div>
-
-            <div class="event">
-                <img class="avatar" src="assets/images/person.png" alt="user">
-                <div>
-                    <h4>Agostinho Amorim</h4>
-                    <p>close this</p>
-                    <p>15 min ago</p>
-                </div>
-            </div>
+            -->
 
             <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                 <div class="comment-box top-line">
@@ -118,7 +125,6 @@ if ($ticket === null) {
                     <input type="submit" class="primary" value="Send">
                 </div>
             </form>
-
         </div>
         <div class="action-panel">
             <div class="side-card">

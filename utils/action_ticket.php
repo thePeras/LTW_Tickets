@@ -38,3 +38,19 @@ function create_comment(string $content, int $ticketId, PDO $db) : bool
     return true;
 
 }
+
+
+function get_comments(int $ticketId, PDO $db) : array
+{
+
+    return get_comments_by_ticket($ticketId, $db);
+
+}
+
+
+function get_ticket_author(string $username, PDO $db) : ?Client
+{
+
+    return get_user($username, $db);
+
+}

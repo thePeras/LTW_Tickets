@@ -48,3 +48,23 @@ function insert_new_comment(Comment $comment, PDO $db) : bool
     return $stmt->execute();
 
 }
+
+
+function get_comments_by_ticket(int $ticketId, PDO $db) : array
+{
+    $sql  = "SELECT * FROM Comments JOIN Clients ON Comments.createdByUser = Clients.username WHERE ticket = :ticketId";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ticketId', $ticketId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $comments = [];
+    while (($row = $stmt->fetch(PDO::FETCH_ASSOC)) !== false) {
+        $comments[] = [
+            'comment'     => new Comment($row['content'], $row['ticket'], $row['createdByUser'], (int) $row['createdAt'], (int) $row['id']),
+            'displayName' => $row['displayName'],
+        ];
+    }
+
+    return $comments;
+
+}

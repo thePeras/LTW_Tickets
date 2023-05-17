@@ -72,11 +72,29 @@
   border: 1px solid #ebebeb;
 }
 
+.ticket-comment {
+  position: relative;
+  padding-bottom: 16px;
+}
+
+.ticket-comment::before {
+  background-color: #d8d8d8;
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 30px;
+  position: absolute;
+  top: 0;
+  width: 2px;
+}
+
 .user-comment {
   padding: 1rem;
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid #ebebeb;
+  position: relative;
+  z-index: 1;
 }
 .user-comment .user {
   display: flex;
@@ -103,32 +121,6 @@
   margin: 0.5rem 0;
   margin-left: 1rem;
   margin-top: 1rem;
-}
-
-.ticket-comment {
-  padding: 1rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.2);
-  border: 1px solid #ebebeb;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.ticket-comment .comment-header {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  align-items: center;
-}
-.ticket-comment .comment-header .comment-author {
-  font-weight: bold;
-}
-.ticket-comment .comment-header .comment-date {
-  color: #929292;
-}
-.ticket-comment .comment-body {
-  color: #353537;
 }
 
 .event {
