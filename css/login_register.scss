@@ -1,3 +1,18 @@
+input[type="submit"] {
+    background-color: #5449f0;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    opacity: 0.8;
+}
+
 .container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -10,7 +25,6 @@
         gap: 1rem;
         padding: 5rem;
 
-        form {}
     }
 
     .left {

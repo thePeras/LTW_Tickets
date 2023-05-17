@@ -1,0 +1,130 @@
+@import "theme.scss";
+
+.tabSelector{
+    display: flex;
+    padding: 1rem;
+    > li{
+        list-style-type: none;
+        flex:1;
+        border-radius: 8px;
+        
+        > a {
+            padding: 1rem 0rem;
+            text-decoration: none;
+            color: $black-color;
+            margin: 0 auto; 
+            text-align: center;
+            display: block;
+            font-weight: 500;
+        }
+        margin: 0rem 0.5rem;
+    }
+    > li.active{
+        background-color: $primary-color;
+        > a {
+            color: white;
+        }
+
+    }
+    > li:not(.active) {
+        background-color: $hover-color;
+
+    }
+
+    > li:hover:not(.active) {
+        background-color: #989ba13c;
+
+    }
+
+    > hr {
+        color: #41444983;
+
+    }
+}
+
+
+.user-table{
+    th{
+        padding: 0.5rem 0rem;
+        border-bottom: 2px solid $hover-color;
+    }
+
+    border-collapse: collapse;
+    padding: 1em 0em;
+    .user-name > p:nth-child(1){
+        color: $black-color;
+    
+    }
+    .user-name > p:nth-child(2){
+        color: $black-secondary;
+        font-size: 0.9rem;
+    }
+
+    .user-info{
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    .user-photo{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    td{
+        padding: 0.5rem 1rem ;
+    }
+
+    .icon{
+        font-size: 1.4em;
+        cursor: pointer;
+    }
+
+    .user-entry{
+        border-bottom: 2px solid $hover-color;
+    }
+
+    .role{
+        border-radius: 8px;
+        padding: 0.3rem 1rem;
+    }
+
+    .client{
+        background-color: #06ad00;
+    }
+
+    .agent{
+        background-color: #ad9c01;
+
+    }
+
+    .admin{
+        background-color: #c90101;
+
+    }
+
+    .role-filter{
+        background: linear-gradient(0, #f8f8f8, #f2f3f8);
+        max-width: 10em;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        border: 1px solid $hover-color;
+        > h3{
+            padding: 1em 1em;
+        }
+        > a{
+            display: block;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            color: $black-color;
+            font-weight: 500;
+        }
+
+        > a:hover{
+            background-color: $hover-color;
+        }
+    }
+}
+
+
+i.delete{
+    color: $delete-color;
+}

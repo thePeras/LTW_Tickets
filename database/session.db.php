@@ -51,7 +51,7 @@ function get_session(string $token, PDO $db) : ?Session
     $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($row === false) {
+    if ($row === false || empty($row) === true) {
         return null;
     }
 
