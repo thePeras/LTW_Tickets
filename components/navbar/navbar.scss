@@ -1,11 +1,6 @@
 
 @import "../../css/theme.scss";
 
-.sticky{
-    position: sticky;
-    top: 0;
-}
-
 nav.sidebar {
     padding: 2rem;
     border-right: 2px solid #e6e6ee;
@@ -34,7 +29,7 @@ nav.sidebar {
                 padding: 0.8rem;
                 margin: 0.5rem 0;
                 text-decoration: none;
-                color: var(--black-color);
+                color: $black-color;
                 font-weight: 500;
                 border-radius: 8px;
                 transition: all 0.1s ease-out;
@@ -46,7 +41,7 @@ nav.sidebar {
             }
 
             a:hover {
-                background-color: var(--hover-color);
+                background-color: $hover-color;
             }
         }
 
@@ -75,13 +70,13 @@ nav.sidebar {
             h3 {
                 font-size: 1rem;
                 font-weight: 500;
-                color: var(--black-color);
+                color: $black-color;
             }
 
             p {
                 font-size: 0.8rem;
                 font-weight: 400;
-                color: var(--black-secondary);
+                color: $black-secondary;
             }
         }
 
