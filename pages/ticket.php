@@ -1,7 +1,7 @@
 <?php
-    require 'components/navbar/navbar.php';
-    require 'database/database.php';
-    require 'utils/action_ticket.php';
+    require_once 'components/navbar/navbar.php';
+    require_once 'database/database.php';
+    require_once 'utils/action_ticket.php';
 
     $db = get_database();
 
@@ -56,6 +56,7 @@ if ($ticket === null) {
     <link rel="stylesheet" href="css/remixicon.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/ticket.css">
+    <link rel="stylesheet" href="css/modal.css">
 </head>
 <body>
     <?php
@@ -126,11 +127,15 @@ if ($ticket === null) {
                 </div>
             </form>
         </div>
+
+        <script src="js/ticket-page.js"></script>
+        <script src="js/modal.js"></script>
+
         <div class="action-panel">
             <div class="side-card">
                 <div>
                     <h4 class="task-label">Assignee</h4>
-                    <p>
+                    <p onclick="makeUserAssignModal()">
                         <i class="ri-account-circle-line"></i>
                         Unassigned
                     </p>
@@ -138,7 +143,7 @@ if ($ticket === null) {
 
                 <div>
                     <h4 class="task-label">Team</h4>
-                    <p>
+                    <p onClick="makeUserAssignModal()">
                         <i class="ri-group-2-line"></i> 
                         Unassigned
                     </p>

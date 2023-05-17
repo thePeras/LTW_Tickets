@@ -1,7 +1,7 @@
 <?php
-    require 'components/navbar/navbar.php';
-    require 'components/ticket-card/ticket-card.php';
-    require 'database/database.php';
+    require_once 'components/navbar/navbar.php';
+    require_once 'components/ticket-card/ticket-card.php';
+    require_once 'database/database.php';
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
-    <link rel="stylesheet" href="pages/tickets.css">
+    <link rel="stylesheet" href="css/tickets.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
@@ -24,11 +24,11 @@
 ?>
 <main>
     <h1>Tickets</h1>
-    <ul id = "buttons">
+    <ul class = "buttons">
         <li><button type = "button"> Sort by</button></li>
         <li><a href="/newTicket" class="button primary"> New ticket</a></li>
     </ul>
-    <ul id = "filters">
+    <ul class = "filters">
         <li class = "active">Unassigned</li>
         <li>Assigned to me</li>
         <li>All tickets</li>

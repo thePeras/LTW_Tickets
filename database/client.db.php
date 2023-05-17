@@ -23,7 +23,7 @@ class Client implements JsonSerializable
     public int $createdAt;
 
 
-    public function jsonSerialize()
+    public function jsonSerialize() : mixed
     {
         return [
             "username"    => $this->username,
@@ -150,9 +150,14 @@ function is_user_password_invalidated(string $username, PDO $db) : bool
 }
 
 
-function get_clients(int $limit, int $offset, PDO $db) : array
+function get_clients(?int $limit, ?int $offset, PDO $db) : array
 {
-    $sql = "SELECT * FROM Clients LIMIT :limit OFFSET :offset";
+    $sql = "";
+    if ($limit === null) {
+        $sql = "SELECT * FROM Clients c)";
+    } else {
+        $sql = "SELECT * FROM Clients c LIMIT :limit OFFSET :offset";
+    }
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
@@ -196,9 +201,15 @@ function get_clients(int $limit, int $offset, PDO $db) : array
 }
 
 
-function get_clients_only(int $limit, int $offset, PDO $db) : array
+function get_clients_only(?int $limit, ?int $offset, PDO $db) : array
 {
-    $sql  = "SELECT * FROM Clients c WHERE username NOT IN (SELECT * FROM Agents) LIMIT :limit OFFSET :offset";
+    $sql = "";
+    if ($limit === null) {
+        $sql = "SELECT * FROM Clients c WHERE username NOT IN (SELECT * FROM Agents)";
+    } else {
+        $sql = "SELECT * FROM Clients c WHERE username NOT IN (SELECT * FROM Agents) LIMIT :limit OFFSET :offset";
+    }
+
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
@@ -217,9 +228,15 @@ function get_clients_only(int $limit, int $offset, PDO $db) : array
 }
 
 
-function get_agents(int $limit, int $offset, PDO $db) : array
+function get_agents(?int $limit, ?int $offset, PDO $db) : array
 {
-    $sql  = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username LIMIT :limit OFFSET :offset";
+    $sql = "";
+    if ($limit === null) {
+        $sql = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username)";
+    } else {
+        $sql = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username LIMIT :limit OFFSET :offset";
+    }
+
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
@@ -240,7 +257,13 @@ function get_agents(int $limit, int $offset, PDO $db) : array
 
 function get_admins(int $limit, int $offset, PDO $db) : array
 {
-    $sql  = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username LIMIT :limit OFFSET :offset";
+    $sql = "";
+    if ($limit === null) {
+        $sql = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username)";
+    } else {
+        $sql = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username LIMIT :limit OFFSET :offset";
+    }
+
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);

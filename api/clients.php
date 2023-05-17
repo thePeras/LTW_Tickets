@@ -21,6 +21,8 @@ handle_api_route(
         $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
         $offset = intval(($_GET["offset"] ?? 0));
 
+        $query = ($_GET["q"] ?? '');
+
         $clients = [];
         if (isset($_GET["sort"]) === false) {
             $clients = get_clients($limit, $offset, $db);
@@ -30,6 +32,17 @@ handle_api_route(
             $clients = get_agents($limit, $offset, $db);
         } else if ($_GET["sort"] === "admin") {
             $clients = get_admins($limit, $offset, $db);
+        }
+
+        if ($query !== '') {
+            $clients = array_filter(
+                $clients,
+                function ($client) use ($query) {
+                    return strpos($client->username, $query) !== false
+                        || strpos($client->displayName, $query) !== false
+                        || strpos($client->email, $query) !== false;
+                }
+            );
         }
 
             echo json_encode($clients);

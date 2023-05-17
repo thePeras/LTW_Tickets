@@ -1,7 +1,7 @@
 <?php
-    require 'components/navbar/navbar.php';
-    require 'database/database.php';
-    require 'utils/action_ticket.php';
+    require_once 'components/navbar/navbar.php';
+    require_once 'database/database.php';
+    require_once 'utils/action_ticket.php';
 ?>
 
 <!DOCTYPE html>
