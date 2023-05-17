@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="username">
                     <p>Username:</p>
                 </label>
-                <input type="text" id="username" name="username" autocomplete="off" required pattern="^\S+$">
+                <input type="text" id="username" name="username" autocomplete="off" required pattern="^[a-zA-Z0-9_\-\.]{3,20}$">
 
                 <label for="email">
                     <p>Email:</p>

@@ -30,13 +30,6 @@ function handleCancelClick(){
 }
 
 function handleSaveClick() {
-    var usernameInput = document.getElementById('username');
-    var username = usernameInput.value;
-    var usernameRegex = /^[a-zA-Z0-9]+$/;
-    if (!usernameRegex.test(username)) {
-        return;
-    }
-
     toggleEditableFields();
 
     var editButton = document.getElementById('editButton');
@@ -56,6 +49,13 @@ function openFileExplorer() {
 
 function handleFileSelect(event) {
     var file = event.target.files[0];
+
+    let max_size_mb = 2;
+
+    if (file.size > max_size_mb * 1000000) {
+        alert('File is too big! Please select a file smaller than ' + max_size_mb + ' MB.');
+        return;
+    }
 
     var reader = new FileReader();
     reader.onload = (function(theFile) {

@@ -3,3 +3,4 @@ database/tickets.db
 .vscode/
 *.css.map
 .DS_Store
+user_data/profile_images/*

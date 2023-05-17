@@ -7,10 +7,10 @@ require 'utils/hash.php';
 
 
 function edit_profile(Client $oldUser,
-    ?string $newUsername,
-    ?string $newEmail,
+    $newUsername,
+    $newEmail,
     ?string $newPassword,
-    ?string $newDisplayName,
+    $newDisplayName,
     $newImage,
     PDO $db
 ) : bool {
@@ -22,16 +22,29 @@ function edit_profile(Client $oldUser,
     }
 
     if ($newImage['tmp_name'] !== '') {
-        $newImageContent  = file_get_contents($newImage['tmp_name']);
-        $newImageName     = hash_profile_picture($newUsername).'.png';
-        $newImageLocation = __DIR__.'/../user_data/profile_pictures/'.$newImageName;
-        file_put_contents($newImageLocation, $newImageContent);
-        $newImage = '/user_data/profile_pictures/'.$newImageName;
+        $newImageContent = file_get_contents($newImage['tmp_name']);
+        if ($oldUser->image === Client::DEFAULT_IMAGE) {
+            $newImageName     = hash_profile_picture($newUsername).'.png';
+            $newImageLocation = __DIR__.'/../user_data/profile_pictures/'.$newImageName;
+            file_put_contents($newImageLocation, $newImageContent);
+            $newImage = '/user_data/profile_pictures/'.$newImageName;
+        } else {
+            file_put_contents(__DIR__.'/../'.$oldUser->image, $newImageContent);
+            $newImage = $oldUser->image;
+        }
     } else {
-        $newImage = null;
+        $newImage = $oldUser->image;
     }
 
-    if (edit_user($oldUser, $newUsername, $newEmail, $newPassword, $newDisplayName, $newImage, $db) === false) {
+    if ($newPassword !== null) {
+        $newPassword = hash_password($newPassword);
+    } else {
+        $newPassword = $oldUser->password;
+    }
+
+    $newUser = new Client($newUsername, $newDisplayName, $newEmail, $newPassword, $newImage);
+
+    if (edit_user($oldUser, $newUser, $db) === false) {
         return false;
     }
 

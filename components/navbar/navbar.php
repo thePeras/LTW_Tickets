@@ -11,7 +11,6 @@ function get_navbar_user(?Client $client) : string
         return '';
     }
 
-    $imageSrc = '';
     if ($client->image === null) {
         $imageSrc = 'assets/images/default_user.png';
     } else {
@@ -23,7 +22,7 @@ function get_navbar_user(?Client $client) : string
                 <img class="avatar" src=$imageSrc alt="user">
                 <div>
                     <h3>$client->displayName</h3>
-                    <p>$client->email</p>
+                    <p>@$client->username</p>
                 </div>
             <a href="/logout" class="logout">
                 <i class="ri-logout-box-line"></i>

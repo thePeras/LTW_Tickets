@@ -53,12 +53,12 @@ echo navbar($db);
                 <img src="assets/images/default_user.png" alt="Default User Image" id = "profilePicture">
             <?php endif; ?>
         </div>
-        <form action="profile" method="post" enctype="multipart/form-data">
+        <form action="profile" method="post" enctype="multipart/form-data" onsubmit="return handleSaveClick()">
             <label for="displayName">Name
                 <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
             </label>
             <label for="username">Username
-                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" required readonly pattern="^\S+$">
+                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" required readonly pattern="^[a-zA-Z0-9_\-\.]{3,20}$">
             </label>
             <label for="email">Email
                 <input type="email" name="email" id="email" value="<?php echo $client->email; ?>" required readonly>
@@ -66,7 +66,7 @@ echo navbar($db);
             <input type="button" id="editButton" value="Edit">
             <div id = "editButtons">
                 <input type="button" id="cancelButton" value="Cancel" style="display: none;" onclick = "handleCancelClick()">
-                <input type="submit" id="saveButton" value="Save" style="display: none;" onclick = "handleSaveClick()">
+                <input type="submit" id="saveButton" value="Save" style="display: none;">
             </div>
             <input type="file" name="fileInput" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
         </form>

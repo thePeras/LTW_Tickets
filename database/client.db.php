@@ -5,25 +5,27 @@ declare(strict_types=1);
 class Client
 {
 
-    public string $username;
+    const DEFAULT_IMAGE = 'assets/images/default_user.png';
 
-    public string $email;
+    public string $username;
 
     public string $displayName;
 
+    public string $email;
+
     public string $password;
 
-    public ?string $image;
+    public string $image;
 
 
-    public function __construct(string $_username, string $_email,
-        string $_password, string $_displayName, ?string $_image=null
+    public function __construct(string $_username, string $_displayName, string $_email,
+        string $_password, string $_image=null
     ) {
         $this->username    = $_username;
+        $this->displayName = $_displayName;
         $this->email       = $_email;
         $this->password    = $_password;
-        $this->displayName = $_displayName;
-        $this->image       = $_image;
+        $this->image       = ($_image ?? self::DEFAULT_IMAGE);
 
     }
 
@@ -33,13 +35,14 @@ class Client
 
 function insert_new_client(Client $client, PDO $db) : bool
 {
-    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, NULL)";
+    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, :image)";
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
     $stmt->bindParam(':email', $client->email, PDO::PARAM_STR);
     $stmt->bindParam(':password', $client->password, PDO::PARAM_STR);
     $stmt->bindParam(':display_name', $client->displayName, PDO::PARAM_STR);
+    $stmt->bindParam(':image', $client->image, PDO::PARAM_STR);
 
     return $stmt->execute();
 
@@ -70,28 +73,24 @@ function get_user(string $username, PDO $db) : ?Client
         return null;
     }
 
-    return new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row['image']);
+    return new Client($row['username'], $row['displayName'], $row['email'], $row['password'], $row['image']);
 
 }
 
 
 function edit_user(Client $oldUser,
-    ?string $newUsername,
-    ?string $newEmail,
-    ?string $newPassword,
-    ?string $newDisplayName,
-    ?string $newImage,
+    Client $newUser,
     PDO $db
 ) : bool {
 
     $sql  = "UPDATE Clients SET username = :new_username, email = :new_email, password = :new_password, displayName = :new_display_name, image = :new_image WHERE username = :old_username";
     $stmt = $db->prepare($sql);
 
-    $newUsername    = ($newUsername ?? $oldUser->username);
-    $newEmail       = ($newEmail ?? $oldUser->email);
-    $newPassword    = ($newPassword ?? $oldUser->password);
-    $newDisplayName = ($newDisplayName ?? $oldUser->displayName);
-    $newImage       = ($newImage ?? $oldUser->image);
+    $newUsername    = $newUser->username;
+    $newDisplayName = $newUser->displayName;
+    $newEmail       = $newUser->email;
+    $newPassword    = $newUser->password;
+    $newImage       = $newUser->image;
 
     $stmt->bindParam(':new_username', $newUsername, PDO::PARAM_STR);
     $stmt->bindParam(':new_email', $newEmail, PDO::PARAM_STR);
