@@ -11,7 +11,7 @@ function register(string $name, string $username, string $email, string $passwor
         return false;
     }
 
-    $hash   = hash_text($password);
+    $hash   = hash_password($password);
     $client = new Client($username, $email, $hash, $name);
     if (insert_new_client($client, $db) === false) {
         return false;

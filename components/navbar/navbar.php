@@ -15,7 +15,7 @@ function get_navbar_user(?Client $client) : string
     if ($client->image === null) {
         $imageSrc = 'assets/images/default_user.png';
     } else {
-        $imageSrc = base64_encode($client->image);
+        $imageSrc = $client->image;
     }
 
     return <<<HTML

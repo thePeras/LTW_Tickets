@@ -32,8 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username    = $_POST['username'];
     $displayName = $_POST['displayName'];
     $email       = $_POST['email'];
+    $image       = $_FILES['fileInput'];
 
-    if (edit_profile($client, $username, $email, null, $displayName, null, $db) === true) {
+    if (edit_profile($client, $username, $email, null, $displayName, $image, $db) === true) {
         $client = get_user($username, $db);
     }
 }
@@ -47,12 +48,12 @@ echo navbar($db);
     <div class="profile-container">
         <div class="image-container">
             <?php if ($client->image !== null) : ?>
-                <img src="<?php echo base64_encode($client->image); ?>" alt="Client Image" id = "profilePicture">
+                <img src="<?php echo $client->image ?>" alt="Client Image" id = "profilePicture">
             <?php else : ?>
                 <img src="assets/images/default_user.png" alt="Default User Image" id = "profilePicture">
             <?php endif; ?>
         </div>
-        <form action="profile" method="post">
+        <form action="profile" method="post" enctype="multipart/form-data">
             <label for="displayName">Name
                 <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
             </label>
@@ -67,8 +68,8 @@ echo navbar($db);
                 <input type="button" id="cancelButton" value="Cancel" style="display: none;" onclick = "handleCancelClick()">
                 <input type="submit" id="saveButton" value="Save" style="display: none;" onclick = "handleSaveClick()">
             </div>
+            <input type="file" name="fileInput" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
         </form>
-        <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
     </div>
 </main>
 

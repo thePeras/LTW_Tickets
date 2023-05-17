@@ -10,10 +10,9 @@
 
 img {
     width: 200px;
-}
-
-p {
-    margin: 10px 0;
+    height: 200px;
+    border-radius: 50%;
+    object-fit : cover;
 }
 
 input {

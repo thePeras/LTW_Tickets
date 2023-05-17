@@ -57,19 +57,11 @@ function openFileExplorer() {
 function handleFileSelect(event) {
     var file = event.target.files[0];
 
-    if (!file.type.match('image.*')) {
-        return;
-    }
-
     var reader = new FileReader();
     reader.onload = (function(theFile) {
         return function(e) {
             var image = document.getElementById('profilePicture');
             image.src = e.target.result;
-
-            image.style.borderRadius = '50%';
-            image.style.height = '200px';
-            image.style.objectFit = 'cover';
         };
     })(file);
     reader.readAsDataURL(file);
