@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../database/tickets.db.php';
 require_once __DIR__.'/../database/comments.db.php';
+require_once __DIR__.'/../database/department.db.php';
 
 
 function create_ticket(string $title, string $description, PDO $db) : bool
@@ -52,5 +53,38 @@ function get_ticket_author(string $username, PDO $db) : ?Client
 {
 
     return get_user($username, $db);
+
+}
+
+
+function change_department(int $ticketId, string $department, PDO $db) : ?string
+{
+
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    // Reseting department
+    if ($department === '') {
+        if (remove_ticket_department($ticket, $db) !== false) {
+            return 'Error updating ticket';
+        }
+
+        return null;
+    }
+
+    $department = get_department($department, $db);
+    if ($department === null) {
+        return 'Department not found';
+    }
+
+    $ticket->department = $department->name;
+
+    if (update_ticket_department($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    return null;
 
 }

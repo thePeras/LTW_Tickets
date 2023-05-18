@@ -5,21 +5,21 @@ declare(strict_types=1);
 class Ticket
 {
 
-    public readonly int $id;
+    public int $id;
 
     public string $title;
 
     public string $description;
 
-    public readonly string $status;
+    public string $status;
 
-    public readonly string $hashtags;
+    public string $hashtags;
 
-    public readonly string $assignee;
+    public string $assignee;
 
     public string $createdByUser;
 
-    public readonly string $department;
+    public string $department;
 
     public Datetime $createdAt;
 
@@ -85,5 +85,37 @@ function get_ticket(int $id, PDO $db) : ?Ticket
         ($result['createdByUser'] ?? ""),
         ($result['department'] ?? ""),
     );
+
+}
+
+
+function change_ticket_department(int $id, string $department, PDO $db) : bool
+{
+    $sql  = "UPDATE Tickets SET department = :department WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':department', $department, PDO::PARAM_STR);
+    return $stmt->execute();
+
+}
+
+
+function update_ticket_department(Ticket $ticket, PDO $db) : bool
+{
+    $sql  = "UPDATE Tickets SET department = :department WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':department', $ticket->department, PDO::PARAM_STR);
+    return $stmt->execute();
+
+}
+
+
+function remove_ticket_department(Ticket $ticket, PDO $db) : bool
+{
+    $sql  = "UPDATE Tickets SET department = NULL WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+    return $stmt->execute();
 
 }

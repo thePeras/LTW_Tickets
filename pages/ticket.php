@@ -15,7 +15,6 @@ if ($session !== null) {
     $loggedUser = get_user($session->username, $db);
 }
 
-
     // Adding a new comment
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_session_valid($db) === null) {
@@ -23,22 +22,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $content = $_POST['content'];
-    $ticket  = $_POST['ticketId'];
+    $action = ($_POST["action"] ?? "");
+    switch ($action) {
+    case "create":
+        $content = $_POST['content'];
+        $ticket  = $_POST['ticketId'];
 
-    if ($content === null || $ticket === null) {
-        $error = 'Invalid comment';
-    }
-
-    if ($content === '') {
-        $error = 'Comment cannot be empty';
-    }
-
-    if ($error === null) {
-        $created = create_comment($content, $ticket, $db);
-        if ($created === false) {
-            $error = 'Error creating comment';
+        if ($content === null || $ticket === null) {
+            $error = 'Invalid comment';
         }
+
+        if ($content === '') {
+            $error = 'Comment cannot be empty';
+        }
+
+        if ($error === null) {
+            $created = create_comment($content, $ticket, $db);
+            if ($created === false) {
+                $error = 'Error creating comment';
+            }
+        }
+        break;
+    case "close":
+        $ticketId = ($_POST["ticketId"] ?? "");
+        $ticket   = get_ticket($ticketId, $db);
+        if ($ticket !== null) {
+        }
+        break;
+    case "changeDepartment":
+        $ticketId   = ($_POST["ticketId"] ?? "");
+        $department = ($_POST["department"] ?? "");
+        $error      = change_department($ticketId, $department, $db);
+        if ($error !== null) {
+            http_response_code(400);
+            echo $error;
+            exit();
+        }
+
+        http_response_code(200);
+        echo "Department changed successfully";
+        exit();
+        break;
     }
 }
 
@@ -51,6 +75,8 @@ if ($ticket === null) {
     $author = get_ticket_author($ticket->createdByUser, $db);
 
     $comments = get_comments($id, $db);
+
+    $departments = get_departments(0, 30, $db, false);
 
 ?>
 
@@ -74,13 +100,27 @@ if ($ticket === null) {
     <?php
         $db = get_database();
         echo navbar($db);
+
+    //TODO: SAFE??
+    if ($error !== null) {
+        echo "<script>snackbar('$error', 'error')</script>";
+    }
     ?>
+    <input type="hidden" id="ticketId" value="<?php echo $ticket->id ?>">
     <main class="ticket-page">
         <div>
             <h1><?php echo "$ticket->title #$ticket->id"?></h1>
             <ul id="buttons">
                 <li><button type = "button"> Status </button></li>
-                <li><button type = "button" class = "active"> Close </button></li>
+                <li><button type = "button" onclick="closeTicketModal(
+                    <?php
+                        echo "'$loggedUser->type', '$ticket->id'";
+                    ?> 
+                    
+                )"> 
+                    <i class="ri-archive-line"></i>
+                    Close ticket 
+                </button></li>
             </ul>
 
             <!-- Ticket description -->
@@ -135,6 +175,7 @@ if ($ticket === null) {
                     <h3>New comment</h3>
                     <textarea name="content" cols="30" rows="10" placeholder="Write your comment"></textarea>
                     <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                    <input type="hidden" name="action" value="create">
                     <input type="submit" class="primary" value="Send">
                 </div>
             </form>
@@ -170,11 +211,13 @@ if ($ticket === null) {
             <div class="side-card">
                 <h4 class="task-label">Department</h4>
                 <div>
-                    <select name="departments">
-                        <option value="1">Department 1</option>
-                        <option value="2">Department 2</option>
-                        <option value="3">Department 3</option>
-                        <option value="3">Department 4</option>
+                    <select name="departments" id="departmentSelect">
+                        <option value="">No department</option> 
+                        <?php foreach ($departments as $department) : ?>
+                            <option value="<?php echo $department->name ?>">
+                                <?php echo $department->name ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>

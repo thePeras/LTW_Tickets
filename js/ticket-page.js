@@ -138,3 +138,72 @@ async function makeLabelsModal(usertype) {
         modalElement.style.opacity = 1;
     }
 }
+
+async function closeTicketModal(usertype, ticketId) {
+    if (usertype != "agent" && usertype != "admin") {
+        return snackbar("Only agents can close the ticket", "warning");
+    }
+
+    const body = document.querySelector("body");
+    body.style.overflow = "hidden";
+
+    const modalElement = document.createElement("div");
+    modalElement.classList.add("modal");
+    modalElement.onclick = (event) => {
+        if (event.target === modalElement) closeModal();
+    }
+
+    const modalContentElement = document.createElement("div");
+    modalContentElement.classList.add("modal-content");
+
+    modalElement.appendChild(modalContentElement);
+    body.appendChild(modalElement);
+
+    //TODO: get csrf token
+
+    modalContentElement.innerHTML = `
+        <h2>Are you sure you want to close this ticket?</h2>
+
+        <div class="main-edit-content">
+            
+
+            <div class="modal-buttons">
+                <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
+                <input type="button" class="" onclick="" value="Yes, close">
+            </div>
+        </div>
+        `;
+
+    modalElement.style.display = "block";
+    modalElement.style.opacity = 0;
+    modalElement.animate([
+        { opacity: 0 },
+        { opacity: 1, visbility: "visible" },
+    ], { duration: 200, iterations: 1 }).onfinish = (event) => {
+        modalElement.style.opacity = 1;
+    }
+}
+
+window.addEventListener("load", async () => {
+    const departmentSelect = document.querySelector("#departmentSelect");
+    departmentSelect.addEventListener("change", (e) => {
+        const newDepartment = e.target.value;
+        const ticketId = document.querySelector("#ticketId").value;
+        let formData = new FormData();
+        formData.append('action', 'changeDepartment');
+        formData.append('department', newDepartment);
+        formData.append('ticketId', ticketId);
+
+        fetch(`/ticket?id=${ticketId}`, {
+            method: "POST",
+            body: formData
+        }).then(async (res) => {
+            if (res.status === 200) {
+                return snackbar("Department changed", "success");
+            }
+
+            const errorMessage = await res.text() ?? "Failed to change department";
+            snackbar(errorMessage, "error");
+        });
+    });
+});
