@@ -88,6 +88,41 @@ function get_departments(int $limit, int $offset, PDO $db, $returnClients=true) 
 }
 
 
+function get_department(string $name, PDO $db) : ?Department
+{
+
+    $sql = "SELECT * FROM Departments WHERE name=:name";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":name", $name);
+
+    $stmt->execute();
+
+    $a = $stmt->fetch();
+    if ($a === false) {
+        return null;
+    }
+
+    $department = new Department($a["name"], $a["description"]);
+
+    $sql  = "SELECT * FROM AgentDepartments ad WHERE department=:department";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":department", $a["name"], PDO::PARAM_INT);
+    $stmt->execute();
+    $userData = $stmt->fetchAll();
+
+    $department->clients = array_map(
+        function (array $a) use ($db) {
+            return get_user($a["agent"], $db);
+        },
+        $userData
+    );
+    $department->count   = count($department->clients);
+    return $department;
+
+}
+
+
 function add_department(string $name, string $description, array $members, PDO $db)
 {
 
@@ -116,5 +151,35 @@ function add_department(string $name, string $description, array $members, PDO $
             continue;
         }
     }
+
+}
+
+
+function edit_department(string $name, string $description, array $members, PDO $db)
+{
+    //TODO: make this when the department can add members
+
+}
+
+
+function delete_department(string $name, PDO $db) : bool
+{
+    $sql = "DELETE FROM AgentDepartments WHERE department=:department";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":department", $name);
+
+    if ($stmt->execute() === false) {
+        log_to_stdout("Failed to remove agents from department ".$name, "e");
+        return false;
+    }
+
+    //TODO: make this delete cascade to a "deleted department"
+
+    $sql  = "DELETE FROM Departments WHERE name=:name";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":name", $name);
+
+    return $stmt->execute();
 
 }

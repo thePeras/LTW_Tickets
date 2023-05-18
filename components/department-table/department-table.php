@@ -23,7 +23,7 @@ function drawDepartmentTable(array $departments)
         </tr>
     </thead>
 
-        <tbody>
+        <tbody class="department-tbody">
             <?php foreach ($departments as $department) :?>
                 <tr class="department-entry">
                     <td>

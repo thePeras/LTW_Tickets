@@ -55,7 +55,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
 
+    if ($_POST["action"] === "editDepartment") {
+        $members = explode(",", ($_POST["members"] ?? ''));
+        if ($members === false || (count($members) === 1 && $members[0] === '')) {
+            $members = [];
+        }
+
+        edit_department($_POST["name"], $_POST["description"], $members, $db);
+    }
+
+    if ($_POST["action"] === "deleteDepartment") {
+        delete_department($_POST["name"], $db);
+    }
+
+
     if (isset($_POST["lastHref"]) === true) {
+        log_to_stdout(var_export($_POST["lastHref"], true));
         header("Location: ".$_POST["lastHref"]);
     } else {
         header("Location: /admin");
