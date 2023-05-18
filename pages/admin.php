@@ -90,9 +90,9 @@ $offset = intval(($_GET["offset"] ?? 0))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tickets</title>
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/remixicon.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/remixicon.css">
 </head>
 <body>
 <div class="modal">
@@ -105,11 +105,11 @@ $offset = intval(($_GET["offset"] ?? 0))
 
     ?>
 <main>
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="css/dropdown.css">
-    <link rel="stylesheet" href="css/components.css">
-    <script src="js/modal.js"></script>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/dropdown.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script src="/js/modal.js"></script>
 
 
     <h1>Admin page</h1>
@@ -142,14 +142,14 @@ $offset = intval(($_GET["offset"] ?? 0))
             $clients = get_admins($limit, $offset, $db);
         }
         ?>
-        <script src="js/user-table.js"></script>
+        <script src="/js/user-table.js"></script>
 
         <?php
         drawUserTable($clients);
         elseif ($_GET["tab"] === "departments") :
             $departments = get_departments($limit, $offset, $db, false);
             ?>
-            <script src="js/department.js"></script>
+            <script src="/js/department.js"></script>
 
             <div class="department-buttons">
                 <button onclick="makeAddDepartmentModal()" class="add-new">Add new...</button>

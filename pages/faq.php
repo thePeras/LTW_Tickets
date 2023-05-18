@@ -1,11 +1,21 @@
 <?php
 
 require_once 'components/layout/layout.php';
+require_once 'utils/routing.php';
+
+handle_page_route("/faq/new", __DIR__."/faq/new.php");
 
 layout_start();
 
-echo <<<HTML
-    <link rel="stylesheet" type="text/css" href="css/faq.css">
+$limit  = min(intval(($_GET["limit"] ?? 10)), 20);
+$offset = intval(($_GET["offset"] ?? 0))
+
+
+
+?>
+    <link rel="stylesheet" type="text/css" href="/css/faq.css">
+    <script src="js/faq.js"></script>
+    
 
     <h1>FAQ</h1>
     <p>Frequently Asked Questions</p>
@@ -16,7 +26,7 @@ echo <<<HTML
     <div>
         <div class="faq-question">
             <header>
-                <h2>How do I get started?</h2>
+                <h2>#1 - How do I get started?</h2>
                 <i class="ri-add-circle-line"></i>
             </header>
             <div class="content">
@@ -26,7 +36,7 @@ echo <<<HTML
 
         <div class="faq-question">
             <header>
-                <h2>How do I get started?</h2>
+                <h2>#2 - How do I get started?</h2>
                 <i class="ri-add-circle-line"></i>
             </header>
             <div class="content">
@@ -38,28 +48,11 @@ echo <<<HTML
     <div class="faq-footer">
         <h2>Still have questions?</h2>
         <p>Don't worry. Create an issue and we'll get back to you as soon as possible.</p>
-        <button type="button" class="primary">Create an Issue</button>
+        <button type="button" class="primary" onclick="location.href = '/faq/new'">Create an Issue</button>
     </div>
 
-    <script>
-        const faqQuestions = document.querySelectorAll('.faq-question');
 
-        faqQuestions.forEach((faqQuestion) => {
-            faqQuestion.addEventListener('click', (e) => {
-                // Clicking in the content do nothing
-                if (e.target.classList.contains('content') || e.target.parentElement.classList.contains('content')) {
-                    return;
-                }
-
-                //ri-add-circle-line: closed status
-                //ri-close-circle-line: open status
-                faqQuestion.querySelector('i').classList.toggle('ri-add-circle-line');
-                faqQuestion.querySelector('i').classList.toggle('ri-close-circle-line');
-                faqQuestion.classList.toggle('active');
-            });
-        });
-    </script>
-HTML;
+<?php
 
 
 layout_end();

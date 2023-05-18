@@ -15,7 +15,7 @@ function get_navbar_user(?Client $client) : string
 
     return  <<<HTML
         <div class="user">
-            <img class="avatar" src="assets/images/person.png" alt="user">
+            <img class="avatar" src="/assets/images/person.png" alt="user">
             <div>
                 <h3>$client->displayName</h3>
                 <p>$client->email</p>
@@ -59,7 +59,7 @@ function navbar(PDO $db)
         $client = get_user($session->username, $db);
     }
     ?>
-        <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/components/navbar/navbar.css">
         <nav class="sidebar sticky">
             <div class="inital-sidebar">
                 <div class="logo">

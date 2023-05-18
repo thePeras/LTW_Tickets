@@ -7,6 +7,11 @@
   font-size: 12px;
   color: #666;
   border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 div {
@@ -14,6 +19,7 @@ div {
 }
 
 .faq-question {
+  margin: 1rem 0rem;
   transition: all 0.5s ease-out;
   padding: 2rem;
   height: -moz-fit-content;
@@ -36,6 +42,9 @@ div {
   transition: all 0.1s ease-out;
   visibility: hidden;
   height: 0;
+  text-align: left;
+  margin: 1rem 0rem 0rem 1rem;
+  overflow-wrap: break-word;
 }
 .faq-question.active {
   background-color: #ffffff;
