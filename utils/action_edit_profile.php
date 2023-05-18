@@ -3,18 +3,16 @@
 declare(strict_types=1);
 
 require_once __DIR__.'/../database/client.db.php';
-require 'utils/hash.php';
+require_once 'utils/hash.php';
 
 
 function edit_profile(Client $oldUser,
-    $newUsername,
     $newEmail,
-    ?string $newPassword,
     $newDisplayName,
     $newImage,
     PDO $db
 ) : bool {
-
+    $newUsername = $oldUser->username;
     if ($newUsername !== null && $newUsername !== $oldUser->username) {
         if (user_already_exists($newUsername, $db) === true) {
             return false;
@@ -36,18 +34,23 @@ function edit_profile(Client $oldUser,
         $newImage = $oldUser->image;
     }
 
-    if ($newPassword !== null) {
-        $newPassword = hash_password($newPassword);
-    } else {
-        $newPassword = $oldUser->password;
-    }
+    $newUser = new Client($newUsername, $newEmail, $oldUser->password, $newDisplayName, $newImage, $oldUser->createdAt);
+    return edit_user($newUser, $db);
 
-    $newUser = new Client($newUsername, $newDisplayName, $newEmail, $newPassword, $newImage);
+}
 
-    if (edit_user($oldUser, $newUser, $db) === false) {
+
+function edit_password(Client $client, string $currentPassword, string $newPassword1, string $newPassword2, PDO $db) : bool
+{
+    if (verify_password($currentPassword, $client->password) === false) {
         return false;
     }
 
-    return change_sessions_username($oldUser->username, $newUsername, $db);
+    if ($newPassword1 !== $newPassword2) {
+        return false;
+    };
+
+    $newPassword = hash_password($newPassword1);
+    return change_password($client->username, $newPassword, $db);
 
 }

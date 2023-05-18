@@ -1,11 +1,8 @@
 function toggleEditableFields() {
-    var profilePicture = document.getElementById('profilePicture');
     var displayNameInput = document.getElementById('displayName');
-    var usernameInput = document.getElementById('username');
     var emailInput = document.getElementById('email');
 
     displayNameInput.readOnly = !displayNameInput.readOnly;
-    usernameInput.readOnly = !usernameInput.readOnly;
     emailInput.readOnly = !emailInput.readOnly;
 }
 

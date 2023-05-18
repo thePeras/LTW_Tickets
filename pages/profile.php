@@ -1,7 +1,7 @@
 <?php
-    require 'components/navbar/navbar.php';
-    require 'database/database.php';
-    require 'utils/action_edit_profile.php';
+    require_once 'components/navbar/navbar.php';
+    require_once 'database/database.php';
+    require_once 'utils/action_edit_profile.php';
 ?>
 
 <!DOCTYPE html>
@@ -29,13 +29,12 @@ if ($session !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username    = $_POST['username'];
     $displayName = $_POST['displayName'];
     $email       = $_POST['email'];
     $image       = $_FILES['fileInput'];
 
-    if (edit_profile($client, $username, $email, null, $displayName, $image, $db) === true) {
-        $client = get_user($username, $db);
+    if (edit_profile($client, $email, $displayName, $image, $db) === true) {
+        $client = get_user($client->username, $db);
     }
 }
 
@@ -54,11 +53,11 @@ echo navbar($db);
             <?php endif; ?>
         </div>
         <form action="profile" method="post" enctype="multipart/form-data" onsubmit="return handleSaveClick()">
+            <label for="username">Username
+                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" pattern="^[a-zA-Z0-9_\-\.]{3,20}$" disabled>
+            </label>
             <label for="displayName">Name
                 <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
-            </label>
-            <label for="username">Username
-                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" required readonly pattern="^[a-zA-Z0-9_\-\.]{3,20}$">
             </label>
             <label for="email">Email
                 <input type="email" name="email" id="email" value="<?php echo $client->email; ?>" required readonly>
