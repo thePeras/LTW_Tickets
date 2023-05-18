@@ -50,7 +50,6 @@ function edit_password(Client $client, string $currentPassword, string $newPassw
         return false;
     };
 
-    $newPassword = hash_password($newPassword1);
-    return change_password($client->username, $newPassword, $db);
+    return change_password($client->username, $newPassword1, $db);
 
 }

@@ -29,12 +29,26 @@ if ($session !== null) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $displayName = $_POST['displayName'];
-    $email       = $_POST['email'];
-    $image       = $_FILES['fileInput'];
+    $action = $_POST['action'];
 
-    if (edit_profile($client, $email, $displayName, $image, $db) === true) {
-        $client = get_user($client->username, $db);
+    if ($action === "editProfile") {
+        $displayName = $_POST['displayName'];
+        $email       = $_POST['email'];
+        $image       = $_FILES['fileInput'];
+
+        if (edit_profile($client, $email, $displayName, $image, $db) === true) {
+            $client = get_user($client->username, $db);
+        }
+    }
+
+    if ($action === "changePassword") {
+        $oldPassword     = $_POST['oldPassword'];
+        $newPassword     = $_POST['newPassword'];
+        $confirmPassword = $_POST['confirmPassword'];
+
+        if (edit_password($client, $oldPassword, $newPassword, $confirmPassword, $db) === true) {
+            $client = get_user($client->username, $db);
+        }
     }
 }
 
@@ -56,19 +70,42 @@ echo navbar($db);
             <label for="username">Username
                 <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" pattern="^[a-zA-Z0-9_\-\.]{3,20}$" disabled>
             </label>
+
             <label for="displayName">Name
                 <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
             </label>
+
             <label for="email">Email
                 <input type="email" name="email" id="email" value="<?php echo $client->email; ?>" required readonly>
             </label>
+
             <input type="button" id="editButton" value="Edit">
             <div id = "editButtons">
                 <input type="button" id="cancelButton" value="Cancel" style="display: none;" onclick = "handleCancelClick()">
                 <input type="submit" id="saveButton" value="Save" style="display: none;">
             </div>
+
+            <input type="hidden" name="action" value="editProfile">
             <input type="file" name="fileInput" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
         </form>
+
+        <form action = "profile" method = "post">
+            <label for = "oldPassword">Your current password
+                <input type="password" name = "oldPassword" id = "oldPassword" required>
+            </label>
+
+            <label for = "newPassword">New password
+                <input type="password" name = "newPassword" id = "newPassword" required>
+            </label>
+
+            <label for = "confirmPassword">Confirm new password
+                <input type="password" name = "confirmPassword" id = "confirmPassword" required>
+            </label>
+
+            <input type="hidden" name="action" value="changePassword">
+            <input type="submit" value="Change Password">
+        </form>
+
     </div>
 </main>
 

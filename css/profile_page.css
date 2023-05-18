@@ -1,7 +1,7 @@
 .profile-container {
     display: flex;
     align-items: flex-start;
-    margin-top: 20px;
+    margin-top: 3em;
 }
 
 .image-container {
@@ -44,12 +44,13 @@ input[type=submit], #editButton {
     border-radius: 8px;
     padding: 0.5rem 1.5rem;
     cursor: pointer;
-    width: 100px;
+    width: min-content;
     margin-top: 10px;
 }
 
-input[type=submit]:hover, #editButton:hover {
+input[type=submit]:hover, #editButton:hover, #cancelButton:hover {
     opacity: 0.8;
+    cursor: pointer;
 }
 
 
