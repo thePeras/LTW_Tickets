@@ -2,6 +2,7 @@
     require_once 'components/navbar/navbar.php';
     require_once 'database/database.php';
     require_once 'utils/action_ticket.php';
+    require_once 'utils/datetime.php';
 
     $db = get_database();
 
@@ -91,7 +92,7 @@ if ($ticket === null) {
                             <?php echo $author->displayName ?>
                         </h3>
                         <p>
-                            <?php echo $ticket->createdAt->format('Y-m-d H:i:s') ?>
+                            <?php echo time_ago($ticket->createdAt) ?>
                         </p>
                     </div>
                     <p>
@@ -108,7 +109,7 @@ if ($ticket === null) {
                             <img class="avatar" src="assets/images/person.png" alt="user" />
                             <h3><?php echo $comment["displayName"] ?></h3>
                             <p>
-                                <?php echo $comment["comment"]->createdAt->format('Y-m-d H:i:s') ?>
+                                <?php echo time_ago($comment["comment"]->createdAt) ?>
                             </p>
                         </div>
                         <p>
