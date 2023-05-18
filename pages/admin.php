@@ -152,7 +152,7 @@ $offset = intval(($_GET["offset"] ?? 0))
             <script src="js/department.js"></script>
 
             <div class="department-buttons">
-                <button onclick="makeAddDepartmentModel()" class="add-new">Add new...</button>
+                <button onclick="makeAddDepartmentModal()" class="add-new">Add new...</button>
             </div>
             <?php drawDepartmentTable($departments);
         endif;?>

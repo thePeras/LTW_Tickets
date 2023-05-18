@@ -5,7 +5,7 @@ var end = false;
 var fetchingDepartments = false;
 const limit = 10;
 
-function makeAddDepartmentModel(){
+function makeAddDepartmentModal(){
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
 
