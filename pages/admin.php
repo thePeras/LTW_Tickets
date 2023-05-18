@@ -4,7 +4,10 @@ require_once __DIR__.'/../utils/roles.php';
 require_once __DIR__.'/../utils/session.php';
 require_once __DIR__.'/../components/navbar/navbar.php';
 require_once __DIR__.'/../database/client.db.php';
+require_once __DIR__.'/../database/department.db.php';
 require_once __DIR__.'/../components/user-table/user-table.php';
+require_once __DIR__.'/../components/department-table/department-table.php';
+
 
 
 
@@ -40,6 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             log_to_stdout("Error while updating user ".$_POST["username"], "e");
             //TODO: make error message
         }
+    }
+
+    if ($_POST["action"] === "newDepartment") {
+        $members = explode(",", ($_POST["members"] ?? ''));
+        if ($members === false || (count($members) === 1 && $members[0] === '')) {
+            $members = [];
+        }
+
+        add_department($_POST["name"], $_POST["description"], $members, $db);
     }
 
 
@@ -82,6 +94,7 @@ $offset = intval(($_GET["offset"] ?? 0))
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/dropdown.css">
     <link rel="stylesheet" href="css/components.css">
+    <script src="js/modal.js"></script>
 
 
     <h1>Admin page</h1>
@@ -115,11 +128,19 @@ $offset = intval(($_GET["offset"] ?? 0))
         }
         ?>
         <script src="js/user-table.js"></script>
-        <script src="js/modal.js"></script>
 
         <?php
         drawUserTable($clients);
-    endif;?>
+        elseif ($_GET["tab"] === "departments") :
+            $departments = get_departments($limit, $offset, $db, false);
+            ?>
+            <script src="js/department.js"></script>
+
+            <div class="department-buttons">
+                <button onclick="makeAddDepartmentModel()" class="add-new">Add new...</button>
+            </div>
+            <?php drawDepartmentTable($departments);
+        endif;?>
         
 </main>    
 </body>
