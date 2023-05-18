@@ -1,6 +1,6 @@
 <?php
-require 'components/navbar/navbar.php';
-require 'database/database.php';
+require_once 'components/navbar/navbar.php';
+require_once 'database/database.php';
 ?>
 
 <?php function layout_start()
@@ -13,6 +13,7 @@ require 'database/database.php';
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Tickets</title>
                 <link rel="stylesheet" href="css/layout.css">
+                <link rel="stylesheet" href="css/components.css">
                 <link rel="stylesheet" href="css/theme.css">
                 <link rel="stylesheet" href="css/remixicon.css">
             </head>

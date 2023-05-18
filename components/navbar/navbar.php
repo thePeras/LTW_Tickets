@@ -77,7 +77,7 @@ function navbar(PDO $db)
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/faq">
                             <i class="ri-question-line"></i>
                             FAQ
                         </a>
