@@ -101,6 +101,55 @@
   background-color: rgba(202, 207, 218, 0.2352941176);
 }
 
+.department-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  padding: 1em 0em;
+}
+.department-buttons .add-new {
+  background-color: #06ad00;
+  color: white;
+}
+
+.department-table {
+  border-collapse: collapse;
+  padding: 1em 0em;
+}
+.department-table th {
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
+}
+.department-table td {
+  padding: 0.5rem 1rem;
+}
+.department-table .icon {
+  font-size: 1.4em;
+  cursor: pointer;
+}
+.department-table .department-entry {
+  border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
+}
+.department-table .department-entry .department-description {
+  max-width: 20em;
+  max-height: 5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 i.delete {
   color: #c01104;
+}
+
+.add-new-department-modal .submit-button {
+  background-color: #06ad00;
+  color: white;
+  border: 0;
+}
+.add-new-department-modal .submit-button:hover {
+  background-color: #027700;
+  opacity: 1;
+}
+.add-new-department-modal .modal-buttons {
+  margin-top: 1em;
 }/*# sourceMappingURL=admin.css.map */
