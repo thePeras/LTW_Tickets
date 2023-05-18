@@ -1,8 +1,10 @@
 @import "theme.scss";
 
+$pagePadding: 1rem;
+
 .tabSelector{
     display: flex;
-    padding: 1rem;
+    padding: $pagePadding;
     > li{
         list-style-type: none;
         flex:1;
@@ -124,7 +126,64 @@
     }
 }
 
+.department-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 1em 0em;
+
+    .add-new{
+        background-color: #06ad00;
+        color: white;
+    }
+}
+
+.department-table{
+    border-collapse: collapse;
+    padding: 1em 0em;
+    th{
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid $hover-color;
+    }
+    td{
+        padding: 0.5rem 1rem ;
+    }
+
+    .icon{
+        font-size: 1.4em;
+        cursor: pointer;
+    }
+    .department-entry{
+        border-bottom: 2px solid $hover-color;
+
+        .department-description{
+            max-width: 20em;
+            max-height: 5em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+    }
+}
 
 i.delete{
     color: $delete-color;
+}
+
+.add-new-department-modal{
+    .submit-button{
+        background-color: #06ad00;
+        color: white;
+        border: 0;
+    }
+
+    .submit-button:hover{
+        background-color: #027700;
+        opacity: 1;
+    }
+
+    .modal-buttons{
+        margin-top: 1em;
+    }
+
 }

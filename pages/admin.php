@@ -4,6 +4,11 @@ require_once __DIR__.'/../utils/roles.php';
 require_once __DIR__.'/../utils/session.php';
 require_once __DIR__.'/../components/navbar/navbar.php';
 require_once __DIR__.'/../database/client.db.php';
+require_once __DIR__.'/../database/department.db.php';
+require_once __DIR__.'/../components/user-table/user-table.php';
+require_once __DIR__.'/../components/department-table/department-table.php';
+
+
 
 
 $db      = get_database();
@@ -40,8 +45,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    if ($_POST["action"] === "newDepartment") {
+        $members = explode(",", ($_POST["members"] ?? ''));
+        if ($members === false || (count($members) === 1 && $members[0] === '')) {
+            $members = [];
+        }
+
+        add_department($_POST["name"], $_POST["description"], $members, $db);
+    }
+
+
+    if ($_POST["action"] === "editDepartment") {
+        $members = explode(",", ($_POST["members"] ?? ''));
+        if ($members === false || (count($members) === 1 && $members[0] === '')) {
+            $members = [];
+        }
+
+        edit_department($_POST["name"], $_POST["description"], $members, $db);
+    }
+
+    if ($_POST["action"] === "deleteDepartment") {
+        delete_department($_POST["name"], $db);
+    }
+
 
     if (isset($_POST["lastHref"]) === true) {
+        log_to_stdout(var_export($_POST["lastHref"], true));
         header("Location: ".$_POST["lastHref"]);
     } else {
         header("Location: /admin");
@@ -82,6 +111,7 @@ $tab = ($_GET["tab"] ?? "users");
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/dropdown.css">
     <link rel="stylesheet" href="css/components.css">
+    <script src="js/modal.js"></script>
 
 
     <h1>Admin page</h1>
@@ -115,77 +145,20 @@ $tab = ($_GET["tab"] ?? "users");
         }
         ?>
         <script src="js/user-table.js"></script>
-        <script src="js/modal.js"></script>
 
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>
-                        User
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Role
-                    </th>
-                    <th>
-                        Date created
-                    </th>
-                    <th>
-                        </th>
-                        <th>
-                            <div class="dropdown-hover">
-                                <i class="ri-filter-line icon">
-                                </i>
-                                <div class="dropdown-content role-filter">
-                                        <h3>Sort by role:</h3>
-                                        <a href="?sort=client" >Client</a>
-                                        <a href="?sort=agent" >Agent</a>
-                                        <a href="?sort=admin" >Admin</a>
-                                </div>
-                            </div>
+        <?php
+        drawUserTable($clients);
+        elseif ($tab === "departments") :
+            $departments = get_departments($limit, $offset, $db, false);
+            ?>
+            <script src="js/department.js"></script>
 
-                        </th>
-                </tr>
-            </thead>
-            <tbody class="user-table-body">
-                <?php foreach ($clients as $client) :?>
-                <tr class="user-entry">
-                    <td class="user-info">
-                        <img class="user-photo" src="assets/images/person.png" alt="user">
-                        <div class="user-name">
-                            <p><?php echo $client->displayName?></p>
-                            <p><?php echo $client->username?></p>
-                        </div>
-                    </td>
-                    <td>
-                        <a href="mailto:<?php echo $client->email?>" ><?php echo $client->email?></a>
-                    </td>
-                    <td>
-                        <p class="role <?php echo $client->type?>"><?php echo ucfirst($client->type)?></p>
-                    </td>
-                    <td>
-                        <p><?php
-                            $dateTime = date_create("@".$client->createdAt);
-                            $dateTime->setTimezone(new DateTimeZone("Europe/Lisbon"));
-                            echo $dateTime->format("H:i d/m/o");
-                        ?></p>
-                    </td>
-                    <td>
-                        <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $client->username?>')"></i>
-                    </td>
-                    <td>
-                        <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo $client->username?>')")></i>
-                    </td>
-                </tr>
-                <?php endforeach;?>
-
-                
-            </tbody>
-        </table>
-    <?php endif;?>
-</main>
-    
+            <div class="department-buttons">
+                <button onclick="makeAddDepartmentModal()" class="add-new">Add new...</button>
+            </div>
+            <?php drawDepartmentTable($departments);
+        endif;?>
+        
+</main>    
 </body>
 </html>

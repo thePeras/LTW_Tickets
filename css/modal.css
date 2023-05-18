@@ -89,4 +89,8 @@
 
 .cancel-button:hover {
   background-color: rgba(152, 155, 161, 0.2352941176);
+}
+
+.add-new-department-modal > h1 {
+  margin-bottom: 1em;
 }/*# sourceMappingURL=modal.css.map */
