@@ -45,6 +45,15 @@ function get_login_button() : string
 
 function navbar(PDO $db)
 {
+
+    $isActive = function (string $path, string $current) : string {
+        if ($path === $current) {
+            return 'true';
+        } else {
+            return 'false';
+        };
+    };
+
     global $ifHtml;
     $session = is_session_valid($db);
     $client  = null;
@@ -56,7 +65,7 @@ function navbar(PDO $db)
         }
     }
     ?>
-        <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/components/navbar/navbar.css">
         <nav class="sidebar sticky">
             <div class="inital-sidebar">
                 <div class="logo">
@@ -74,7 +83,7 @@ function navbar(PDO $db)
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/faq">
                             <i class="ri-question-line"></i>
                             FAQ
                         </a>

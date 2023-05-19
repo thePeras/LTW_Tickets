@@ -1,0 +1,140 @@
+@import "theme.scss";
+
+.faq-footer {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 2rem;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+main div {
+    text-align: center;
+}
+
+.faq-question {
+    margin: 1rem 0rem;
+    transition: all 0.5s ease-out;
+    padding: 2rem;
+    height: fit-content;
+
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+
+        .faq-buttons{
+            display: flex;
+            flex-direction: row;
+            gap: 1em;
+            align-items: center;
+
+            i {
+                font-size: 1.6rem;
+                margin-right: 0.2rem;
+            }
+    
+            .delete-button{
+                background-color: $delete-color;
+                color: white;
+            }
+
+            .delete-button:hover{
+                background-color: #a70d02;
+
+            }
+
+            .edit-button{
+                background-color: #06ad00;
+                color: white;
+            }
+
+            .edit-button:hover{
+                background-color: #027700;
+            }
+        }
+
+    }
+
+    .content {
+        margin-top: 0.7rem;
+        color: #2d2d2d;
+        opacity: 0;
+        transition: all 0.1s ease-out;
+        visibility: hidden;
+        height: 0;
+        text-align: left;
+        margin: 1rem 0rem 0rem 1rem;
+        overflow-wrap: break-word;
+
+        .created-by{
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: start;
+            img{
+                height: 2rem;
+                width: 2rem;
+                border-radius: 50%;
+            }
+
+            p:first-child {
+                font-weight: bold;
+                color: black;
+            }
+
+            .display-name{
+                color: $black-secondary;
+
+            }
+        }
+    }
+
+    &.active {
+        background-color: #ffffff;
+        border-radius: 8px;
+
+        .content {
+            opacity: 1;
+            visibility: visible;
+            height: auto;
+        }
+
+
+    }
+}
+
+.top-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    .search{
+        > input{
+            margin-top: 1rem;
+
+        }
+    }
+
+    > button {
+        display: block;
+        background-color: #06ad00;
+
+    }
+    > button:hover{
+        background-color: #059e00;
+
+    }
+}

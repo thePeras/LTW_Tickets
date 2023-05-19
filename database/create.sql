@@ -28,7 +28,7 @@ CREATE TABLE Clients(
 CREATE TABLE Sessions(
     user TEXT PRIMARY KEY,
     token TEXT UNIQUE NOT NULL,
-    lastUsedDate NUMBER NOT NULL,
+    lastUsedDate INTEGER NOT NULL,
     FOREIGN KEY(user) REFERENCES Clients(username)
 );
 
@@ -43,7 +43,7 @@ CREATE TABLE Admins(
 );
 
 CREATE TABLE FAQs(
-    id NUMBER PRIMARY KEY,
+    id INTEGER PRIMARY KEY NOT NULL,
     createdByUser TEXT NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE AgentDepartments(
 );
 
 CREATE TABLE Tickets(
-    id NUMBER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     status TEXT,
@@ -81,17 +81,17 @@ CREATE TABLE Tickets(
 );
 
 CREATE TABLE Comments(
-    id NUMBER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     content TEXT NOT NULL,
     createdByUser TEXT NOT NULL,
-    ticket NUMBER NOT NULL,
+    ticket INTEGER NOT NULL,
     FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
 
 CREATE TABLE Changes(
-    id NUMBER PRIMARY KEY,
-    timestamp NUMBER NOT NULL,
+    id INTEGER PRIMARY KEY,
+    timestamp INTEGER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
 
@@ -99,7 +99,7 @@ CREATE TABLE Changes(
 
 CREATE TABLE AssignedChanges(
     agent TEXT NOT NULL,
-    change NUMBER NOT NULL,
+    change INTEGER NOT NULL,
     PRIMARY KEY (change, agent),
     FOREIGN KEY (agent) REFERENCES Agents(username),
     FOREIGN KEY (change) REFERENCES Changes(id)
@@ -107,6 +107,6 @@ CREATE TABLE AssignedChanges(
 
 CREATE TABLE StatusChanges(
     status TEXT NOT NULL,
-    change NUMBER PRIMARY KEY,
+    change INTEGER PRIMARY KEY,
     FOREIGN KEY (change) REFERENCES Changes(id)
 );

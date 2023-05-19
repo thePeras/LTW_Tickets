@@ -18,7 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = $_POST['email'];
     $password = $_POST['password'];
 
-    $registered = register($name, $username, $email, $password, $db);
+    //Cannot register an username that is me due to the api /clients/me returning the user logged on
+    if ($username !== "me") {
+        $registered = register($name, $username, $email, $password, $db);
+    }
+
     if ($registered === true) {
         header('Location: /');
     }
@@ -35,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="css/layout.css" rel="stylesheet" type="text/css">
     <link href="css/login_register.css" rel="stylesheet" type="text/css">
     <link href="css/components.css" rel="stylesheet" type="text/css">
-    <script src="js/password.js"></script>
+    <script src="/js/password.js"></script>
 </head>
 <body>
     <div class="container">
