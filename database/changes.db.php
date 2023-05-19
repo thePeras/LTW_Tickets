@@ -5,18 +5,21 @@ declare(strict_types=1);
 class Change
 {
 
-    public readonly int $id;
+    public int $id;
 
-    public readonly string $timestamp;
+    public DateTime $timestamp;
 
-    public readonly string $user;
+    public int $ticketId;
+
+    public Client $user;
 
 
-    public function __construct(int $id, string $timestamp, string $user)
+    public function __construct(int $id, int $ticketId, int $epoch, Client $user)
     {
         $this->id        = $id;
-        $this->timestamp = $timestamp;
+        $this->timestamp = new DateTime("@".$epoch);
         $this->user      = $user;
+        $this->ticketId  = $ticketId;
 
     }
 
@@ -26,12 +29,12 @@ class Change
 class AssignedChange extends Change
 {
 
-    public readonly string $agent;
+    public Client $agent;
 
 
-    public function __construct(int $id, string $timestamp, string $user, string $agent)
+    public function __construct(int $id, int $ticketId, int $epoch, Client $user, Client $agent)
     {
-        parent::__construct($id, $timestamp, $user);
+        parent::__construct($id, $ticketId, $epoch, $user);
         $this->$agent = $agent;
 
     }
@@ -39,18 +42,97 @@ class AssignedChange extends Change
 
 }
 
-class StatusChanges extends Change
+class StatusChange extends Change
 {
 
-    public readonly string $status;
+    public string $status;
 
 
-    public function __construct(int $id, string $timestamp, string $user, string $status)
+    public function __construct(int $id, int $ticketId, int $epoch, Client $user, string $status)
     {
-        parent::__construct($id, $timestamp, $user);
+        parent::__construct($id, $ticketId, $epoch, $user);
         $this->status = $status;
 
     }
 
+
+}
+
+
+function insert_new_change($change, PDO $db) : bool
+{
+    if ($change instanceof AssignedChange === false and $change instanceof StatusChange === false) {
+        return false;
+    }
+
+    $sql       = "INSERT INTO Changes (timestamp, user) VALUES (:timestamp, :user)";
+    $stmt      = $db->prepare($sql);
+    $timestamp = $change->timestamp->getTimestamp();
+    $stmt->bindParam(':timestamp', $timestamp, PDO::PARAM_STR);
+    $stmt->bindParam(':user', $change->user->username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $changeId = $db->lastInsertId();
+
+    $sql  = "INSERT INTO TicketsChanges (ticket, change) VALUES (:ticket, :change)";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ticket', $change->ticketId, PDO::PARAM_INT);
+    $stmt->bindParam(':change', $changeId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    if ($change instanceof AssignedChange === true) {
+        $sql  = "INSERT INTO AssignedChanges (change, agent) VALUES (:change, :agent)";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':change', $changeId, PDO::PARAM_INT);
+        $stmt->bindParam(':agent', $change->agent->username, PDO::PARAM_STR);
+        return $stmt->execute();
+    } else {
+        $sql  = "INSERT INTO StatusChanges (change, status) VALUES (:change, :status)";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':change', $changeId, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $change->status, PDO::PARAM_STR);
+        return $stmt->execute();
+    }
+
+}
+
+
+function get_changes_by_ticket(int $ticketId, PDO $db) : array
+{
+    // I have  StatusChanges, Changes and TicketsChanges tables
+    $sql  = "SELECT * FROM StatusChanges JOIN Changes ON StatusChanges.change = Changes.id JOIN TicketsChanges ON Changes.id = TicketsChanges.change WHERE ticket = :ticketId";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ticketId', $ticketId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $changes = [];
+    while (($row = $stmt->fetch(PDO::FETCH_ASSOC)) !== false) {
+        $change = new StatusChange(
+            (int) $row['id'],
+            $row['ticket'],
+            $row['timestamp'],
+            get_user($row['user'], $db),
+            $row['status']
+        );
+        array_push($changes, $change);
+    }
+
+    $sql  = "SELECT * FROM AssignedChanges JOIN Changes ON AssignedChanges.change = Changes.id JOIN TicketsChanges ON Changes.id = TicketsChanges.change WHERE ticket = :ticketId";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ticketId', $ticketId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    while (($row = $stmt->fetch(PDO::FETCH_ASSOC)) !== false) {
+        $change = new AssignedChange(
+            (int) $row['id'],
+            $row['ticket'],
+            $row['timestamp'],
+            get_user($row['user'], $db),
+            get_user($row['agent'], $db)
+        );
+            array_push($changes, $change);
+    }
+
+    return $changes;
 
 }

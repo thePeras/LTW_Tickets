@@ -95,7 +95,14 @@ CREATE TABLE Changes(
     timestamp NUMBER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
+);
 
+CREATE TABLE TicketsChanges(
+    change NUMBER NOT NULL,
+    ticket NUMBER NOT NULL,
+    PRIMARY KEY (change, ticket),
+    FOREIGN KEY (change) REFERENCES Changes(id),
+    FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
 
 CREATE TABLE AssignedChanges(

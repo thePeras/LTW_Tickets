@@ -93,10 +93,18 @@ if ($ticket === null) {
     $author = get_ticket_author($ticket->createdByUser, $db);
 
     $comments = get_comments($id, $db);
+    $changes  = get_changes($id, $db);
+    $all      = array_merge($comments, $changes);
+    usort(
+        $all,
+        function ($a, $b) {
+            return ($a->timestamp->getTimestamp() - $b->timestamp->getTimestamp());
+        }
+    );
 
     $departments = get_departments(0, 30, $db, false);
 
-?>
+    ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +141,7 @@ if ($ticket === null) {
         <div>
             <h1><?php echo "$ticket->title #$ticket->id"?></h1>
             <ul id="buttons">
-                <li><button type = "button"> Status </button></li>
+                <!-- TODO: Change to OPEN with ticket is closed-->
                 <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                     <input type="hidden" name="action" value="close">
                     <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
@@ -162,34 +170,58 @@ if ($ticket === null) {
                 </div>
             </div>
 
-            <!-- Comments -->
-            <?php foreach ($comments as $comment) : ?>
-                <div class="ticket-comment">
-                    <div class="user-comment">
-                        <div class="user">
-                            <img class="avatar" src="assets/images/person.png" alt="user" />
-                            <h3><?php echo $comment["displayName"] ?></h3>
+            <?php foreach ($all as $item) :
+                echo $item instanceof AssignedChange;
+                ?>
+                <!-- Change --> 
+                <?php if (($item instanceof AssignedChange) === true) : ?> 
+                        <div class="event">
+                            <img class="avatar" src="assets/images/person.png" alt="user">
+                            <div>
+                                <h4>
+                                    <?php echo $item->user->displayName?>
+                                </h4>
+                                <p>assign this ticket to 
+                                    <b><?php echo $item->agent->displayName ?></b>
+                                </p>
+                                <p>
+                                    <?php echo time_ago($item->timestamp) ?>
+                                </p>
+                            </div>
+                        </div>
+                <?php ; elseif (($item instanceof StatusChange) === true) :?> 
+                    <div class="event">
+                        <img class="avatar" src="assets/images/person.png" alt="user">
+                        <div>
+                            <h4>
+                                <?php echo $item->user->displayName?>
+                            </h4>
+                            <p>udpate status to 
+                                <b><?php echo $item->status ?></b>
+                            </p>
                             <p>
-                                <?php echo time_ago($comment["comment"]->createdAt) ?>
+                                <?php echo time_ago($item->timestamp) ?>
                             </p>
                         </div>
-                        <p>
-                            <?php echo $comment["comment"]->content ?>
-                        </p>
                     </div>
-                </div>
+                <!-- Comment --> 
+                <?php ; elseif (($item instanceof Comment) === true) :?> 
+                    <div class="ticket-comment">
+                        <div class="user-comment">
+                            <div class="user">
+                                <img class="avatar" src="assets/images/person.png" alt="user" />
+                                <h3><?php echo 22 ?></h3>
+                                <p>
+                                    <?php echo time_ago($item->timestamp) ?>
+                                </p>
+                            </div>
+                            <p>
+                                <?php echo $item->content ?>
+                            </p>
+                        </div>
+                    </div>
+                <?php endif; ?>
             <?php endforeach; ?>
-
-            <!--
-            <div class="event">
-                <img class="avatar" src="assets/images/person.png" alt="user">
-                <div>
-                    <h4>Agostinho Amorim</h4>
-                    <p>close this</p>
-                    <p>15 min ago</p>
-                </div>
-            </div>
-            -->
 
             <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                 <div class="comment-box top-line">

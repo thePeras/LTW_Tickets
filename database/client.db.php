@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use PHP_CodeSniffer\Standards\MySource\Sniffs\PHP\AjaxNullComparisonSniff;
+
 require_once __DIR__."/../utils/hash.php";
 require_once __DIR__."/../utils/roles.php";
 require_once __DIR__."/../utils/logger.php";
@@ -12,15 +14,15 @@ class Client implements JsonSerializable
 
     public string $username;
 
-    public string $email;
+    public ?string $email;
 
-    public string $displayName;
+    public ?string $displayName;
 
-    public string $password;
+    public ?string $password;
 
     public string $type;
 
-    public int $createdAt;
+    public ?int $createdAt;
 
 
     public function jsonSerialize() : mixed
@@ -37,8 +39,8 @@ class Client implements JsonSerializable
     }
 
 
-    public function __construct(string $_username, string $_email,
-        string $_password, string $_displayName, ?int $_createdAt=null
+    public function __construct(string $_username, ?string $_email=null,
+        ?string $_password=null, ?string $_displayName=null, ?int $_createdAt=null
     ) {
         $this->username    = $_username;
         $this->email       = $_email;

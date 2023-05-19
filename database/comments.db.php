@@ -10,20 +10,20 @@ class Comment
 
     public string $content;
 
-    public string $createdByUser;
+    public Client $createdByUser;
 
-    public DateTime $createdAt;
+    public DateTime $timestamp;
 
     public int $ticket;
 
 
     public function __construct(string $content, int $ticket,
-        string $createdByUser, int $_epoch, int $id=0
+        Client $createdByUser, int $_epoch, int $id=0
     ) {
         $this->id            = $id;
         $this->content       = $content;
         $this->createdByUser = $createdByUser;
-        $this->createdAt     = new DateTime("@".$_epoch);
+        $this->timestamp     = new DateTime("@".$_epoch);
         $this->ticket        = $ticket;
 
     }
@@ -38,10 +38,10 @@ function insert_new_comment(Comment $comment, PDO $db) : bool
     $sql  = "INSERT INTO Comments(content, createdByUser, createdAt, ticket) VALUES (:content, :createdByUser, :createdAt, :ticket)";
     $stmt = $db->prepare($sql);
 
-    $createdAt = $comment->createdAt->getTimestamp();
+    $createdAt = $comment->timestamp->getTimestamp();
 
     $stmt->bindParam(':content', $comment->content, PDO::PARAM_STR);
-    $stmt->bindParam(':createdByUser', $comment->createdByUser, PDO::PARAM_STR);
+    $stmt->bindParam(':createdByUser', $comment->createdByUser->username, PDO::PARAM_STR);
     $stmt->bindParam(':createdAt', $createdAt, PDO::PARAM_INT);
     $stmt->bindParam(':ticket', $comment->ticket, PDO::PARAM_INT);
 
@@ -59,10 +59,18 @@ function get_comments_by_ticket(int $ticketId, PDO $db) : array
 
     $comments = [];
     while (($row = $stmt->fetch(PDO::FETCH_ASSOC)) !== false) {
-        $comments[] = [
-            'comment'     => new Comment($row['content'], $row['ticket'], $row['createdByUser'], (int) $row['createdAt'], (int) $row['id']),
-            'displayName' => $row['displayName'],
-        ];
+        $comments[] = new Comment(
+            $row['content'],
+            $row['ticket'],
+            new Client(
+                $row['username'],
+                $row['email'],
+                null,
+                $row['displayName']
+            ),
+            (int) $row['createdAt'],
+            (int) $row['id']
+        );
     }
 
     return $comments;

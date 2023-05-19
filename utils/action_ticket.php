@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__.'/../database/tickets.db.php';
 require_once __DIR__.'/../database/comments.db.php';
 require_once __DIR__.'/../database/department.db.php';
+require_once __DIR__.'/../database/changes.db.php';
 
 
 function create_ticket(string $title, string $description, PDO $db) : bool
@@ -29,8 +30,9 @@ function create_comment(string $content, int $ticketId, PDO $db) : bool
 
     $session = is_session_valid($db);
 
-    $comment   = new Comment($content, $ticketId, $session->username, time());
-    $commentId = insert_new_comment($comment, $db);
+    $createdByUser = new Client($session->username);
+    $comment       = new Comment($content, $ticketId, $createdByUser, time());
+    $commentId     = insert_new_comment($comment, $db);
 
     if ($commentId === null) {
         return false;
@@ -45,6 +47,14 @@ function get_comments(int $ticketId, PDO $db) : array
 {
 
     return get_comments_by_ticket($ticketId, $db);
+
+}
+
+
+function get_changes(int $ticketId, PDO $db) : array
+{
+
+    return get_changes_by_ticket($ticketId, $db);
 
 }
 
@@ -106,6 +116,14 @@ function close_ticket(int $ticketId, PDO $db) : ?string
 
     if (update_ticket_status($ticket, $db) !== true) {
         return 'Error updating ticket';
+    }
+
+    // Creating a change
+    $changeBy = new Client($ticket->createdByUser, '', '');
+    $changeAt = time();
+    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status);
+    if (insert_new_change($change, $db) === null) {
+        return 'Error inserting the change';
     }
 
     return null;
