@@ -150,6 +150,18 @@ function edit_user(Client $newUser, PDO $db) : bool
 }
 
 
+function set_default_client_image(Client $client, PDO $db)
+{
+    $sql      = "UPDATE Clients SET image = :image WHERE username = :username";
+    $stmt     = $db->prepare($sql);
+    $newImage = Client::DEFAULT_IMAGE;
+    $stmt->bindParam(':image', $newImage, PDO::PARAM_STR);
+    $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+
 function change_password(string $username, string $newPassword, PDO $db) : bool
 {
     $hashedPassword = hash_password($newPassword);

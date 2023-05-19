@@ -7,17 +7,13 @@ require_once __DIR__.'/../../utils/roles.php';
 require_once __DIR__.'/../../database/client.db.php';
 
 
-function get_navbar_user(?Client $client) : string
+function get_navbar_user(?Client $client, PDO $db) : string
 {
     if ($client === null) {
         return '';
     }
 
-    if ($client->image === null) {
-        $imageSrc = 'assets/images/default_user.png';
-    } else {
-        $imageSrc = $client->image;
-    }
+    $imageSrc = $client->image;
 
     return <<<HTML
         <div class="user" onclick="location.href='/profile'">
@@ -54,6 +50,10 @@ function navbar(PDO $db)
     $client  = null;
     if ($session !== null) {
         $client = get_user($session->username, $db);
+        if (file_exists(__DIR__.'/../../'.$client->image) === false) {
+            set_default_client_image($client, $db);
+            $client = get_user($client->username, $db);
+        }
     }
     ?>
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
@@ -107,7 +107,7 @@ function navbar(PDO $db)
             </div>
             <?php
             if ($session !== null) {
-                echo get_navbar_user($client);
+                echo get_navbar_user($client, $db);
             } else {
                 echo get_login_button();
             }
