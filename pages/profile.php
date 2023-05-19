@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
     <link rel="stylesheet" href="css/profile_page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="js/profile_page.js" defer></script>
+    <script src="js/password.js"></script>
 </head>
 <body>
 
@@ -24,6 +26,9 @@
     global $ifHtml;
     $session = is_session_valid($db);
     $client  = null;
+
+    $passwordFailed = false;
+
 if ($session !== null) {
     $client = get_user($session->username, $db);
 }
@@ -48,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (edit_password($client, $oldPassword, $newPassword, $confirmPassword, $db) === true) {
             $client = get_user($client->username, $db);
+        } else {
+            $passwordFailed = true;
         }
     }
 }
@@ -89,23 +96,37 @@ echo navbar($db);
             <input type="file" name="fileInput" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
         </form>
 
-        <form action = "profile" method = "post">
-            <label for = "oldPassword">Your current password
-                <input type="password" name = "oldPassword" id = "oldPassword" required>
+        <form action = "profile" method = "post" onsubmit>
+            <label for="oldPassword">Your current password
+                <div class="password-container">
+                    <input type="password" name="oldPassword" id="oldPassword" required>
+                    <i class="fas fa-eye-slash password-toggle-icon" onclick="togglePasswordVisibility('oldPassword')"></i>
+                </div>
             </label>
 
-            <label for = "newPassword">New password
-                <input type="password" name = "newPassword" id = "newPassword" required>
+            <label for="newPassword">New password
+                <div class="password-container">
+                    <input type="password" name="newPassword" id="newPassword" required>
+                    <i class="fas fa-eye-slash password-toggle-icon" onclick="togglePasswordVisibility('newPassword')"></i>
+                </div>
             </label>
 
-            <label for = "confirmPassword">Confirm new password
-                <input type="password" name = "confirmPassword" id = "confirmPassword" required>
+            <label for="confirmPassword">Confirm new password
+                <div class="password-container">
+                    <input type="password" name="confirmPassword" id="confirmPassword" required>
+                    <i class="fas fa-eye-slash password-toggle-icon" onclick="togglePasswordVisibility('confirmPassword')"></i>
+                </div>
             </label>
+
+            <?php if ($passwordFailed === true) : ?>
+                <p class="error">Wrong password</p>
+            <?php else : ?>
+                <p class="success">Password changed successfully</p>
+            <?php endif; ?>
 
             <input type="hidden" name="action" value="changePassword">
-            <input type="submit" value="Change Password">
+            <input type="submit" value="Change Password" onclick="passwordsMatch('newPassword', 'confirmPassword')">
         </form>
-
     </div>
 </main>
 

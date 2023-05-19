@@ -64,3 +64,27 @@ label {
     margin-bottom: 10px;
     font-size: 0.9rem;
 }
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    top: 45%;
+    right: 0px;
+    transform: translateY(-40%);
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+.success {
+    color: green;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}

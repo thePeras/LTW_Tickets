@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="css/layout.css" rel="stylesheet" type="text/css">
     <link href="css/login_register.css" rel="stylesheet" type="text/css">
     <link href="css/components.css" rel="stylesheet" type="text/css">
-    <script src="js/password_validation.js"></script>
+    <script src="js/password.js"></script>
 </head>
 <body>
     <div class="container">
@@ -74,11 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" id="confirmPassword" name="password" required>
                 <br>
 
-                <input type="checkbox" onclick="showPassword()">
+                <input type="checkbox" onclick="showPasswordsRegister()">
                 <label>Show password</label>
         
                 <br><br>
-                <input type="submit" value="Create account" onclick="passwordsMatch()">
+                <input type="submit" value="Create account" onclick="passwordsMatch('password', 'confirmPassword')">
             </form>
 
             <?php if ($registered === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>
