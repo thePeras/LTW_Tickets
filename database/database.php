@@ -48,13 +48,17 @@ function make_default_admin(PDO $db)
     $password = $env["DEFAULT_ADMIN_PASSWORD"];
     $email    = $env["DEFAULT_ADMIN_EMAIL"];
     $name     = "Admin";
-    $sql      = "INSERT INTO Clients VALUES (:user, :email, :password, :name,:createdAt, 1);";
+    $image    = "assets/images/default_user.png";
+    $sql      = "INSERT INTO Clients VALUES (:user, :email, :password, :name, :image, :createdAt, 1);";
     $stmt     = $db->prepare($sql);
     $stmt->bindParam(":user", $username);
-    $stmt->bindParam(":password", hash_text($password));
+    $password = hash_password($password);
+    $stmt->bindParam(":password", $password);
     $stmt->bindParam(":email", $email);
     $stmt->bindParam(":name", $name);
-    $stmt->bindParam(":createdAt", time(), PDO::PARAM_INT);
+    $stmt->bindParam(":image", $image);
+    $time = time();
+    $stmt->bindParam(":createdAt", $time, PDO::PARAM_INT);
 
     if ($stmt->execute() === false) {
         throw new ErrorException("Query failed while creating default admin");

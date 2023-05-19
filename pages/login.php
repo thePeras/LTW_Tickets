@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="username">
                     <p>Username:</p>
                 </label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" autocomplete="off" required>
 
                 <label for="password">
                     <p>Password:</p>
@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <br>
                 <input type="submit" value="Login">
             </form>
+
             <?php if ($loggedIn === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>
                 <p class="error">Invalid username or password.</p>
             <?php endif; ?>

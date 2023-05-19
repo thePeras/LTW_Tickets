@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="css/layout.css" rel="stylesheet" type="text/css">
     <link href="css/login_register.css" rel="stylesheet" type="text/css">
     <link href="css/components.css" rel="stylesheet" type="text/css">
+    <script src="js/password.js"></script>
 </head>
 <body>
     <div class="container">
@@ -48,32 +49,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="post" action="register">
                 
                 <label for="name">
-                    <p>Name:</p>
+                    <p>Name</p>
                 </label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required autocomplete="off">
 
                 <label for="username">
-                    <p>Username:</p>
+                    <p>Username</p>
                 </label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" autocomplete="off" required pattern="^[a-zA-Z0-9_\-\.]{3,20}$">
 
                 <label for="email">
-                    <p>Email:</p>
+                    <p>Email</p>
                 </label>
                 <input type="text" id="email" name="email" required>
 
                 <label for="password">
-                    <p>Password:</p>
+                    <p>Password</p>
                 </label>
                 <input type="password" id="password" name="password" required>
 
                 <label for="password">
-                    <p>Confirm password:</p>
+                    <p>Confirm password</p>
                 </label>
-                <input type="password" id="password" name="password" required>
-
+                <input type="password" id="confirmPassword" name="password" required>
                 <br>
-                <input type="submit" value="Create account">
+
+                <input type="checkbox" onclick="showPasswordsRegister()">
+                <label>Show password</label>
+        
+                <br><br>
+                <input type="submit" value="Create account" onclick="passwordsMatch('password', 'confirmPassword')">
             </form>
 
             <?php if ($registered === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>
