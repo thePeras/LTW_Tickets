@@ -46,6 +46,26 @@ div {
   margin: 1rem 0rem 0rem 1rem;
   overflow-wrap: break-word;
 }
+.faq-question .content .created-by {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: start;
+}
+.faq-question .content .created-by img {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+}
+.faq-question .content .created-by p:first-child {
+  font-weight: bold;
+  color: black;
+}
+.faq-question .content .created-by .display-name {
+  color: rgba(54, 60, 76, 0.7803921569);
+}
 .faq-question.active {
   background-color: #ffffff;
   border-radius: 8px;
@@ -54,4 +74,22 @@ div {
   opacity: 1;
   visibility: visible;
   height: auto;
+}
+
+.top-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3em;
+}
+.top-content .search > input {
+  margin-top: 1rem;
+}
+.top-content > button {
+  display: block;
+  background-color: #06ad00;
+}
+.top-content > button:hover {
+  background-color: #059e00;
 }/*# sourceMappingURL=faq.css.map */

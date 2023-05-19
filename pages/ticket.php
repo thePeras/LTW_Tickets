@@ -1,6 +1,6 @@
 <?php
-    require 'components/navbar/navbar.php';
-    require 'database/database.php';
+    require_once 'components/navbar/navbar.php';
+    require_once 'database/database.php';
 
     $id = $_GET['id'];
 ?>

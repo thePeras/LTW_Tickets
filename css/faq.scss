@@ -1,3 +1,5 @@
+@import "theme.scss";
+
 .faq-footer {
     width: 100%;
     background-color: #ffffff;
@@ -46,6 +48,30 @@ div {
         text-align: left;
         margin: 1rem 0rem 0rem 1rem;
         overflow-wrap: break-word;
+
+        .created-by{
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: start;
+            img{
+                height: 2rem;
+                width: 2rem;
+                border-radius: 50%;
+            }
+
+            p:first-child {
+                font-weight: bold;
+                color: black;
+            }
+
+            .display-name{
+                color: $black-secondary;
+
+            }
+        }
     }
 
     &.active {
@@ -56,9 +82,32 @@ div {
             opacity: 1;
             visibility: visible;
             height: auto;
-
         }
 
+
+    }
+}
+
+.top-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    .search{
+        > input{
+            margin-top: 1rem;
+
+        }
+    }
+
+    > button {
+        display: block;
+        background-color: #06ad00;
+
+    }
+    > button:hover{
+        background-color: #059e00;
 
     }
 }
