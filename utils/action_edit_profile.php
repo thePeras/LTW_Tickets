@@ -27,7 +27,7 @@ function edit_profile(Client $oldUser,
         }
 
         if ($oldUser->image === Client::DEFAULT_IMAGE) {
-            $newImageName = hash_profile_picture($newUsername).'.png';
+            $newImageName     = hash_profile_picture($newUsername).'.png';
             $newImageLocation = __DIR__.'/../user_data/profile_pictures/'.$newImageName;
             file_put_contents($newImageLocation, $newImageContent);
             $newImage = '/user_data/profile_pictures/'.$newImageName;

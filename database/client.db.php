@@ -35,6 +35,7 @@ class Client implements JsonSerializable
             "displayName" => $this->displayName,
             "type"        => $this->type,
             "createdAt"   => $this->createdAt,
+            "image"       => $this->image,
 
         ];
 
