@@ -40,7 +40,9 @@ function drawUserTable(array $clients)
     <?php foreach ($clients as $client) :?>
     <tr class="user-entry">
         <td class="user-info">
-            <img class="user-photo" src="assets/images/person.png" alt="user">
+            <img class="user-photo" src="
+            <?php $client->image?>
+            " alt="user">
             <div class="user-name">
                 <p><?php echo $client->displayName?></p>
                 <p><?php echo $client->username?></p>

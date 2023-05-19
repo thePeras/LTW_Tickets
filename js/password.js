@@ -15,7 +15,7 @@ function passwordsMatch(idPassword1, idPassword2) {
     }
 }
 
-function showPasswordsRegister(){
+function showPasswordsRegister() {
     var password = document.getElementById("password");
     var confirm_password = document.getElementById("confirmPassword");
 
@@ -34,11 +34,11 @@ function togglePasswordVisibility(inputId) {
 
     if (input.type === "password") {
         input.type = "text";
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
+        icon.classList.remove("ri-eye-line");
+        icon.classList.add("ri-eye-off-line");
     } else {
         input.type = "password";
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
+        icon.classList.remove("ri-eye-off-line");
+        icon.classList.add("ri-eye-line");
     }
 }

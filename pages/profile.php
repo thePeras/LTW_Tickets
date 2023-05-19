@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
     <link rel="stylesheet" href="css/profile_page.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="js/profile_page.js" defer></script>
     <script src="js/password.js"></script>
 </head>
@@ -27,7 +26,7 @@
     $session = is_session_valid($db);
     $client  = null;
 
-    $passwordFailed = false;
+    $passwordFailed = null;
 
 if ($session !== null) {
     $client = get_user($session->username, $db);
@@ -52,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $confirmPassword = $_POST['confirmPassword'];
 
         if (edit_password($client, $oldPassword, $newPassword, $confirmPassword, $db) === true) {
-            $client = get_user($client->username, $db);
+            $client         = get_user($client->username, $db);
+            $passwordFailed = false;
         } else {
             $passwordFailed = true;
         }
@@ -100,27 +100,27 @@ echo navbar($db);
             <label for="oldPassword">Your current password
                 <div class="password-container">
                     <input type="password" name="oldPassword" id="oldPassword" required>
-                    <i class="fas fa-eye-slash password-toggle-icon" onclick="togglePasswordVisibility('oldPassword')"></i>
+                    <i class="ri-eye-line password-toggle-icon" onclick="togglePasswordVisibility('oldPassword')"></i>
                 </div>
             </label>
 
             <label for="newPassword">New password
                 <div class="password-container">
                     <input type="password" name="newPassword" id="newPassword" required>
-                    <i class="fas fa-eye-slash password-toggle-icon" onclick="togglePasswordVisibility('newPassword')"></i>
+                    <i class="ri-eye-line password-toggle-icon" onclick="togglePasswordVisibility('newPassword')"></i>
                 </div>
             </label>
 
             <label for="confirmPassword">Confirm new password
                 <div class="password-container">
                     <input type="password" name="confirmPassword" id="confirmPassword" required>
-                    <i class="fas fa-eye-slash password-toggle-icon" onclick="togglePasswordVisibility('confirmPassword')"></i>
+                    <i class="ri-eye-line password-toggle-icon" onclick="togglePasswordVisibility('confirmPassword')"></i>
                 </div>
             </label>
 
             <?php if ($passwordFailed === true) : ?>
                 <p class="error">Wrong password</p>
-            <?php else : ?>
+            <?php elseif ($passwordFailed === false) : ?>
                 <p class="success">Password changed successfully</p>
             <?php endif; ?>
 

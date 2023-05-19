@@ -204,7 +204,7 @@ function get_clients(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
 
     $clientBuilder = function (array $a) use ($resultAgent, $resultAdmin): ?Client {
-        $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+        $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
         $client->type = "client";
         if (in_array($client->username, $resultAgent) === true) {
             $client->type = "agent";
@@ -232,7 +232,7 @@ function get_clients_only(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
     return array_map(
         function (array $a) : Client {
-            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
             $client->type = "client";
             return $client;
         },
@@ -253,7 +253,7 @@ function get_agents(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
     return array_map(
         function (array $a) : Client {
-            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
             $client->type = "agent";
             return $client;
         },
@@ -274,7 +274,7 @@ function get_admins(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
     return array_map(
         function (array $a) : Client {
-            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
             $client->type = "admin";
             return $client;
         },
