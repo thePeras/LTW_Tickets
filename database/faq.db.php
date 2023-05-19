@@ -87,3 +87,44 @@ function search_faq_title(int $limit, int $offset, string $searchQuery, PDO $db)
     );
 
 }
+
+
+function delete_faq(int $id, PDO $db) : bool
+{
+    $sql  = "DELETE FROM FAQs WHERE id=:id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return $stmt->rowCount() === 1;
+
+}
+
+
+function get_faq(int $id, PDO $db) : FAQ
+{
+    $sql  = "SELECT * FROM FAQs WHERE id=:id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $a = $stmt->fetch();
+    return new FAQ($a["id"], $a["createdByUser"], $a["title"], $a["content"]);
+
+}
+
+
+function modify_faq_entry(int $id, string $title, string $content, string $user, PDO $db) : bool
+{
+    $sql  = "UPDATE FAQs SET title=:title, content=:content, createdByUser=:user WHERE id=:id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->bindParam(":user", $user);
+    $stmt->bindParam(":title", $title);
+    $stmt->bindParam(":content", $content);
+
+    $stmt->execute();
+    return $stmt->rowCount() === 1;
+
+}

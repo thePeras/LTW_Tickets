@@ -4,6 +4,8 @@ require_once 'components/layout/layout.php';
 require_once 'utils/routing.php';
 require_once 'utils/roles.php';
 require_once 'utils/session.php';
+require_once 'utils/logger.php';
+
 
 require_once 'database/database.php';
 require_once 'database/faq.db.php';
@@ -18,6 +20,34 @@ if (is_session_valid($db) === null) {
 }
 
 handle_page_route("/faq/new", __DIR__."/faq/new.php");
+handle_page_route("/faq/<id>", __DIR__."/faq/edit.php");
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (is_current_user_agent($db) === false) {
+        header("Location: /faq");
+        exit();
+    }
+
+    log_to_stdout(var_export($_POST, true));
+
+    if (isset($_POST["action"]) === false) {
+        header("Location: /");
+        exit();
+    }
+
+    if ($_POST["action"] === "deleteFAQ" && isset($_POST["id"]) === true) {
+        if (delete_faq(intval($_POST["id"]), $db) === false) {
+            log_to_stdout("Something went wrong while deleting FAQ with id".$_POST["id"], "e");
+        }
+    }
+
+    if (isset($_POST["lastHref"]) === true) {
+        header("Location: ".$_POST["lastHref"]);
+    } else {
+        header("Location: /faq");
+    }
+}
 
 layout_start();
 
@@ -28,7 +58,10 @@ $faqs = get_FAQs($limit, $offset, $db);
 
 ?>
     <link rel="stylesheet" type="text/css" href="/css/faq.css">
-    <script src="js/faq.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/modal.css">
+
+    <script src="/js/modal.js"></script>
+    <script src="/js/faq.js"></script>
     
 
     <h1>FAQ</h1>
@@ -49,7 +82,16 @@ $faqs = get_FAQs($limit, $offset, $db);
         <div class="faq-question">
             <header>
                 <h2>#<?php echo $faq->id?> - <?php echo $faq->title?></h2>
-                <i class="ri-add-circle-line"></i>
+                <div class="faq-buttons">
+                    <?php if (is_current_user_agent($db) === true) :?>
+                        <button class="edit-button" onclick="location.href = '/faq/<?php echo $faq->id?>'">Edit</button>
+
+                    <?php endif;?>
+                    <?php if (is_current_user_agent($db) === true) :?>
+                        <button class="delete-button" onclick="makeDeleteModal(<?php echo $faq->id?>)">Delete</button>
+                    <?php endif;?>
+                    <i class="ri-add-circle-line"></i>
+                </div>
             </header>
             <div class="content">
                 <?php foreach ($content as $paragraph) :?>

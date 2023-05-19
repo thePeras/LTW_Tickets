@@ -70,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST["lastHref"]) === true) {
-        log_to_stdout(var_export($_POST["lastHref"], true));
         header("Location: ".$_POST["lastHref"]);
     } else {
         header("Location: /admin");

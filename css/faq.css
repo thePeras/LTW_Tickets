@@ -31,9 +31,29 @@ div {
   justify-content: space-between;
   cursor: pointer;
 }
-.faq-question header i {
+.faq-question header .faq-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+}
+.faq-question header .faq-buttons i {
   font-size: 1.6rem;
   margin-right: 0.2rem;
+}
+.faq-question header .faq-buttons .delete-button {
+  background-color: #c01104;
+  color: white;
+}
+.faq-question header .faq-buttons .delete-button:hover {
+  background-color: #a70d02;
+}
+.faq-question header .faq-buttons .edit-button {
+  background-color: #06ad00;
+  color: white;
+}
+.faq-question header .faq-buttons .edit-button:hover {
+  background-color: #027700;
 }
 .faq-question .content {
   margin-top: 0.7rem;

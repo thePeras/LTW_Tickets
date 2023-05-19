@@ -32,10 +32,37 @@ div {
         justify-content: space-between;
         cursor: pointer;
 
-        i {
-            font-size: 1.6rem;
-            margin-right: 0.2rem;
+        .faq-buttons{
+            display: flex;
+            flex-direction: row;
+            gap: 1em;
+            align-items: center;
+
+            i {
+                font-size: 1.6rem;
+                margin-right: 0.2rem;
+            }
+    
+            .delete-button{
+                background-color: $delete-color;
+                color: white;
+            }
+
+            .delete-button:hover{
+                background-color: #a70d02;
+
+            }
+
+            .edit-button{
+                background-color: #06ad00;
+                color: white;
+            }
+
+            .edit-button:hover{
+                background-color: #027700;
+            }
         }
+
     }
 
     .content {

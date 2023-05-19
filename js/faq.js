@@ -4,6 +4,8 @@ var end = false;
 var fetchingFAQs = false;
 var searchInput = '';
 
+var currentUserType = '';
+
 const limit = 10;
 
 function isOnScreen(element) {
@@ -34,6 +36,9 @@ async function buildResults(result) {
 
     const userJson = await userRes.json();
 
+    
+    const editButton = `<button class="edit-button" onclick="location.href = '/faq/${result["id"]}'">Edit</button>`
+    const deleteButton = `<button class="delete-button" onclick="makeDeleteModal(${result["id"]})">Delete</button>`
 
 
     var contents = result["content"].split("\n");
@@ -44,7 +49,11 @@ async function buildResults(result) {
     question.innerHTML = `
     <header>
         <h2>#${result["id"]} - ${result["title"]}</h2>
-        <i class="ri-add-circle-line"></i>
+        <div class="faq-buttons">
+            ${currentUserType == "agent" || currentUserType == "admin"  ? editButton : ''}
+            ${currentUserType == "agent" || currentUserType == "admin"  ? deleteButton : ''}
+            <i class="ri-add-circle-line"></i>
+        </div>
     </header>
     <div class="content">
         ${contents}
@@ -59,14 +68,19 @@ async function buildResults(result) {
 }
 
 async function searchNewParam(event) {
-    searchInput = event.target.value
-    if (searchInput.length < 3) return;
+    searchInput = event.target.value;
+    var res = undefined;
+    if (searchInput.length === 0) {
+        res = await fetch(`/api/faqs?limit=1&offset=0`,
+        { method: "GET" });
+    }
+    if (searchInput.length < 3 && searchInput.length >= 1) return;
     offset = 0;
     end = false;
 
     fetchingFAQs = true;
 
-    const res = await fetch(`/api/faqs?limit=10&offset=${offset}&q=${encodeURI(searchInput)}`,
+    res = await fetch(`/api/faqs?limit=10&offset=${offset}&q=${encodeURI(searchInput)}`,
         { method: "GET" });
 
     if (res.status !== 200) {
@@ -100,7 +114,7 @@ const addResultClick = () => {
         faqQuestion.toggleAttribute("click-listener", true);
         faqQuestion.addEventListener('click', (e) => {
             // Clicking in the content do nothing
-            if (e.target.classList.contains('content') || e.target.parentElement.classList.contains('content')) {
+            if (e.target.classList.contains('content') || e.target.parentElement.classList.contains('content') || e.target.tagName == "BUTTON") {
                 return;
             }
 
@@ -149,3 +163,56 @@ document.addEventListener("DOMContentLoaded", (ev) => {
 });
 
 document.addEventListener("scroll", getNewFaqs);
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const res = await fetch("/api/clients/me", {method: "get"});
+
+    if(res.status !== 200){
+        console.log(`Something went wrong while getting current user type status: ${res.status}`);
+        //assume that it is a client if something goes wrong
+        currentUserType = "client";
+        return;
+    }
+
+    const resJson = await res.json();
+
+    currentUserType = resJson["type"];
+
+});
+
+
+function makeDeleteModal(id) {
+    const body = document.querySelector("body");
+    body.style.overflow = "hidden";
+
+    const modalElement = document.querySelector(".modal");
+    if (modalElement === null) return;
+
+    const modalContentElement = document.querySelector(".modal-content");
+    modalContentElement.classList.toggle("delete-user-modal");
+    if (modalContentElement === null) return;
+
+    //TODO: inject CSRF token
+    modalContentElement.innerHTML = `
+    <h1>Delete User</h1>
+    <p>Are you sure that you want to delete faq <b>#${id}</b>? This action is irreversible...</p>
+    <div class="modal-buttons">
+        <button class="cancel-button" onclick="closeModal()"><p>Cancel</p></button>
+        <form method="post" action="faq">
+            <input type="hidden" name="action" value="deleteFAQ">
+            <input type="hidden" name="id" value="${id}">
+            <input type="hidden" name="lastHref" value="${location.href}">
+
+
+            <input type="submit" class="delete-button" value="Delete">
+        </form>
+        </div>`;
+    modalElement.style.display = "block";
+    modalElement.style.opacity = 0;
+    modalElement.animate([
+        { opacity: 0 },
+        { opacity: 1, visbility: "visible" },
+    ], { duration: 200, iterations: 1 }).onfinish = (event) => {
+        modalElement.style.opacity = 1;
+    }
+}
