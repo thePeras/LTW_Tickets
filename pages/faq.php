@@ -3,12 +3,19 @@
 require_once 'components/layout/layout.php';
 require_once 'utils/routing.php';
 require_once 'utils/roles.php';
+require_once 'utils/session.php';
+
 require_once 'database/database.php';
 require_once 'database/faq.db.php';
 
 
 
 $db = get_database();
+
+if (is_session_valid($db) === null) {
+    header("Location: /login");
+    exit();
+}
 
 handle_page_route("/faq/new", __DIR__."/faq/new.php");
 
@@ -29,13 +36,13 @@ $faqs = get_FAQs($limit, $offset, $db);
     <div class="top-content">
         <div class="search">
             <h4>Have Questions? We're here to help.</h4>
-            <input type="text" placeholder="Search">
+            <input type="text" placeholder="Search" class="search-input" autocomplete="off">
         </div>
         <?php if (is_current_user_agent($db) === true) :?>
             <button  type="button" class="create-faq primary" onclick="location.href= '/faq/new'">Create new...</button>
         <?php endif;?>
     </div>
-    <div>
+    <div class="faq-content">
         <?php foreach ($faqs as $faq) :
             $user    = get_user($faq->createdByUser, $db);
             $content = explode("\n", $faq->content)?>
