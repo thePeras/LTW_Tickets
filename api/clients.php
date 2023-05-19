@@ -41,13 +41,21 @@ handle_api_route(
     "/clients/<id>",
     "GET",
     function (mixed $id) use ($db) {
-        if (is_session_valid($db) === null) {
+        $session = is_session_valid($db);
+        if ($session === null) {
             http_response_code(403);
             echo '{"error":"user not authenticated"}';
             exit();
         }
 
-        $client = get_user($id, $db);
+        $client = null;
+
+        if ($id === "me") {
+            $client = get_user($session->username, $db);
+        } else {
+            $client = get_user($id, $db);
+        }
+
         if ($client === null) {
             http_response_code(404);
             echo '{"error":"username not found"}';
