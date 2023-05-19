@@ -95,11 +95,6 @@ $offset = intval(($_GET["offset"] ?? 0))
     <link rel="stylesheet" href="/css/remixicon.css">
 </head>
 <body>
-<div class="modal">
-        <div class="modal-content">
-
-        </div>
-    </div>
     <?php
     navbar($db);
 
