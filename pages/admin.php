@@ -70,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST["lastHref"]) === true) {
-        log_to_stdout(var_export($_POST["lastHref"], true));
         header("Location: ".$_POST["lastHref"]);
     } else {
         header("Location: /admin");
@@ -91,32 +90,27 @@ $tab    = ($_GET["tab"] ?? "users");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tickets</title>
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/remixicon.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/remixicon.css">
 </head>
 <body>
-<div class="modal">
-        <div class="modal-content">
-
-        </div>
-    </div>
     <?php
     navbar($db);
 
     ?>
 <main>
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="css/dropdown.css">
-    <link rel="stylesheet" href="css/components.css">
-    <script src="js/modal.js"></script>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/dropdown.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <script src="/js/modal.js"></script>
 
 
     <h1>Admin page</h1>
     <ul class="tabSelector">
         <li <?php
-        if ($tab === "users" || $_GET["tab"] === null) {
+        if ($tab === "users") {
             echo 'class="active"';
         }?>>
             <a href="?tab=users">Users</a>
@@ -130,7 +124,7 @@ $tab    = ($_GET["tab"] ?? "users");
         </li>
     </ul>
 
-    <?php if ($tab === "users" || $tab === null) :?>
+    <?php if ($tab === "users") :?>
         <?php
         $clients = [];
         if (isset($_GET["sort"]) === false) {
@@ -143,14 +137,14 @@ $tab    = ($_GET["tab"] ?? "users");
             $clients = get_admins($limit, $offset, $db);
         }
         ?>
-        <script src="js/user-table.js"></script>
+        <script src="/js/user-table.js"></script>
 
         <?php
         drawUserTable($clients);
         elseif ($tab === "departments") :
             $departments = get_departments($limit, $offset, $db, false);
             ?>
-            <script src="js/department.js"></script>
+            <script src="/js/department.js"></script>
 
             <div class="department-buttons">
                 <button onclick="makeAddDepartmentModal()" class="primary">Add new department</button>

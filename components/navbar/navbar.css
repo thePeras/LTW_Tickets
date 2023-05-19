@@ -68,6 +68,7 @@ nav.sidebar div.user {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  justify-content: space-between;
 }
 nav.sidebar div.user img.avatar {
   width: 40px;
@@ -94,6 +95,19 @@ nav.sidebar div.user .logout {
   text-decoration: none;
   font-size: 1.5rem;
   color: black;
+}
+nav.sidebar .login {
+  display: block;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  text-decoration: none;
+  background-color: rgba(202, 207, 218, 0.2352941176);
+  color: var(--black-color);
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.1s ease-out;
+  border: 1px solid #dcdbdb;
+  box-shadow: 0 1px 0.2rem 5px 5px rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 950px) {

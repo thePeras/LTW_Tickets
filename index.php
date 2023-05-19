@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_URI"] === "/") {
             api_route_error();
             exit();
         } else {
-            include $pagesDir."/notFound.php";
+            include $pagesDir."/not-found.php";
             log_to_stdout($_SERVER["REQUEST_METHOD"]." - ".$_SERVER["REQUEST_URI"]." - no such page route.", "e");
         }
     }

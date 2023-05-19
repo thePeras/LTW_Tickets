@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
-    <link rel="stylesheet" href="pages/tickets.css">
+    <link rel="stylesheet" href="css/tickets.css">
 </head>
 <body>
 

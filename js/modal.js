@@ -1,3 +1,16 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const body = document.querySelector("body");
+
+    const modal = document.createElement("div");
+    modal.classList.add("modal");
+    modal.innerHTML = `<div class="modal-content"></div>`;
+
+    body.prepend(modal);
+    
+
+});
+
+
 function closeModal() {
     const body = document.querySelector("body");
     body.style.overflow = "auto";
@@ -13,5 +26,4 @@ function closeModal() {
         if (modalContentElement === null) return;
         modalContentElement.innerHTML = '';
     };
-
 }
