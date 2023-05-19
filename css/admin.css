@@ -99,9 +99,6 @@ table td:first-child {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(202, 207, 218, 0.2352941176);
 }
-.user-table .role-filter > h3 {
-  padding: 1em 1em;
-}
 .user-table .role-filter > a {
   display: block;
   padding: 0.5em 1em;

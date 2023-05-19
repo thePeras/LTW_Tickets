@@ -1,9 +1,10 @@
-button {
+button,
+input[type=button],
+input[type=submit] {
   cursor: pointer;
   text-align: center;
   font-size: 1rem;
   font-weight: 500;
-  color: #363c4c;
   display: block;
   padding: 0.8rem;
   text-decoration: none;
@@ -11,18 +12,51 @@ button {
   border-radius: 8px;
   background-color: rgba(111, 113, 119, 0.235);
   border: none;
+  margin: 0;
 }
-button:hover {
+button:hover,
+input[type=button]:hover,
+input[type=submit]:hover {
   background-color: rgba(111, 113, 119, 0.235);
 }
-button.primary {
+button.primary,
+input[type=button].primary,
+input[type=submit].primary {
   background-color: #5449f0;
   color: white;
 }
-button.primary:hover {
+button.primary:hover,
+input[type=button].primary:hover,
+input[type=submit].primary:hover {
   background-color: #6158e1;
 }
-button:focus {
+button.cancel,
+input[type=button].cancel,
+input[type=submit].cancel {
+  background-color: rgba(202, 207, 218, 0.2352941176);
+  color: #363c4c;
+}
+button.cancel:hover,
+input[type=button].cancel:hover,
+input[type=submit].cancel:hover {
+  background-color: rgba(152, 155, 161, 0.2352941176);
+}
+button.delete,
+input[type=button].delete,
+input[type=submit].delete {
+  background-color: #c01104;
+  color: white;
+}
+button.delete:hover,
+input[type=button].delete:hover,
+input[type=submit].delete:hover {
+  background-color: #a70d02;
+}
+
+.cancel-button:hover {
+  background-color: rgba(152, 155, 161, 0.2352941176);
+}
+.cancel-button:hover:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
   border-color: #5449f0;
@@ -77,19 +111,6 @@ input::-moz-placeholder {
 }
 input::placeholder {
   color: #929292;
-}
-
-input[type=submit] {
-  background-color: #5449f0;
-  color: white;
-  font-weight: bold;
-  padding: 0.5rem;
-  border-radius: 8px;
-  padding: 0.5rem 1.5rem;
-  cursor: pointer;
-}
-input[type=submit]:hover {
-  opacity: 0.8;
 }
 
 textarea {

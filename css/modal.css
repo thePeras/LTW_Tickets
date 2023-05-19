@@ -1,8 +1,9 @@
-.cancel-button, .edit-user-modal > .main-edit-content .modal-buttons .edit-button, .delete-user-modal > .modal-buttons > form > .delete-button {
+.edit-user-modal > .main-edit-content .modal-buttons .edit-button, .delete-user-modal > .modal-buttons > form > .delete-button {
   padding: 0.7rem 1.3rem;
   border-radius: 8px;
   border: 0;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .modal {
@@ -17,8 +18,11 @@
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
 }
+.modal h1 {
+  font-weight: 500;
+}
 .modal > .modal-content {
-  padding: 1rem;
+  padding: 1.5rem;
   background: linear-gradient(0, #f9faff, #f0f1f9);
   border-radius: 8px;
   position: fixed;
@@ -33,6 +37,7 @@
   flex-direction: row;
   justify-content: right;
   gap: 1em;
+  align-items: center;
 }
 
 .delete-user-modal {
@@ -71,7 +76,8 @@
 .edit-user-modal > .main-edit-content > .image-username .username {
   color: rgba(54, 60, 76, 0.7803921569);
 }
-.edit-user-modal > .main-edit-content > .edit-user-form > input, .edit-user-modal > .main-edit-content > .edit-user-form > select {
+.edit-user-modal > .main-edit-content > .edit-user-form > input,
+.edit-user-modal > .main-edit-content > .edit-user-form > select {
   margin-bottom: 1em;
 }
 .edit-user-modal > .main-edit-content .modal-buttons .edit-button {
@@ -80,15 +86,6 @@
 }
 .edit-user-modal > .main-edit-content .modal-buttons .edit-button:hover {
   background-color: #059e00;
-}
-
-.cancel-button {
-  background-color: rgba(202, 207, 218, 0.2352941176);
-  color: #363c4c;
-}
-
-.cancel-button:hover {
-  background-color: rgba(152, 155, 161, 0.2352941176);
 }
 
 .add-new-department-modal > h1 {
