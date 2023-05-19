@@ -4,3 +4,4 @@ database/tickets.db
 *.css.map
 user_data/profile_pictures/*
 *.DS_Store
+.fuse*

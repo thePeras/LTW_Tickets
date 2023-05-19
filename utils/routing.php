@@ -14,7 +14,7 @@ function handle_api_route(string $path, string $method, Closure $handler) : void
         array_shift($matches);
     }
 
-    $path = preg_replace($argumentRegex, "([[:alnum:]]*)", $path);
+    $path = preg_replace($argumentRegex, "((?:[[:alnum:]]|\ )*)", $path);
     $path = preg_replace("/\//", "\/", $path);
 
     $reflection = new ReflectionFunction($handler);
