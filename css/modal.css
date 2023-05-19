@@ -35,6 +35,30 @@
   gap: 1em;
 }
 
+.suggestions {
+  background: white;
+  padding: 0.5rem;
+  padding-top: 1rem;
+  border-radius: 0 0 8px 8px;
+  margin-top: -14px;
+  z-index: 0;
+  padding-top: 1rem;
+  border: 1px solid rgb(215, 217, 250);
+  list-style-type: none;
+}
+.suggestions:not(.has-suggestions) {
+  display: none;
+}
+.suggestions li {
+  padding: 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.suggestions li:hover {
+  background-color: #ebebeb;
+}
+
 .delete-user-modal {
   gap: 2em;
 }
@@ -71,7 +95,8 @@
 .edit-user-modal > .main-edit-content > .image-username .username {
   color: rgba(54, 60, 76, 0.7803921569);
 }
-.edit-user-modal > .main-edit-content > .edit-user-form > input, .edit-user-modal > .main-edit-content > .edit-user-form > select {
+.edit-user-modal > .main-edit-content > .edit-user-form > input,
+.edit-user-modal > .main-edit-content > .edit-user-form > select {
   margin-bottom: 1em;
 }
 .edit-user-modal > .main-edit-content .modal-buttons .edit-button {

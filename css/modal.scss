@@ -41,6 +41,33 @@
     }
 }
 
+.suggestions {
+    background: white;
+    padding: 0.5rem;
+    padding-top: 1rem;
+    border-radius: 0 0 8px 8px;
+    margin-top: -14px;
+    z-index: 0;
+    padding-top: 1rem;
+    border: 1px solid rgb(215, 217, 250);
+    list-style-type: none;
+
+    &:not(.has-suggestions) {
+        display: none;
+    }
+
+    li {
+        padding: 0.7rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+
+        &:hover {
+            background-color: #ebebeb;
+        }
+    }
+}
+
 .delete-user-modal {
     gap: 2em;
 
@@ -91,7 +118,9 @@
         }
 
         >.edit-user-form {
-            >input, >select{
+
+            >input,
+            >select {
                 margin-bottom: 1em;
             }
 
@@ -126,8 +155,8 @@
 
 }
 
-.add-new-department-modal{
-    > h1{
+.add-new-department-modal {
+    >h1 {
         margin-bottom: 1em;
     }
 }

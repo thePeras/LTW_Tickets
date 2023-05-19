@@ -42,9 +42,14 @@ async function makeUserAssignModal(usertype) {
     const searchField = document.createElement("input");
     searchField.type = "text";
     searchField.placeholder = "Search user...";
+    searchField.style.zIndex = 1;
+
+    const suggestions = document.createElement("ul");
+    suggestions.classList.add("suggestions");
 
     mainContent = modalContentElement.querySelector(".main-edit-content");
     mainContent.parentNode.insertBefore(searchField, mainContent);
+    mainContent.parentNode.insertBefore(suggestions, mainContent);
 
     searchField.addEventListener("input", async (e) => {
         const searchValue = searchField.value;
@@ -57,8 +62,33 @@ async function makeUserAssignModal(usertype) {
             return;
         }
 
-        const resJson = await res.json();
-        console.log(resJson);
+        const users = await res.json();
+        console.log(users)
+
+        suggestions.innerHTML = "";
+        if (users.length !== 0) {
+            suggestions.classList.add("has-suggestions");
+            //append suggestions
+            users.forEach((user) => {
+                const suggestion = document.createElement("li");
+                suggestion.classList.add("suggestion");
+                suggestion.innerHTML = `
+                    <span>${user.displayName}</span>
+                `;
+                suggestion.addEventListener("click", (e) => {
+                    //TODO: asign user
+                    console.log("assign user")
+                });
+                suggestions.appendChild(suggestion);
+            });
+        } else {
+            suggestions.classList.remove("has-suggestions");
+        }
+
+    });
+
+    searchField.addEventListener("blur", (e) => {
+        suggestions.classList.remove("has-suggestions");
     });
 
     modalElement.style.display = "block";
