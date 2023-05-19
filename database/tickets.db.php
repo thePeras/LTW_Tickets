@@ -119,3 +119,14 @@ function remove_ticket_department(Ticket $ticket, PDO $db) : bool
     return $stmt->execute();
 
 }
+
+
+function update_ticket_status(Ticket $ticket, PDO $db) : bool
+{
+    $sql  = "UPDATE Tickets SET status = :status WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':status', $ticket->status, PDO::PARAM_STR);
+    return $stmt->execute();
+
+}

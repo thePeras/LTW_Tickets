@@ -88,3 +88,26 @@ function change_department(int $ticketId, string $department, PDO $db) : ?string
     return null;
 
 }
+
+
+function close_ticket(int $ticketId, PDO $db) : ?string
+{
+
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    if ($ticket->status === 'closed') {
+        return 'Ticket is already closed';
+    }
+
+    $ticket->status = 'closed';
+
+    if (update_ticket_status($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    return null;
+
+}

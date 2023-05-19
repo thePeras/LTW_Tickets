@@ -6,7 +6,8 @@
 
     $db = get_database();
 
-    $error = null;
+    $error   = null;
+    $success = null;
 
     $session = is_session_valid($db);
 
@@ -45,8 +46,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         break;
     case "close":
         $ticketId = ($_POST["ticketId"] ?? "");
-        $ticket   = get_ticket($ticketId, $db);
+        if ($ticketId === "") {
+            $error = "Invalid ticket";
+            break;
+        }
+
+        $ticket = get_ticket($ticketId, $db);
         if ($ticket !== null) {
+            if ($ticket->status === "closed") {
+                $error = "Ticket is already closed";
+                break;
+            } else {
+                $error = close_ticket($ticketId, $db);
+                if ($error === null) {
+                    $success = "Ticket closed successfully";
+                }
+            }
+        } else {
+            $error = "Ticket not found";
+            break;
         }
         break;
     case "changeDepartment":
@@ -105,6 +123,10 @@ if ($ticket === null) {
     if ($error !== null) {
         echo "<script>snackbar('$error', 'error')</script>";
     }
+
+    if ($success !== null) {
+        echo "<script>snackbar('$success', 'success')</script>";
+    }
     ?>
     <input type="hidden" id="ticketId" value="<?php echo $ticket->id ?>">
     <main class="ticket-page">
@@ -112,15 +134,14 @@ if ($ticket === null) {
             <h1><?php echo "$ticket->title #$ticket->id"?></h1>
             <ul id="buttons">
                 <li><button type = "button"> Status </button></li>
-                <li><button type = "button" onclick="closeTicketModal(
-                    <?php
-                        echo "'$loggedUser->type', '$ticket->id'";
-                    ?> 
-                    
-                )"> 
-                    <i class="ri-archive-line"></i>
-                    Close ticket 
-                </button></li>
+                <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                    <input type="hidden" name="action" value="close">
+                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                    <li><button type = "button" onClick="closeTicket(event,this)"> 
+                        <i class="ri-archive-line"></i>
+                        Close ticket 
+                    </button></li>
+                </form>
             </ul>
 
             <!-- Ticket description -->
