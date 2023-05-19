@@ -1,3 +1,25 @@
+#navbar-checkbox {
+  display: none;
+}
+
+label[for=navbar-checkbox] {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+#navbar-open,
+#navbar-close {
+  display: none;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 3rem;
+  color: #363c4c;
+  cursor: pointer;
+  z-index: 1000;
+}
+
 nav.sidebar {
   padding: 2rem;
   border-right: 2px solid #e6e6ee;
@@ -75,7 +97,42 @@ nav.sidebar div.user .logout {
 }
 
 @media screen and (max-width: 950px) {
-  nav.sidebar {
+  #navbar-checkbox:checked ~ label > #navbar-close {
+    display: block;
+  }
+  #navbar-checkbox:not(:checked) ~ label > #navbar-open {
+    display: block;
+  }
+  #navbar-checkbox:checked ~ nav.sidebar {
+    display: grid;
+  }
+  #navbar-checkbox:checked ~ main {
     display: none;
+  }
+  #navbar-checkbox:not(:checked) ~ nav.sidebar {
+    display: none;
+  }
+  nav.sidebar {
+    text-align: center;
+    max-height: 100vh;
+    max-width: 100%;
+    border: none;
+    align-items: center;
+    justify-content: center;
+  }
+  nav.sidebar ul li {
+    max-width: 250px;
+  }
+  nav.sidebar div.user {
+    gap: 0.5rem;
+    margin: 0 auto;
+    justify-content: center;
+    text-align: left;
+  }
+  nav.sidebar div.user .logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
   }
 }/*# sourceMappingURL=navbar.css.map */

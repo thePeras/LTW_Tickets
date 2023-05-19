@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__.'/../../utils/render_utils.php';
 require_once __DIR__.'/../../utils/session.php';
 require_once __DIR__.'/../../utils/roles.php';
 
@@ -43,7 +42,6 @@ function get_login_button() : string
 
 function navbar(PDO $db)
 {
-    global $ifHtml;
     $session = is_session_valid($db);
     $client  = null;
     if ($session !== null) {
@@ -51,7 +49,14 @@ function navbar(PDO $db)
     }
     ?>
         <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
-        <nav class="sidebar sticky">
+        
+        <input type="checkbox" id="navbar-checkbox" checked> 
+        <label for="navbar-checkbox">
+            <i class="ri-menu-line" id="navbar-open"></i>
+            <i class="ri-close-line" id="navbar-close"></i>
+        </label>
+
+        <nav class="sidebar">
             <div class="inital-sidebar">
                 <div class="logo">
                     <h1>Tickets Manager</h1>
