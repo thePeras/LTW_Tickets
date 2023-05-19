@@ -71,3 +71,15 @@ function remove_session(string $token, PDO $db) : bool
     return $stmt->execute();
 
 }
+
+
+function change_sessions_username(string $oldUsername, string $newUsername, PDO $db) : bool
+{
+    $sql  = "UPDATE Sessions SET user = :newUsername WHERE user = :oldUsername";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':newUsername', $newUsername, PDO::PARAM_STR);
+    $stmt->bindParam(':oldUsername', $oldUsername, PDO::PARAM_STR);
+
+    return $stmt->execute();
+
+}

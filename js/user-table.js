@@ -19,7 +19,7 @@ function drawNewRow(jsonObject) {
     tr.classList.add("user-entry");
     tr.innerHTML = `                  
     <td class="user-info">
-        <img class="user-photo" src="/assets/images/person.png" alt="user">
+        <img class="user-photo" src="${jsonObject["image"]}" alt="user">
         <div class="user-name">
             <p>${jsonObject["displayName"]}</p>
             <p>${jsonObject["username"]}</p>

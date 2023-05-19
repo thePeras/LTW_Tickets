@@ -10,13 +10,17 @@ require_once __DIR__."/../utils/logger.php";
 class Client implements JsonSerializable
 {
 
-    public string $username;
+    const DEFAULT_IMAGE = 'assets/images/default_user.png';
 
-    public string $email;
+    public string $username;
 
     public string $displayName;
 
+    public string $email;
+
     public string $password;
+
+    public string $image;
 
     public string $type;
 
@@ -31,6 +35,7 @@ class Client implements JsonSerializable
             "displayName" => $this->displayName,
             "type"        => $this->type,
             "createdAt"   => $this->createdAt,
+            "image"       => $this->image,
 
         ];
 
@@ -38,11 +43,13 @@ class Client implements JsonSerializable
 
 
     public function __construct(string $_username, string $_email,
-        string $_password, string $_displayName, ?int $_createdAt=null
+        string $_password, string $_displayName, ?string $_image=null, ?int $_createdAt=null
     ) {
         $this->username    = $_username;
+        $this->displayName = $_displayName;
         $this->email       = $_email;
         $this->password    = $_password;
+        $this->image       = ($_image ?? self::DEFAULT_IMAGE);
         $this->displayName = $_displayName;
         if ($_createdAt === null) {
             $this->createdAt = time();
@@ -58,13 +65,15 @@ class Client implements JsonSerializable
 
 function insert_new_client(Client $client, PDO $db) : bool
 {
-    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, :createdAt, 0)";
+
+    $sql = "INSERT INTO Clients VALUES (:username, :email, :password, :display_name, :image, :createdAt, 0)";
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
     $stmt->bindParam(':email', $client->email, PDO::PARAM_STR);
     $stmt->bindParam(':password', $client->password, PDO::PARAM_STR);
     $stmt->bindParam(':display_name', $client->displayName, PDO::PARAM_STR);
+    $stmt->bindParam(':image', $client->image, PDO::PARAM_STR);
     $stmt->bindParam(":createdAt", $client->createdAt, PDO::PARAM_INT);
 
     return $stmt->execute();
@@ -96,7 +105,7 @@ function get_user(string $username, PDO $db) : ?Client
         return null;
     }
 
-    $client = new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row["createdAt"]);
+    $client = new Client($row['username'], $row['email'], $row['password'], $row['displayName'], $row['image'], $row["createdAt"]);
 
     $client->type = "client";
 
@@ -124,9 +133,38 @@ function get_user(string $username, PDO $db) : ?Client
 }
 
 
+function edit_user(Client $newUser, PDO $db) : bool
+{
+    $sql = "UPDATE Clients SET email = :new_email, password = :new_password, displayName = :new_display_name, image = :new_image WHERE username = :username";
+
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindParam(':new_email', $newUser->email, PDO::PARAM_STR);
+    $stmt->bindParam(':new_password', $newUser->password, PDO::PARAM_STR);
+    $stmt->bindParam(':new_display_name', $newUser->displayName, PDO::PARAM_STR);
+    $stmt->bindParam(':new_image', $newUser->image, PDO::PARAM_STR);
+    $stmt->bindParam(':username', $newUser->username, PDO::PARAM_STR);
+
+    return $stmt->execute();
+
+}
+
+
+function set_default_client_image(Client $client, PDO $db)
+{
+    $sql      = "UPDATE Clients SET image = :image WHERE username = :username";
+    $stmt     = $db->prepare($sql);
+    $newImage = Client::DEFAULT_IMAGE;
+    $stmt->bindParam(':image', $newImage, PDO::PARAM_STR);
+    $stmt->bindParam(':username', $client->username, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+
 function change_password(string $username, string $newPassword, PDO $db) : bool
 {
-    $hashedPassword = hash_text($newPassword);
+    $hashedPassword = hash_password($newPassword);
     $sql            = "UPDATE Clients SET password=:password, passwordInvalidated=0 WHERE username=:username";
     $stmt           = $db->prepare($sql);
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -179,7 +217,7 @@ function get_clients(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
 
     $clientBuilder = function (array $a) use ($resultAgent, $resultAdmin): ?Client {
-        $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+        $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
         $client->type = "client";
         if (in_array($client->username, $resultAgent) === true) {
             $client->type = "agent";
@@ -207,7 +245,7 @@ function get_clients_only(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
     return array_map(
         function (array $a) : Client {
-            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
             $client->type = "client";
             return $client;
         },
@@ -228,7 +266,7 @@ function get_agents(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
     return array_map(
         function (array $a) : Client {
-            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
             $client->type = "agent";
             return $client;
         },
@@ -249,7 +287,7 @@ function get_admins(int $limit, int $offset, PDO $db) : array
     $result = $stmt->fetchAll();
     return array_map(
         function (array $a) : Client {
-            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["createdAt"]);
+            $client       = new Client($a["username"], $a["email"], $a["password"], $a["displayName"], $a["image"], $a["createdAt"]);
             $client->type = "admin";
             return $client;
         },
@@ -351,7 +389,7 @@ function update_user(string $username, string $displayName, string $password, st
         return $stmt->execute();
     }
 
-    $hash = hash_text($password);
+    $hash = hash_password($password);
     $sql  = "UPDATE Clients SET displayName=:displayName, email=:email, password=:password, passwordInvalidated=1 WHERE username=:username";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":username", $username);
