@@ -23,7 +23,7 @@ class Client implements JsonSerializable
     public int $createdAt;
 
 
-    public function jsonSerialize()
+    public function jsonSerialize() : mixed
     {
         return [
             "username"    => $this->username,

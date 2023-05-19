@@ -42,7 +42,7 @@ CREATE TABLE Admins(
 );
 
 CREATE TABLE FAQs(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY NOT NULL,
     createdByUser TEXT NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
