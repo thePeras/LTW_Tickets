@@ -21,8 +21,13 @@ function edit_profile(Client $oldUser,
 
     if ($newImage['tmp_name'] !== '') {
         $newImageContent = file_get_contents($newImage['tmp_name']);
+        if (is_dir(__DIR__.'/../user_data/profile_pictures/') === false) {
+            log_to_stdout("profile_pictures directory doesnt exist yet... creating");
+            mkdir(__DIR__.'/../user_data/profile_pictures/', 0777, true);
+        }
+
         if ($oldUser->image === Client::DEFAULT_IMAGE) {
-            $newImageName     = hash_profile_picture($newUsername).'.png';
+            $newImageName = hash_profile_picture($newUsername).'.png';
             $newImageLocation = __DIR__.'/../user_data/profile_pictures/'.$newImageName;
             file_put_contents($newImageLocation, $newImageContent);
             $newImage = '/user_data/profile_pictures/'.$newImageName;
