@@ -2,117 +2,144 @@
 
 $pagePadding: 1rem;
 
-.tabSelector{
+.tabSelector {
     display: flex;
     padding: $pagePadding;
-    > li{
+    gap: 1rem;
+
+    >li {
         list-style-type: none;
-        flex:1;
+        flex: 1;
         border-radius: 8px;
-        
-        > a {
+
+        >a {
             padding: 1rem 0rem;
             text-decoration: none;
             color: $black-color;
-            margin: 0 auto; 
+            margin: 0 auto;
             text-align: center;
             display: block;
             font-weight: 500;
         }
-        margin: 0rem 0.5rem;
     }
-    > li.active{
+
+    >li.active {
         background-color: $primary-color;
-        > a {
+
+        >a {
             color: white;
         }
 
     }
-    > li:not(.active) {
+
+    >li:not(.active) {
         background-color: $hover-color;
 
     }
 
-    > li:hover:not(.active) {
+    >li:hover:not(.active) {
         background-color: #989ba13c;
 
     }
 
-    > hr {
+    >hr {
         color: #41444983;
 
     }
 }
 
 
-.user-table{
-    th{
+table {
+    th:first-child {
+        text-align: left;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    td:first-child {
+        text-align: left;
+    }
+}
+
+.user-table {
+    width: 100%;
+
+    th {
         padding: 0.5rem 0rem;
         border-bottom: 2px solid $hover-color;
     }
 
     border-collapse: collapse;
     padding: 1em 0em;
-    .user-name > p:nth-child(1){
+
+    .user-name>p:nth-child(1) {
         color: $black-color;
-    
+
     }
-    .user-name > p:nth-child(2){
+
+    .user-name>p:nth-child(2) {
         color: $black-secondary;
         font-size: 0.9rem;
     }
 
-    .user-info{
+    .user-info {
         display: flex;
         flex-direction: row;
         gap: 0.5rem;
+        padding-left: 0;
     }
-    .user-photo{
+
+    .user-photo {
         width: 40px;
         height: 40px;
         border-radius: 50%;
     }
-    td{
-        padding: 0.5rem 1rem ;
+
+    td {
+        padding: 0.5rem 1rem;
     }
 
-    .icon{
+    .icon {
         font-size: 1.4em;
         cursor: pointer;
     }
 
-    .user-entry{
+    .user-entry {
         border-bottom: 2px solid $hover-color;
     }
 
-    .role{
+    .role {
         border-radius: 8px;
         padding: 0.3rem 1rem;
     }
 
-    .client{
+    .client {
         background-color: #06ad00;
     }
 
-    .agent{
+    .agent {
         background-color: #ad9c01;
 
     }
 
-    .admin{
+    .admin {
         background-color: #c90101;
 
     }
 
-    .role-filter{
+    .role-filter {
         background: linear-gradient(0, #f8f8f8, #f2f3f8);
         max-width: 10em;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         border: 1px solid $hover-color;
-        > h3{
+
+        >h3 {
             padding: 1em 1em;
         }
-        > a{
+
+        >a {
             display: block;
             padding: 0.5em 1em;
             text-decoration: none;
@@ -120,43 +147,52 @@ $pagePadding: 1rem;
             font-weight: 500;
         }
 
-        > a:hover{
+        >a:hover {
             background-color: $hover-color;
         }
     }
 }
 
-.department-buttons{
+.department-buttons {
     display: flex;
     flex-direction: row;
-    justify-content: start;
-    padding: 1em 0em;
-
-    .add-new{
-        background-color: #06ad00;
-        color: white;
-    }
+    justify-content: end;
+    padding-right: 1em
 }
 
-.department-table{
+.department-table {
     border-collapse: collapse;
     padding: 1em 0em;
-    th{
+    width: 100%;
+
+    th {
         padding: 0.5rem 1rem;
         border-bottom: 2px solid $hover-color;
     }
-    td{
-        padding: 0.5rem 1rem ;
+
+    th:first-child {
+        text-align: left;
     }
 
-    .icon{
+
+    td {
+        padding: 0.5rem 1rem;
+        text-align: center;
+    }
+
+    td:first-child {
+        text-align: left;
+    }
+
+    .icon {
         font-size: 1.4em;
         cursor: pointer;
     }
-    .department-entry{
+
+    .department-entry {
         border-bottom: 2px solid $hover-color;
 
-        .department-description{
+        .department-description {
             max-width: 20em;
             max-height: 5em;
             text-overflow: ellipsis;
@@ -166,23 +202,23 @@ $pagePadding: 1rem;
     }
 }
 
-i.delete{
+i.delete {
     color: $delete-color;
 }
 
-.add-new-department-modal{
-    .submit-button{
+.add-new-department-modal {
+    .submit-button {
         background-color: #06ad00;
         color: white;
         border: 0;
     }
 
-    .submit-button:hover{
+    .submit-button:hover {
         background-color: #027700;
         opacity: 1;
     }
 
-    .modal-buttons{
+    .modal-buttons {
         margin-top: 1em;
     }
 

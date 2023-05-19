@@ -80,7 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
-$offset = intval(($_GET["offset"] ?? 0))
+$offset = intval(($_GET["offset"] ?? 0));
+$tab    = ($_GET["tab"] ?? "users");
 ?>
 
 
@@ -115,21 +116,21 @@ $offset = intval(($_GET["offset"] ?? 0))
     <h1>Admin page</h1>
     <ul class="tabSelector">
         <li <?php
-        if ($_GET["tab"] === "users" || $_GET["tab"] === null) {
+        if ($tab === "users" || $_GET["tab"] === null) {
             echo 'class="active"';
         }?>>
             <a href="?tab=users">Users</a>
         </li>
         <li
         <?php
-        if ($_GET["tab"] === "departments") {
+        if ($tab === "departments") {
             echo 'class="active"';
         }?>>
             <a href="?tab=departments">Departments</a>
         </li>
     </ul>
 
-    <?php if ($_GET["tab"] === "users" || $_GET["tab"] === null) :?>
+    <?php if ($tab === "users" || $tab === null) :?>
         <?php
         $clients = [];
         if (isset($_GET["sort"]) === false) {
@@ -146,13 +147,13 @@ $offset = intval(($_GET["offset"] ?? 0))
 
         <?php
         drawUserTable($clients);
-        elseif ($_GET["tab"] === "departments") :
+        elseif ($tab === "departments") :
             $departments = get_departments($limit, $offset, $db, false);
             ?>
             <script src="js/department.js"></script>
 
             <div class="department-buttons">
-                <button onclick="makeAddDepartmentModal()" class="add-new">Add new...</button>
+                <button onclick="makeAddDepartmentModal()" class="primary">Add new department</button>
             </div>
             <?php drawDepartmentTable($departments);
         endif;?>
