@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <div class="left">
-
+            <img src="assets/images/illustration.svg" alt="illustration">
         </div>
         <div class="right">
             <h1>Welcome Back!</h1>
@@ -52,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" id="password" name="password" required>
 
                 <br>
-                <input type="submit" value="Login">
+                <input type="submit" class="primary" value="Login">
             </form>
             <?php if ($loggedIn === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>
                 <p class="error">Invalid username or password.</p>
             <?php endif; ?>
-            <p>If you don't have an account, <a href="/register">sign up here</a>.</p>
+            <p>If you don't have an account, <a href="/register">sign up here</a></p>
         </div>
     </div>
 </body>
