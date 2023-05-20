@@ -52,7 +52,7 @@ async function buildResults(result) {
         <div class="faq-buttons">
             ${currentUserType == "agent" || currentUserType == "admin" ? editButton : ''}
             ${currentUserType == "agent" || currentUserType == "admin" ? deleteButton : ''}
-            <i class="ri-add-circle-line"></i>
+            <i class="ri-add-circle-line open-close"></i>
         </div>
     </header>
     <div class="content">
