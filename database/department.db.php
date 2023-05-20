@@ -88,8 +88,12 @@ function get_departments(int $limit, int $offset, PDO $db, $returnClients=true) 
 }
 
 
-function get_department(string $name, PDO $db) : ?Department
+function get_department(?string $name, PDO $db) : ?Department
 {
+
+    if ($name === null || $name === "null") {
+        return new Department("Deleted department", "");
+    }
 
     $sql = "SELECT * FROM Departments WHERE name=:name";
 
