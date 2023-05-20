@@ -1,4 +1,3 @@
-
 const currentSearchParams = new URLSearchParams((location.href.split("?")[1] ?? ''));
 var offset = currentSearchParams.get("offset") ?? 0;
 var end = false;
@@ -73,29 +72,62 @@ function handleSortOptionChange(value) {
     window.location.href = url.toString();
 }
 
+function handleSearchEvent() {
+    var searchText = document.getElementById('search').value;
+    var url = new URL(location.href);
+  
+    url.searchParams.set("text", searchText);
+    url.searchParams.set("offset", "0");
+    url.searchParams.set("limit", "10");
+  
+    window.location.href = url.toString();
+}
+  
+//   function handleSearchInput() {
+//     var searchText = document.getElementById('search').value;
+//     var url = new URL(location.href);
+  
+//     url.searchParams.set("text", searchText);
+//     url.searchParams.set("offset", "0");
+  
+//     var xhr = new XMLHttpRequest();
+//     xhr.onreadystatechange = function () {
+//       if (xhr.readyState === XMLHttpRequest.DONE) {
+//         if (xhr.status === 200) {
+//           var responseHTML = xhr.responseText;
+//           var ticketListStart = responseHTML.indexOf('<div class="ticket-list">');
+//           var ticketListEnd = responseHTML.indexOf('</div>', ticketListStart);
+//           var ticketListHTML = responseHTML.slice(ticketListStart, ticketListEnd + 6);
+  
+//           var ticketList = document.querySelector('.ticket-list');
+//           ticketList.innerHTML = ticketListHTML;
+//         } else {
+//           console.error('Error: ' + xhr.status);
+//         }
+//       }
+//     };
+  
+//     xhr.open('GET', url.toString(), true);
+//     xhr.send();
+//   }
+  
+//   document.getElementById('search').addEventListener('input', handleSearchInput);
+
+  
+
+function handleKeyDown(event) {
+    if (event.key === "Enter") {
+        handleSearchInput();
+        event.preventDefault();
+    }
+}
+
 function handleSearchInput() {
     var searchText = document.getElementById('search').value;
     var url = new URL(location.href);
 
-    if (searchText.length > 0) {
-        url.searchParams.set("text", searchText);
-    } else {
-        url.searchParams.delete("text");
-    }
+    url.searchParams.set('text', searchText);
+    url.searchParams.set('offset', '0');
 
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // Update the ticket list with the response
-                var ticketList = document.querySelector('.ticket-list');
-                ticketList.innerHTML = xhr.responseText;
-            } else {
-                console.error('Error: ' + xhr.status);
-            }
-        }
-    };
-
-    xhr.open('GET', url.toString(), true);
-    xhr.send();
+    window.location.href = url.toString();
 }

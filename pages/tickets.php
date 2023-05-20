@@ -68,7 +68,7 @@ $ticketListHTML = ob_get_clean();
         <h1>Tickets</h1>
         <ul id="buttons">
             <li>
-                <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars($text); ?>" oninput="handleSearchInput()">
+                <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars($text); ?>" onkeydown="handleKeyDown(event)">
             </li>
             <li>
                 <select id="sortSelect" onchange="handleSortOptionChange(this.value)">
