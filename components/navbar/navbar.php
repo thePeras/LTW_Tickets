@@ -16,11 +16,13 @@ function get_navbar_user(?Client $client, PDO $db) : string
 
     return <<<HTML
         <div class="user" onclick="location.href='/profile'">
+            <div>
                 <img class="avatar" src=$imageSrc alt="user">
                 <div>
                     <h3>$client->displayName</h3>
                     <p>@$client->username</p>
                 </div>
+            </div>
             <a href="/logout" class="logout">
                 <i class="ri-logout-box-line"></i>
             </a>
@@ -45,8 +47,10 @@ function get_login_button() : string
 function navbar(PDO $db)
 {
 
-    $isActive = function (string $path, string $current) : string {
-        if ($path === $current) {
+    $isActive = function (string $path) : string {
+        $currentPath = explode("/", $_SERVER['REQUEST_URI']);
+        $currentPath = $currentPath[(count($currentPath) - 1)];
+        if ($path === $currentPath) {
             return 'true';
         } else {
             return 'false';
@@ -77,40 +81,32 @@ function navbar(PDO $db)
                     <h1>Tickets Manager</h1>
                 </div>
                 <ul>
-                    <li <?php
-                    if (str_contains($_SERVER['REQUEST_URI'], "/tickets") === true) {
-                        echo 'class="active"';
-                    }
-                    ?>>
-                        <a href="#">
+                    <li data-active="<?php echo $isActive("tickets"); ?>">
+                        <a href="/tickets">
                             <i class="ri-ticket-line"></i>
                             Tickets
                         </a>
                     </li>
-                    <li>
+                    <li data-active="<?php echo $isActive("faq"); ?>">
                         <a href="/faq">
                             <i class="ri-question-line"></i>
                             FAQ
                         </a>
                     </li>
-                    <li>
+                    <li data-active="<?php echo $isActive("departments"); ?>">
                         <a href="#">
                             <i class="ri-building-line"></i>
                             Departments
                         </a>
                     </li>
-                    <li>
+                    <li data-active="<?php echo $isActive("analytics"); ?>">
                         <a href="#">
                             <i class="ri-line-chart-line"></i>
                             Analytics
                         </a>
                     </li>
                     <?php if (is_current_user_admin($db) === true) :?>
-                    <li <?php
-                    if (str_contains($_SERVER['REQUEST_URI'], "/admin") === true) {
-                        echo 'class="active"';
-                    }
-                    ?>>
+                     <li data-active="<?php echo $isActive("admin"); ?>">
                         <a href="/admin">
                             <i class="ri-admin-line"></i>
                             Admin settings

@@ -60,7 +60,7 @@ nav.sidebar ul li a i {
 nav.sidebar ul li a:hover {
   background-color: rgba(202, 207, 218, 0.2352941176);
 }
-nav.sidebar ul li.active a {
+nav.sidebar ul li[data-active=true] a {
   background-color: #5449f0;
   color: #fff;
 }
@@ -69,25 +69,56 @@ nav.sidebar div.user {
   align-items: center;
   gap: 0.3rem;
   justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 8px;
 }
-nav.sidebar div.user img.avatar {
+nav.sidebar div.user:hover {
+  cursor: pointer;
+  background-color: rgba(202, 207, 218, 0.2352941176);
+}
+nav.sidebar div.user:hover h3:before,
+nav.sidebar div.user:hover p:before {
+  display: none;
+}
+nav.sidebar div.user div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+nav.sidebar div.user div img.avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
 }
-nav.sidebar div.user div {
+nav.sidebar div.user div div {
+  display: block;
   cursor: pointer;
 }
-nav.sidebar div.user div h3 {
+nav.sidebar div.user div div h3 {
   font-size: 1rem;
   font-weight: 500;
   color: #363c4c;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
 }
-nav.sidebar div.user div p {
+nav.sidebar div.user div div p {
   font-size: 0.8rem;
   font-weight: 400;
   color: rgba(54, 60, 76, 0.7803921569);
+  position: relative;
+}
+nav.sidebar div.user div div h3:before,
+nav.sidebar div.user div div p:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(90deg, transparent 90px, #f9faff);
 }
 nav.sidebar div.user .logout {
   cursor: pointer;

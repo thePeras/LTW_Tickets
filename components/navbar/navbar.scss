@@ -68,7 +68,7 @@ nav.sidebar {
             }
         }
 
-        li.active a {
+        li[data-active="true"] a {
             background-color: $primary-color;
             color: #fff;
         }
@@ -80,29 +80,67 @@ nav.sidebar {
         align-items: center;
         gap: 0.3rem;
         justify-content: space-between;
+        padding: 0.5rem;
+        border-radius: 8px;
 
-        img.avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        &:hover {
             cursor: pointer;
+            background-color: $hover-color;
+
+            h3:before,
+            p:before {
+                display: none;
+            }
         }
 
         div {
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
 
-            h3 {
-                font-size: 1rem;
-                font-weight: 500;
-                color: $black-color;
+            img.avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
             }
 
-            p {
-                font-size: 0.8rem;
-                font-weight: 400;
-                color: $black-secondary;
+            div {
+                display: block;
+                cursor: pointer;
+
+                h3 {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: $black-color;
+                    max-width: 120px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    position: relative;
+                }
+
+                p {
+                    font-size: 0.8rem;
+                    font-weight: 400;
+                    color: $black-secondary;
+                    position: relative;
+
+                }
+
+                // Text overflow fade effect
+                h3:before,
+                p:before {
+                    content: '';
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    background: linear-gradient(90deg, transparent 90px, #f9faff);
+                }
             }
         }
+
 
         .logout {
             cursor: pointer;
