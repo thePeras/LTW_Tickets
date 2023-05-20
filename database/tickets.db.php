@@ -15,7 +15,7 @@ class Ticket
 
     public string $hashtags;
 
-    public string $assignee;
+    public Client $assignee;
 
     public string $createdByUser;
 
@@ -25,7 +25,7 @@ class Ticket
 
 
     public function __construct(string $title, string $description, int $_epoch, $id=0, string $status="",
-        string $hashtags="", string $assignee="", string $createdByUser="", string $department="",
+        string $hashtags="", Client $assignee=new Client(""), string $createdByUser="", string $department="",
     ) {
         $this->id            = $id;
         $this->title         = $title;
@@ -64,11 +64,10 @@ function insert_new_ticket(Session $session, Ticket $ticket, PDO $db) : int
 
 function get_ticket(int $id, PDO $db) : ?Ticket
 {
-    $sql  = "SELECT * FROM Tickets WHERE id = :id";
+    $sql  = "SELECT * FROM Tickets LEFT JOIN Clients ON Tickets.assignee = Clients.username WHERE id = :id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-
     $result = $stmt->fetch();
     if ($result === false) {
         return null;
@@ -81,21 +80,10 @@ function get_ticket(int $id, PDO $db) : ?Ticket
         (int) $result['id'],
         ($result['status'] ?? ""),
         ($result['hashtags'] ?? ""),
-        ($result['assignee'] ?? ""),
+        new Client(($result['username'] ?? ""), null, null, ($result['displayName'] ?? null), ($result['image'] ?? null)),
         ($result['createdByUser'] ?? ""),
         ($result['department'] ?? ""),
     );
-
-}
-
-
-function change_ticket_department(int $id, string $department, PDO $db) : bool
-{
-    $sql  = "UPDATE Tickets SET department = :department WHERE id = :id";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->bindParam(':department', $department, PDO::PARAM_STR);
-    return $stmt->execute();
 
 }
 
@@ -127,6 +115,24 @@ function update_ticket_status(Ticket $ticket, PDO $db) : bool
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
     $stmt->bindParam(':status', $ticket->status, PDO::PARAM_STR);
+    return $stmt->execute();
+
+}
+
+
+function update_ticket_assignee(Ticket $ticket, PDO $db) : bool
+{
+    if ($ticket->assignee->username === "") {
+        $sql  = "UPDATE Tickets SET assignee = NULL WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    $sql  = "UPDATE Tickets SET assignee = :assignee WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':assignee', $ticket->assignee->username, PDO::PARAM_STR);
     return $stmt->execute();
 
 }

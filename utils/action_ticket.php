@@ -129,3 +129,60 @@ function close_ticket(int $ticketId, PDO $db) : ?string
     return null;
 
 }
+
+
+function assign_ticket($ticketId, $user, $db)
+{
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    $user = get_user($user, $db);
+    if ($user === null) {
+        return 'User not found';
+    }
+
+    $ticket->assignee = $user;
+
+    if (update_ticket_assignee($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    // Creating a change
+    $changeBy = new Client($ticket->createdByUser, '', '');
+    $changeAt = time();
+    $change   = new AssignedChange(0, $ticket->id, $changeAt, $changeBy, $ticket->assignee);
+    if (insert_new_change($change, $db) === null) {
+        return 'Error inserting the change';
+    }
+
+    return null;
+
+}
+
+
+function unassign_ticket($ticketId, $db)
+{
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    $ticket->assignee = new Client('');
+
+    if (update_ticket_assignee($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    // Creating a change
+    $changeBy = new Client($ticket->createdByUser, '', ''); //TODO: Change to the user that unassigned the ticket
+    $changeAt = time();
+    $change   = new AssignedChange(0, $ticket->id, $changeAt, $changeBy, $ticket->assignee);
+    if (insert_new_change($change, $db) === null) {
+        return 'Error inserting the change';
+    }
+
+    return null;
+
+}

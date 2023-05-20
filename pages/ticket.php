@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         break;
-    case "close":
+    case "close": //TODO: set changeStatus
         $ticketId = ($_POST["ticketId"] ?? "");
         if ($ticketId === "") {
             $error = "Invalid ticket";
@@ -65,6 +65,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error = "Ticket not found";
             break;
+        }
+        break;
+    case "assign":
+        $ticketId = ($_POST["ticketId"] ?? null);
+        $ticketId = intval($ticketId);
+        $user     = ($_POST["user"] ?? null);
+        $error    = assign_ticket($ticketId, $user, $db);
+        if ($error === null) {
+            $success = "Ticket assigned successfully";
+        }
+        break;
+    case "unassign":
+        $ticketId = ($_POST["ticketId"] ?? null);
+        $ticketId = intval($ticketId);
+        $error    = unassign_ticket($ticketId, $db);
+        if ($error === null) {
+            $success = "Ticket unassigned";
         }
         break;
     case "changeDepartment":
@@ -99,7 +116,7 @@ if ($ticket === null) {
     $comments = get_comments($id, $db);
     $changes  = get_changes($id, $db);
     $all      = array_merge($comments, $changes);
-    usort(
+    usort( //TODO: not working
         $all,
         function ($a, $b) {
             return ($a->timestamp->getTimestamp() - $b->timestamp->getTimestamp());
@@ -174,9 +191,7 @@ if ($ticket === null) {
                 </div>
             </div>
 
-            <?php foreach ($all as $item) :
-                echo $item instanceof AssignedChange;
-                ?>
+            <?php foreach ($all as $item) : ?>
                 <!-- Change --> 
                 <?php if (($item instanceof AssignedChange) === true) : ?> 
                         <div class="event">
@@ -187,12 +202,19 @@ if ($ticket === null) {
                                 <h4>
                                     <?php echo $item->user->displayName?>
                                 </h4>
+                                <?php if ($item->agent->username === "") : ?>
+                                    <p>unassign this ticket</p>
+                                    <p>
+                                        <?php echo time_ago($item->timestamp) ?>
+                                    </p>
+                                <?php else : ?>
                                 <p>assign this ticket to 
                                     <b><?php echo $item->agent->displayName ?></b>
                                 </p>
                                 <p>
                                     <?php echo time_ago($item->timestamp) ?>
                                 </p>
+                                <?php endif; ?>
                             </div>
                         </div>
                 <?php ; elseif (($item instanceof StatusChange) === true) :?> 
@@ -248,6 +270,23 @@ if ($ticket === null) {
             <div class="side-card">
                 <div>
                     <h4 class="task-label">Assignee</h4>
+                    <?php if ($ticket->assignee->username !== "") : ?>
+                        <div class="user">
+                            <div>
+                                <img class="avatar" src="<?php echo $ticket->assignee->image ?>" alt="user">
+                                <?php echo $ticket->assignee->displayName ?>
+                            </div>
+                            <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
+                                <form method="POST" action="
+                                    <?php echo "ticket?id=$ticket->id" ?>
+                                ">
+                                    <input type="hidden" name="action" value="unassign">
+                                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                    <i class="ri-close-line" onclick="removeAssignee(event, this)"></i>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php else : ?>
                     <p onclick="makeUserAssignModal(
                         <?php
                             echo "'$loggedUser->type'";
@@ -256,6 +295,7 @@ if ($ticket === null) {
                         <i class="ri-account-circle-line"></i>
                         Unassigned
                     </p>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="side-card">

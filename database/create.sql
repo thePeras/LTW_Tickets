@@ -107,7 +107,7 @@ CREATE TABLE TicketsChanges(
 );
 
 CREATE TABLE AssignedChanges(
-    agent TEXT NOT NULL,
+    agent TEXT,
     change INTEGER NOT NULL,
     PRIMARY KEY (change, agent),
     FOREIGN KEY (agent) REFERENCES Agents(username),

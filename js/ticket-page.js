@@ -68,16 +68,34 @@ async function makeUserAssignModal(usertype) {
         suggestions.innerHTML = "";
         if (users.length !== 0) {
             suggestions.classList.add("has-suggestions");
-            //append suggestions
             users.forEach((user) => {
                 const suggestion = document.createElement("li");
                 suggestion.classList.add("suggestion");
                 suggestion.innerHTML = `
+                    <img src="${user.image}" alt="user">
                     <span>${user.displayName}</span>
                 `;
-                suggestion.addEventListener("click", (e) => {
-                    //TODO: asign user
-                    console.log("assign user")
+                suggestion.addEventListener("click", () => {
+                    // Creating a form and submit it
+                    console.log("clicked");
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    const ticketId = document.querySelector("#ticketId").value;
+                    form.action = `/ticket?id=${ticketId}`;
+                    const input = document.createElement("input");
+                    input.name = "action";
+                    input.value = "assign";
+                    form.appendChild(input);
+                    const input2 = document.createElement("input");
+                    input2.name = "user";
+                    input2.value = user.username;
+                    form.appendChild(input2);
+                    const input3 = document.createElement("input");
+                    input3.name = "ticketId";
+                    input3.value = ticketId;
+                    form.appendChild(input3);
+                    document.body.appendChild(form);
+                    form.submit();
                 });
                 suggestions.appendChild(suggestion);
             });
@@ -87,9 +105,9 @@ async function makeUserAssignModal(usertype) {
 
     });
 
-    searchField.addEventListener("blur", (e) => {
-        suggestions.classList.remove("has-suggestions");
-    });
+    //searchField.addEventListener("blur", (e) => {
+    //    suggestions.classList.remove("has-suggestions");
+    //});
 
     modalElement.style.display = "block";
     modalElement.style.opacity = 0;
@@ -199,3 +217,10 @@ window.addEventListener("load", async () => {
         });
     });
 });
+
+function removeAssignee(e, element) {
+    e.preventDefault();
+
+    const form = element.parentNode;
+    form.submit();
+}

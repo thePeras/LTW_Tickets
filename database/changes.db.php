@@ -35,7 +35,7 @@ class AssignedChange extends Change
     public function __construct(int $id, int $ticketId, int $epoch, Client $user, Client $agent)
     {
         parent::__construct($id, $ticketId, $epoch, $user);
-        $this->$agent = $agent;
+        $this->agent = $agent;
 
     }
 
@@ -81,6 +81,13 @@ function insert_new_change($change, PDO $db) : bool
     $stmt->execute();
 
     if ($change instanceof AssignedChange === true) {
+        if ($change->agent->username === "") {
+            $sql  = "INSERT INTO AssignedChanges (change, agent) VALUES (:change, NULL)";
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':change', $changeId, PDO::PARAM_INT);
+            return $stmt->execute();
+        }
+
         $sql  = "INSERT INTO AssignedChanges (change, agent) VALUES (:change, :agent)";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':change', $changeId, PDO::PARAM_INT);
@@ -128,7 +135,7 @@ function get_changes_by_ticket(int $ticketId, PDO $db) : array
             $row['ticket'],
             $row['timestamp'],
             get_user($row['user'], $db),
-            get_user($row['agent'], $db)
+            (get_user(($row['agent'] ?? ""), $db) ?? new Client("", ""))
         );
             array_push($changes, $change);
     }
