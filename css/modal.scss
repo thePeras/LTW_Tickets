@@ -103,19 +103,6 @@
 
         }
 
-        .modal-buttons {
-            .edit-button {
-                background-color: #06ad00;
-                color: white;
-                @extend %button;
-            }
-
-            .edit-button:hover {
-                background-color: #059e00;
-            }
-        }
-
-
     }
 
 }

@@ -8,6 +8,7 @@ label[for="navbar-checkbox"] {
     position: fixed;
     top: 0;
     right: 0;
+    z-index: 1;
 }
 
 #navbar-open,
@@ -23,7 +24,10 @@ label[for="navbar-checkbox"] {
 }
 
 nav.sidebar {
+    position: fixed;
     padding: 2rem;
+    width: calc(280px - 4rem);
+    height: calc(100% - 4rem);
     border-right: 2px solid #e6e6ee;
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -194,15 +198,16 @@ nav.sidebar {
 
     nav.sidebar {
         text-align: center;
-        max-height: 100vh;
-        max-width: 100%;
+        min-height: 100vh;
+        overflow-y: scroll;
+        width: 100%;
         border: none;
         align-items: center;
         justify-content: center;
 
         ul {
             li {
-                max-width: 250px;
+                width: 200px;
             }
         }
 

@@ -1,4 +1,4 @@
-.edit-user-modal > .main-edit-content .modal-buttons .edit-button, .delete-user-modal > .modal-buttons > form > .delete-button {
+.delete-user-modal > .modal-buttons > form > .delete-button {
   padding: 0.7rem 1.3rem;
   border-radius: 8px;
   border: 0;
@@ -79,13 +79,6 @@
 .edit-user-modal > .main-edit-content > .edit-user-form > input,
 .edit-user-modal > .main-edit-content > .edit-user-form > select {
   margin-bottom: 1em;
-}
-.edit-user-modal > .main-edit-content .modal-buttons .edit-button {
-  background-color: #06ad00;
-  color: white;
-}
-.edit-user-modal > .main-edit-content .modal-buttons .edit-button:hover {
-  background-color: #059e00;
 }
 
 .add-new-department-modal > h1 {

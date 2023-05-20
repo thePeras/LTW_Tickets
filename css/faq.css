@@ -53,13 +53,6 @@ main div {
 .faq-question header .faq-buttons .delete-button:hover {
   background-color: #a70d02;
 }
-.faq-question header .faq-buttons .edit-button {
-  background-color: #06ad00;
-  color: white;
-}
-.faq-question header .faq-buttons .edit-button:hover {
-  background-color: #027700;
-}
 .faq-question .content {
   margin-top: 0.7rem;
   color: #2d2d2d;

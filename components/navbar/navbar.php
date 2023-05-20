@@ -75,7 +75,7 @@ function navbar(PDO $db)
             <i class="ri-close-line" id="navbar-close"></i>
         </label>
 
-        <nav class="sidebar sticky">
+        <nav class="sidebar">
             <div class="inital-sidebar">
                 <div class="logo">
                     <h1>Tickets Manager</h1>

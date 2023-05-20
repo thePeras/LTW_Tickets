@@ -123,6 +123,15 @@ const addResultClick = () => {
                 return;
             }
 
+            // Check if faqQuestion is active
+            if (!faqQuestion.classList.contains('active')) {
+                faqQuestions.forEach((faqQuestion) => {
+                    faqQuestion.querySelector('i.open-close').classList.remove('ri-close-circle-line');
+                    faqQuestion.querySelector('i.open-close').classList.add('ri-add-circle-line');
+                    faqQuestion.classList.remove('active');
+                });
+            }
+
             faqQuestion.querySelector('i.open-close').classList.toggle('ri-add-circle-line');
             faqQuestion.querySelector('i.open-close').classList.toggle('ri-close-circle-line');
             faqQuestion.classList.toggle('active');
