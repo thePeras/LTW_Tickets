@@ -59,7 +59,7 @@ async function buildResults(result) {
         ${contents.join("\n")}
         <div class="created-by">
             <p>By:</p>
-            <img class="avatar" src="${userJson["image"]}" alt="user">
+            <img class="avatar" src="/${userJson["image"]}" alt="user">
             <p class="display-name">${userJson["displayName"]}</p>
         </div>
     `;
