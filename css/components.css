@@ -1,6 +1,7 @@
 button,
 input[type=button],
-input[type=submit] {
+input[type=submit],
+a.button {
   cursor: pointer;
   text-align: center;
   font-size: 1rem;
@@ -16,40 +17,47 @@ input[type=submit] {
 }
 button:hover,
 input[type=button]:hover,
-input[type=submit]:hover {
+input[type=submit]:hover,
+a.button:hover {
   background-color: rgba(111, 113, 119, 0.235);
 }
 button.primary,
 input[type=button].primary,
-input[type=submit].primary {
+input[type=submit].primary,
+a.button.primary {
   background-color: #5449f0;
   color: white;
 }
 button.primary:hover,
 input[type=button].primary:hover,
-input[type=submit].primary:hover {
+input[type=submit].primary:hover,
+a.button.primary:hover {
   background-color: #6158e1;
 }
 button.cancel,
 input[type=button].cancel,
-input[type=submit].cancel {
+input[type=submit].cancel,
+a.button.cancel {
   background-color: rgba(202, 207, 218, 0.2352941176);
   color: #363c4c;
 }
 button.cancel:hover,
 input[type=button].cancel:hover,
-input[type=submit].cancel:hover {
+input[type=submit].cancel:hover,
+a.button.cancel:hover {
   background-color: rgba(152, 155, 161, 0.2352941176);
 }
 button.delete,
 input[type=button].delete,
-input[type=submit].delete {
+input[type=submit].delete,
+a.button.delete {
   background-color: #c01104;
   color: white;
 }
 button.delete:hover,
 input[type=button].delete:hover,
-input[type=submit].delete:hover {
+input[type=submit].delete:hover,
+a.button.delete:hover {
   background-color: #a70d02;
 }
 

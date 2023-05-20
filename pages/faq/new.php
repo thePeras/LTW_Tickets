@@ -41,28 +41,21 @@ layout_start();
 //TODO csrf
 ?>
 <link rel="stylesheet" type="text/css" href="/css/faq-new.css">
-<h1>Create new FAQ</h1>
-
-
+<h1>Create a new FAQ</h1>
 <hr>
 
 <form method="post" class="create-faq">
-
-
     <label for="title">
-        <p>Title:</p>
+        <p>Question:</p>
     </label>
-    <input type="text" name="title" required placeholder="Insert your title...">
-
-
+    <input type="text" name="title" required placeholder="What is the question?">
 
     <label for="content">
-        <p>Content:</p>
+        <p>Answer:</p>
     </label>
-    <textarea class="content-area" name="content" rows="10" required placeholder="Insert your content..."></textarea>
+    <textarea class="content-area" name="content" rows="10" required placeholder="Write the corresponding answer"></textarea>
 
-    <br>
-    <input type="submit" value="Add">
+    <input type="submit" class="primary" value="Create">
 
 </form>
 

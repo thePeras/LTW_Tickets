@@ -69,7 +69,7 @@ function navbar(PDO $db)
     ?>
         <link rel="stylesheet" type="text/css" href="/components/navbar/navbar.css">
 
-        <input type="checkbox" id="navbar-checkbox" checked> 
+        <input type="checkbox" id="navbar-checkbox"> 
         <label for="navbar-checkbox">
             <i class="ri-menu-line" id="navbar-open"></i>
             <i class="ri-close-line" id="navbar-close"></i>

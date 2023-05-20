@@ -1,19 +1,28 @@
 @import "theme.scss";
 
 .faq-footer {
-    width: 100%;
+    width: fit-content;
     background-color: #ffffff;
     padding: 2rem;
-    margin-top: 20px;
     text-align: center;
     font-size: 12px;
-    color: #666;
+    color: #4d4d4d;
     border-radius: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    margin: 0 auto;
+    margin-top: 3rem;
+
+    p {
+        font-size: 1rem;
+    }
+
+    a {
+        margin-top: 0.5rem;
+    }
 }
 
 main div {
@@ -21,10 +30,8 @@ main div {
 }
 
 .faq-question {
-    margin: 1rem 0rem;
     transition: all 0.5s ease-out;
-    padding: 2rem;
-    height: fit-content;
+    padding: 1.2rem;
 
     header {
         display: flex;
@@ -32,7 +39,7 @@ main div {
         justify-content: space-between;
         cursor: pointer;
 
-        .faq-buttons{
+        .faq-buttons {
             display: flex;
             flex-direction: row;
             gap: 1em;
@@ -42,23 +49,23 @@ main div {
                 font-size: 1.6rem;
                 margin-right: 0.2rem;
             }
-    
-            .delete-button{
+
+            .delete-button {
                 background-color: $delete-color;
                 color: white;
             }
 
-            .delete-button:hover{
+            .delete-button:hover {
                 background-color: #a70d02;
 
             }
 
-            .edit-button{
+            .edit-button {
                 background-color: #06ad00;
                 color: white;
             }
 
-            .edit-button:hover{
+            .edit-button:hover {
                 background-color: #027700;
             }
         }
@@ -75,15 +82,17 @@ main div {
         text-align: left;
         margin: 1rem 0rem 0rem 1rem;
         overflow-wrap: break-word;
+        display: none;
 
-        .created-by{
-            margin-top: 2rem;
+        .created-by {
+            margin-top: 1.2rem;
             display: flex;
             flex-direction: row;
             gap: 0.5rem;
             align-items: center;
             justify-content: start;
-            img{
+
+            img {
                 height: 2rem;
                 width: 2rem;
                 border-radius: 50%;
@@ -94,7 +103,7 @@ main div {
                 color: black;
             }
 
-            .display-name{
+            .display-name {
                 color: $black-secondary;
 
             }
@@ -109,32 +118,27 @@ main div {
             opacity: 1;
             visibility: visible;
             height: auto;
+            display: block;
         }
 
 
     }
 }
 
-.top-content{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 3em;
-    .search{
-        > input{
-            margin-top: 1rem;
+.top-content {
+    button {
+        margin: 1rem;
+        margin-left: auto;
+    }
 
+    .search {
+        >input {
+            margin-top: 1rem;
+            width: 20rem;
         }
     }
+}
 
-    > button {
-        display: block;
-        background-color: #06ad00;
-
-    }
-    > button:hover{
-        background-color: #059e00;
-
-    }
+.faq-content {
+    margin: 2rem 0;
 }

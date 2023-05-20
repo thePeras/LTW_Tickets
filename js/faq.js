@@ -36,7 +36,7 @@ async function buildResults(result) {
 
     const userJson = await userRes.json();
 
-    
+
     const editButton = `<button class="edit-button" onclick="location.href = '/faq/${result["id"]}'">Edit</button>`
     const deleteButton = `<button class="delete-button" onclick="makeDeleteModal(${result["id"]})">Delete</button>`
 
@@ -50,8 +50,8 @@ async function buildResults(result) {
     <header>
         <h2>#${result["id"]} - ${result["title"]}</h2>
         <div class="faq-buttons">
-            ${currentUserType == "agent" || currentUserType == "admin"  ? editButton : ''}
-            ${currentUserType == "agent" || currentUserType == "admin"  ? deleteButton : ''}
+            ${currentUserType == "agent" || currentUserType == "admin" ? editButton : ''}
+            ${currentUserType == "agent" || currentUserType == "admin" ? deleteButton : ''}
             <i class="ri-add-circle-line"></i>
         </div>
     </header>
@@ -72,7 +72,7 @@ async function searchNewParam(event) {
     var res = undefined;
     if (searchInput.length === 0) {
         res = await fetch(`/api/faqs?limit=1&offset=0`,
-        { method: "GET" });
+            { method: "GET" });
     }
     if (searchInput.length < 3 && searchInput.length >= 1) return;
     offset = 0;
@@ -108,20 +108,23 @@ const addResultClick = () => {
     console.log(faqQuestions);
 
     faqQuestions.forEach((faqQuestion) => {
-        if(faqQuestion.hasAttribute("click-listener")){
+        if (faqQuestion.hasAttribute("click-listener")) {
             return;
         }
         faqQuestion.toggleAttribute("click-listener", true);
         faqQuestion.addEventListener('click', (e) => {
             // Clicking in the content do nothing
-            if (e.target.classList.contains('content') || e.target.parentElement.classList.contains('content') || e.target.tagName == "BUTTON") {
+            if (e.target.classList.contains('content') ||
+                e.target.parentElement.classList.contains('content') ||
+                e.target.tagName == "BUTTON" ||
+                e.target.classList.contains('ri-edit-line') ||
+                e.target.classList.contains('ri-delete-bin-line')
+            ) {
                 return;
             }
 
-            //ri-add-circle-line: closed status
-            //ri-close-circle-line: open status
-            faqQuestion.querySelector('i').classList.toggle('ri-add-circle-line');
-            faqQuestion.querySelector('i').classList.toggle('ri-close-circle-line');
+            faqQuestion.querySelector('i.open-close').classList.toggle('ri-add-circle-line');
+            faqQuestion.querySelector('i.open-close').classList.toggle('ri-close-circle-line');
             faqQuestion.classList.toggle('active');
         });
     })
@@ -157,7 +160,7 @@ async function getNewFaqs(ev) {
 document.addEventListener("DOMContentLoaded", addResultClick);
 
 document.addEventListener("DOMContentLoaded", (ev) => {
-    const searchInput = document.querySelector('.search-input');
+    const searchInput = document.querySelector('#fq-search');
 
     searchInput.addEventListener("input", searchDebounce);
 });
@@ -165,9 +168,9 @@ document.addEventListener("DOMContentLoaded", (ev) => {
 document.addEventListener("scroll", getNewFaqs);
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const res = await fetch("/api/clients/me", {method: "get"});
+    const res = await fetch("/api/clients/me", { method: "get" });
 
-    if(res.status !== 200){
+    if (res.status !== 200) {
         console.log(`Something went wrong while getting current user type status: ${res.status}`);
         //assume that it is a client if something goes wrong
         currentUserType = "client";

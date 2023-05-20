@@ -5,7 +5,8 @@ $placeholder-color: #929292;
 
 button,
 input[type="button"],
-input[type="submit"] {
+input[type="submit"],
+a.button {
     cursor: pointer;
     text-align: center;
     font-size: 1rem;
