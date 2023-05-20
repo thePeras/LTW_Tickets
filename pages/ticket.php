@@ -84,7 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-    $id     = $_GET['id'];
+    $id = $_GET['id'];
+if ($id === null) {
+    header('Location: /tickets');
+}
+
     $ticket = get_ticket($id, $db);
 if ($ticket === null) {
     header('Location: /tickets');
@@ -156,7 +160,7 @@ if ($ticket === null) {
             <div class="ticket-comment">
                 <div class="user-comment">
                     <div class="user">
-                        <img class="avatar" src="assets/images/person.png" alt="user">
+                        <img class="avatar" src="<?php echo $author->image ?>" alt="user">
                         <h3>
                             <?php echo $author->displayName ?>
                         </h3>
@@ -176,7 +180,9 @@ if ($ticket === null) {
                 <!-- Change --> 
                 <?php if (($item instanceof AssignedChange) === true) : ?> 
                         <div class="event">
-                            <img class="avatar" src="assets/images/person.png" alt="user">
+                            <img class="avatar" src="
+                                <?php echo $item->user->image ?>
+                            " alt="user">
                             <div>
                                 <h4>
                                     <?php echo $item->user->displayName?>
@@ -191,7 +197,9 @@ if ($ticket === null) {
                         </div>
                 <?php ; elseif (($item instanceof StatusChange) === true) :?> 
                     <div class="event">
-                        <img class="avatar" src="assets/images/person.png" alt="user">
+                        <img class="avatar" src="
+                            <?php echo $item->user->image ?>
+                        " alt="user">
                         <div>
                             <h4>
                                 <?php echo $item->user->displayName?>
@@ -209,8 +217,10 @@ if ($ticket === null) {
                     <div class="ticket-comment">
                         <div class="user-comment">
                             <div class="user">
-                                <img class="avatar" src="assets/images/person.png" alt="user" />
-                                <h3><?php echo 22 ?></h3>
+                                <img class="avatar" src="
+                                    <?php echo $item->createdByUser->image ?>
+                                " alt="user" />
+                                <h3><?php echo $item->createdByUser->displayName ?></h3>
                                 <p>
                                     <?php echo time_ago($item->timestamp) ?>
                                 </p>

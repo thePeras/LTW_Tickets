@@ -85,7 +85,7 @@ function handle_page_route(string $path, string $fileName) : void
 
     //match only the uri after
     //TODO: maybe handle elements?
-    if (preg_match($pathRegex, substr($_SERVER["REQUEST_URI"], 4)) === 1) {
+    if (preg_match($pathRegex, $_SERVER["REQUEST_URI"]) === 1) {
         include $fileName;
         exit();
     }

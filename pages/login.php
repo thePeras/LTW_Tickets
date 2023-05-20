@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/layout.css" rel="stylesheet" type="text/css">
-    <link href="css/login_register.css" rel="stylesheet" type="text/css">
-    <link href="css/components.css" rel="stylesheet" type="text/css">
+    <link href="/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="/css/login_register.css" rel="stylesheet" type="text/css">
+    <link href="/css/components.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div class="container">
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="username">
                     <p>Username:</p>
                 </label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" autocomplete="off" required>
 
                 <label for="password">
                     <p>Password:</p>
@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <br>
                 <input type="submit" value="Login">
             </form>
+
             <?php if ($loggedIn === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>
                 <p class="error">Invalid username or password.</p>
             <?php endif; ?>

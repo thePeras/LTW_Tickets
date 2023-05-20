@@ -20,6 +20,7 @@ CREATE TABLE Clients(
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     displayName TEXT NOT NULL,
+    image TEXT NOT NULL,
     createdAt INTEGER NOT NULL,
     passwordInvalidated INTEGER DEFAULT 0
 );
@@ -27,7 +28,7 @@ CREATE TABLE Clients(
 CREATE TABLE Sessions(
     user TEXT PRIMARY KEY,
     token TEXT UNIQUE NOT NULL,
-    lastUsedDate NUMBER NOT NULL,
+    lastUsedDate INTEGER NOT NULL,
     FOREIGN KEY(user) REFERENCES Clients(username)
 );
 
@@ -42,7 +43,7 @@ CREATE TABLE Admins(
 );
 
 CREATE TABLE FAQs(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY NOT NULL,
     createdByUser TEXT NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
@@ -85,14 +86,14 @@ CREATE TABLE Comments(
     content TEXT NOT NULL,
     createdByUser TEXT NOT NULL,
     createdAt NUMBER NOT NULL,
-    ticket NUMBER NOT NULL,
+    ticket INTEGER NOT NULL,
     FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
 
 CREATE TABLE Changes(
     id INTEGER PRIMARY KEY,
-    timestamp NUMBER NOT NULL,
+    timestamp INTEGER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
 );
@@ -107,7 +108,7 @@ CREATE TABLE TicketsChanges(
 
 CREATE TABLE AssignedChanges(
     agent TEXT NOT NULL,
-    change NUMBER NOT NULL,
+    change INTEGER NOT NULL,
     PRIMARY KEY (change, agent),
     FOREIGN KEY (agent) REFERENCES Agents(username),
     FOREIGN KEY (change) REFERENCES Changes(id)
@@ -115,6 +116,6 @@ CREATE TABLE AssignedChanges(
 
 CREATE TABLE StatusChanges(
     status TEXT NOT NULL,
-    change NUMBER PRIMARY KEY,
+    change INTEGER PRIMARY KEY,
     FOREIGN KEY (change) REFERENCES Changes(id)
 );

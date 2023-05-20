@@ -5,7 +5,6 @@ const passwordValidator = () => {
     const confirmPassword = document.forms["resetPasswordForm"]["confirmPassword"];
 
     if (password !== confirmPassword.value) {
-        //insert element
         if (document.querySelector("p.error") === null) {
             const p = document.createElement("p");
             p.textContent = "Your passwords don't match";

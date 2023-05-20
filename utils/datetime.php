@@ -7,7 +7,7 @@ function time_ago(Datetime $datetime)
     $diff = (time() - $datetime->getTimestamp());
 
     if ($diff < 1) {
-        return '0 seconds';
+        return 'now';
     }
 
     $a      = [

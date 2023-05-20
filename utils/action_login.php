@@ -14,7 +14,7 @@ function login(string $username, string $password, PDO $db) : bool
         return false;
     }
 
-    if (verify_hash($password, $client->password) === false) {
+    if (verify_password($password, $client->password) === false) {
         return false;
     }
 

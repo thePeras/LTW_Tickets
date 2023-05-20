@@ -7,19 +7,21 @@ require_once __DIR__.'/../../utils/roles.php';
 require_once __DIR__.'/../../database/client.db.php';
 
 
-function get_navbar_user(?Client $client) : string
+function get_navbar_user(?Client $client, PDO $db) : string
 {
     if ($client === null) {
         return '';
     }
 
-    return  <<<HTML
-        <div class="user">
-            <img class="avatar" src="assets/images/person.png" alt="user">
-            <div>
-                <h3>$client->displayName</h3>
-                <p>$client->email</p>
-            </div>
+    $imageSrc = $client->image;
+
+    return <<<HTML
+        <div class="user" onclick="location.href='/profile'">
+                <img class="avatar" src=$imageSrc alt="user">
+                <div>
+                    <h3>$client->displayName</h3>
+                    <p>@$client->username</p>
+                </div>
             <a href="/logout" class="logout">
                 <i class="ri-logout-box-line"></i>
             </a>
@@ -43,14 +45,27 @@ function get_login_button() : string
 
 function navbar(PDO $db)
 {
+
+    $isActive = function (string $path, string $current) : string {
+        if ($path === $current) {
+            return 'true';
+        } else {
+            return 'false';
+        };
+    };
+
     global $ifHtml;
     $session = is_session_valid($db);
     $client  = null;
     if ($session !== null) {
         $client = get_user($session->username, $db);
+        if (file_exists(__DIR__.'/../../'.$client->image) === false) {
+            set_default_client_image($client, $db);
+            $client = get_user($client->username, $db);
+        }
     }
     ?>
-        <link rel="stylesheet" type="text/css" href="components/navbar/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/components/navbar/navbar.css">
         <nav class="sidebar sticky">
             <div class="inital-sidebar">
                 <div class="logo">
@@ -68,7 +83,7 @@ function navbar(PDO $db)
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/faq">
                             <i class="ri-question-line"></i>
                             FAQ
                         </a>
@@ -101,7 +116,7 @@ function navbar(PDO $db)
             </div>
             <?php
             if ($session !== null) {
-                echo get_navbar_user($client);
+                echo get_navbar_user($client, $db);
             } else {
                 echo get_login_button();
             }

@@ -19,7 +19,7 @@ function drawNewRow(jsonObject) {
     tr.classList.add("user-entry");
     tr.innerHTML = `                  
     <td class="user-info">
-        <img class="user-photo" src="assets/images/person.png" alt="user">
+        <img class="user-photo" src="${jsonObject["image"]}" alt="user">
         <div class="user-name">
             <p>${jsonObject["displayName"]}</p>
             <p>${jsonObject["username"]}</p>
@@ -153,7 +153,7 @@ async function makeEditModal(username) {
         <h2>Edit user</h2>
         <div class="main-edit-content">
             <div class="image-username">
-                <img class="user-photo" src="assets/images/person.png" alt="user">
+                <img class="user-photo" src="/assets/images/person.png" alt="user">
                 <p class="username">${resJson["username"]}</p>
             </div>
             <form name="editUserForm", action="admin" class="edit-user-form" method="post">
