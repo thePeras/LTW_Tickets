@@ -35,24 +35,34 @@ function ticketCard(Ticket $ticket)
     $title       = htmlspecialchars($ticket->title);
     $description = htmlspecialchars($ticket->description);
     $status      = htmlspecialchars($ticket->status);
+    $timeAgo     = $ticket->getTimeAgo();
     $hashtags    = htmlspecialchars($ticket->hashtags);
+
+    $hashtags = explode(",", $hashtags);
+
+    $tags = '';
+    foreach ($hashtags as $hashtag) {
+        $tags .= "<span class='tag'>$hashtag</span>";
+    }
 
     return <<<HTML
         <link rel="stylesheet" type="text/css" href="components/ticket-card/ticket-card.css">
         
         <div class="ticket-card" data-id="$id">
-            <h3>$title</h3>
-            <h5>3h ago</h5>
+            <h3>#$id - $title</h3>
+            <h5>$timeAgo</h5>
             <p>$description</p>
             <footer>
                 <tags>
                     <span class="tag">$status</span>
-                    <span class="tag">$hashtags</span>
+                    $tags
                 </tags>
+                <!---
                 <comments>
                     <span class="ri-chat-1-line"></span>
                     <span>3</span>
                 </comments>
+                -->
             </footer>
         </div>
 

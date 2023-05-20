@@ -1,5 +1,4 @@
-pragma foreign_keys=on;
-
+pragma foreign_keys = on;
 DROP TABLE IF EXISTS FAQs;
 DROP TABLE IF EXISTS Admins;
 DROP TABLE IF EXISTS StatusChanges;
@@ -12,9 +11,6 @@ DROP TABLE IF EXISTS Comments;
 DROP TABLE IF EXISTS Tickets;
 DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS Clients;
-
-
-
 CREATE TABLE Clients(
     username TEXT PRIMARY KEY,
     email TEXT NOT NULL,
@@ -24,47 +20,38 @@ CREATE TABLE Clients(
     createdAt INTEGER NOT NULL,
     passwordInvalidated INTEGER DEFAULT 0
 );
-
 CREATE TABLE Sessions(
     user TEXT PRIMARY KEY,
     token TEXT UNIQUE NOT NULL,
     lastUsedDate INTEGER NOT NULL,
     FOREIGN KEY(user) REFERENCES Clients(username)
 );
-
 CREATE TABLE Agents(
     username TEXT PRIMARY KEY,
     FOREIGN KEY (username) REFERENCES Clients(username)
 );
-
 CREATE TABLE Admins(
     username TEXT PRIMARY KEY,
     FOREIGN KEY (username) REFERENCES Agents(username)
 );
-
 CREATE TABLE FAQs(
     id INTEGER PRIMARY KEY NOT NULL,
     createdByUser TEXT NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
-
     FOREIGN KEY (createdByUser) REFERENCES Agents(username)
 );
-
 CREATE TABLE Departments(
     name TEXT PRIMARY KEY,
     description TEXT
 );
-
 CREATE TABLE AgentDepartments(
     agent TEXT NOT NULL,
     department TEXT NOT NULL,
-
     PRIMARY KEY (agent, department),
     FOREIGN KEY (agent) REFERENCES Agents(username),
     FOREIGN KEY (department) REFERENCES Departments(name)
 );
-
 CREATE TABLE Tickets(
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
@@ -73,30 +60,26 @@ CREATE TABLE Tickets(
     hashtags TEXT,
     assignee TEXT,
     createdByUser TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
     department TEXT NOT NULL,
-
     FOREIGN KEY (assignee) REFERENCES Agents(username),
     FOREIGN KEY (createdByUser) REFERENCES Clients(username),
     FOREIGN KEY (department) REFERENCES Departments(name)
 );
-
 CREATE TABLE Comments(
     id INTEGER PRIMARY KEY,
     content TEXT NOT NULL,
     createdByUser TEXT NOT NULL,
     ticket INTEGER NOT NULL,
-    FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
+    FOREIGN KEY (createdByUser) REFERENCES Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
-
 CREATE TABLE Changes(
     id INTEGER PRIMARY KEY,
     timestamp INTEGER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
-
 );
-
 CREATE TABLE AssignedChanges(
     agent TEXT NOT NULL,
     change INTEGER NOT NULL,
@@ -104,7 +87,6 @@ CREATE TABLE AssignedChanges(
     FOREIGN KEY (agent) REFERENCES Agents(username),
     FOREIGN KEY (change) REFERENCES Changes(id)
 );
-
 CREATE TABLE StatusChanges(
     status TEXT NOT NULL,
     change INTEGER PRIMARY KEY,
