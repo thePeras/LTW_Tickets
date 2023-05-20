@@ -5,16 +5,16 @@ declare(strict_types=1);
 class FAQ
 {
 
-    public readonly int $id;
+    public int $id;
 
-    public readonly string $createdByUser;
+    public ?string $createdByUser;
 
-    public readonly string $title;
+    public string $title;
 
-    public readonly string $content;
+    public string $content;
 
 
-    public function __construct(int $_id, string $_createdByUser,
+    public function __construct(int $_id, ?string $_createdByUser,
         string $_title, string $_content
     ) {
         $this->id            = $_id;

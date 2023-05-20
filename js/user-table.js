@@ -140,7 +140,7 @@ async function makeEditModal(username) {
         <h2>Edit user</h2>
         <div class="main-edit-content">
             <div class="image-username">
-                <img class="user-photo" src="/assets/images/person.png" alt="user">
+                <img class="user-photo" src="${resJson["image"]}" alt="user">
                 <p class="username">${resJson["username"]}</p>
             </div>
             <form name="editUserForm", action="admin" class="edit-user-form" method="post">
