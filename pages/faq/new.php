@@ -41,7 +41,7 @@ layout_start();
 //TODO csrf
 ?>
 <link rel="stylesheet" type="text/css" href="/css/faq-new.css">
-<h1>Create a new FAQ</h1>
+<h1>Create a FAQ</h1>
 <hr>
 
 <form method="post" class="create-faq">

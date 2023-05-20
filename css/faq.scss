@@ -133,3 +133,9 @@ main div {
 .faq-content {
     margin: 2rem 0;
 }
+
+@media only screen and (max-width: 1000px) {
+    .top-content .search>input {
+        width: auto;
+    }
+}

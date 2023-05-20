@@ -1,6 +1,7 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  height: 100vh;
 }
 .container div {
   display: flex;
@@ -27,6 +28,9 @@ a:visited {
 @media only screen and (max-width: 1000px) {
   .container {
     grid-template-columns: 1fr;
+  }
+  .container div {
+    padding: 2rem;
   }
   .container .left {
     display: none;

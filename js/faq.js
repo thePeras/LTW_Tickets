@@ -37,8 +37,8 @@ async function buildResults(result) {
     const userJson = await userRes.json();
 
 
-    const editButton = `<button class="edit-button" onclick="location.href = '/faq/${result["id"]}'">Edit</button>`
-    const deleteButton = `<button class="delete-button" onclick="makeDeleteModal(${result["id"]})">Delete</button>`
+    const editButton = `<i class="ri-edit-line" onclick="location.href = '/faq/${result["id"]}'"></i>`;
+    const deleteButton = `<i class="ri-delete-bin-line" onclick="makeDeleteModal(${result["id"]})"></i>`;
 
 
     var contents = result["content"].split("\r\n");
@@ -105,13 +105,7 @@ const searchDebounce = debounce(searchNewParam, 300);
 
 const addResultClick = () => {
     const faqQuestions = document.querySelectorAll('.faq-question');
-    console.log(faqQuestions);
-
     faqQuestions.forEach((faqQuestion) => {
-        if (faqQuestion.hasAttribute("click-listener")) {
-            return;
-        }
-        faqQuestion.toggleAttribute("click-listener", true);
         faqQuestion.addEventListener('click', (e) => {
             // Clicking in the content do nothing
             if (e.target.classList.contains('content') ||
@@ -213,8 +207,6 @@ function makeDeleteModal(id) {
         <form method="post" action="faq">
             <input type="hidden" name="action" value="deleteFAQ">
             <input type="hidden" name="id" value="${id}">
-            <input type="hidden" name="lastHref" value="${location.href}">
-
 
             <input type="submit" class="delete-button" value="Delete">
         </form>

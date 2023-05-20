@@ -153,7 +153,8 @@ nav.sidebar .login {
     display: block;
   }
   #navbar-checkbox:checked ~ nav.sidebar {
-    display: grid;
+    display: flex;
+    gap: 2rem;
   }
   #navbar-checkbox:checked ~ main {
     display: none;
@@ -165,10 +166,13 @@ nav.sidebar .login {
     text-align: center;
     min-height: 100vh;
     overflow-y: scroll;
-    width: 100%;
+    width: calc(100% - 4rem);
     border: none;
     align-items: center;
     justify-content: center;
+  }
+  nav.sidebar > .inital-sidebar {
+    flex: none;
   }
   nav.sidebar ul li {
     width: 200px;

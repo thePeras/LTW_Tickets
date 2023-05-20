@@ -184,7 +184,8 @@ nav.sidebar {
 
     // Navbar
     #navbar-checkbox:checked~nav.sidebar {
-        display: grid;
+        display: flex;
+        gap: 2rem;
     }
 
     #navbar-checkbox:checked~main {
@@ -200,10 +201,14 @@ nav.sidebar {
         text-align: center;
         min-height: 100vh;
         overflow-y: scroll;
-        width: 100%;
+        width: calc(100% - 4rem);
         border: none;
         align-items: center;
         justify-content: center;
+
+        >.inital-sidebar {
+            flex: none;
+        }
 
         ul {
             li {
