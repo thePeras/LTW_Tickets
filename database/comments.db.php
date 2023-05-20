@@ -52,7 +52,7 @@ function insert_new_comment(Comment $comment, PDO $db) : bool
 
 function get_comments_by_ticket(int $ticketId, PDO $db) : array
 {
-    $sql  = "SELECT * FROM Comments JOIN Clients ON Comments.createdByUser = Clients.username WHERE ticket = :ticketId";
+    $sql  = "SELECT * FROM Comments WHERE ticket = :ticketId";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':ticketId', $ticketId, PDO::PARAM_INT);
     $stmt->execute();
@@ -62,12 +62,7 @@ function get_comments_by_ticket(int $ticketId, PDO $db) : array
         $comments[] = new Comment(
             $row['content'],
             $row['ticket'],
-            new Client(
-                $row['username'],
-                $row['email'],
-                null,
-                $row['displayName']
-            ),
+            get_user($row['createdByUser'], $db),
             (int) $row['createdAt'],
             (int) $row['id']
         );

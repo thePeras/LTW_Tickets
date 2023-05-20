@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = ($_POST["action"] ?? "");
     switch ($action) {
-    case "create":
+    case "comment":
         $content = $_POST['content'];
         $ticket  = $_POST['ticketId'];
 
@@ -44,6 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         break;
+    case "open":
+        $ticketId = ($_POST["ticketId"] ?? "");
+        if ($ticketId === "") {
+            $error = "Invalid ticket";
+            break;
+        }
+
+        $error = open_ticket($ticketId, $db);
+        if ($error === null) {
+            $success = "Ticket opened successfully";
+        }
+        break;
+
     case "close": //TODO: set changeStatus
         $ticketId = ($_POST["ticketId"] ?? "");
         if ($ticketId === "") {
@@ -116,7 +129,7 @@ if ($ticket === null) {
     $comments = get_comments($id, $db);
     $changes  = get_changes($id, $db);
     $all      = array_merge($comments, $changes);
-    usort( //TODO: not working
+    usort(
         $all,
         function ($a, $b) {
             return ($a->timestamp->getTimestamp() - $b->timestamp->getTimestamp());
@@ -162,15 +175,49 @@ if ($ticket === null) {
         <div>
             <h1><?php echo "$ticket->title #$ticket->id"?></h1>
             <ul id="buttons">
-                <!-- TODO: Change to OPEN with ticket is closed-->
-                <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
-                    <input type="hidden" name="action" value="close">
-                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                    <li><button type = "button" onClick="closeTicket(event,this)"> 
-                        <i class="ri-archive-line"></i>
-                        Close ticket 
-                    </button></li>
-                </form>
+                <li class="status"> <!-- Status: Open -->
+                    <p>
+                        <i class="ri-flag-line"></i>
+                        Status:
+                    </p>
+                    <?php
+                    $icons = [
+                        "Open"     => "ri-checkbox-blank-circle-line",
+                        "Closed"   => "ri-checkbox-circle-line",
+                        "Assigned" => "ri-donut-chart-line",
+                    ];
+
+                    if ($ticket->status === "") {
+                        $status = "Open";
+                    } else {
+                        $status = ucfirst($ticket->status);
+                    }
+                    ?>
+                        
+                    <span data-status="<?php echo $status?>">
+                        <i class="<?php echo $icons[$status] ?>"></i>
+                        <?php echo $status ?>
+                    </span>
+                </li>
+                <?php if ($ticket->status === "closed") {?>
+                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                        <input type="hidden" name="action" value="open">
+                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                        <li><button type = "button" onClick="submitForm(event,this)"> 
+                            <i class="ri-book-open-line"></i>
+                            Reopen ticket 
+                        </button></li>
+                    </form>
+                <?php } else { ?>
+                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                        <input type="hidden" name="action" value="close">
+                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                        <li><button type = "button" onClick="submitForm(event,this)"> 
+                            <i class="ri-archive-line"></i>
+                            Close ticket 
+                        </button></li>
+                    </form>
+                <?php } ?>
             </ul>
 
             <!-- Ticket description -->
@@ -203,18 +250,15 @@ if ($ticket === null) {
                                     <?php echo $item->user->displayName?>
                                 </h4>
                                 <?php if ($item->agent->username === "") : ?>
-                                    <p>unassign this ticket</p>
-                                    <p>
-                                        <?php echo time_ago($item->timestamp) ?>
-                                    </p>
+                                    <p>remove <b>assigned</b> from ticket</p>
                                 <?php else : ?>
-                                <p>assign this ticket to 
+                                <p><b>assign</b> this ticket to 
                                     <b><?php echo $item->agent->displayName ?></b>
                                 </p>
+                                <?php endif; ?>
                                 <p>
                                     <?php echo time_ago($item->timestamp) ?>
                                 </p>
-                                <?php endif; ?>
                             </div>
                         </div>
                 <?php ; elseif (($item instanceof StatusChange) === true) :?> 
@@ -226,9 +270,11 @@ if ($ticket === null) {
                             <h4>
                                 <?php echo $item->user->displayName?>
                             </h4>
-                            <p>udpate status to 
-                                <b><?php echo $item->status ?></b>
-                            </p>
+                            <?php if ($item->status === "closed") : ?>
+                                <p><b>closed</b> this ticket</p>
+                            <?php else : ?>
+                                <p><b>opened</b> this ticket</p>
+                            <?php endif; ?>
                             <p>
                                 <?php echo time_ago($item->timestamp) ?>
                             </p>
@@ -260,7 +306,7 @@ if ($ticket === null) {
                     <h3>New comment</h3>
                     <textarea name="content" cols="30" rows="10" placeholder="Write your comment"></textarea>
                     <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                    <input type="hidden" name="action" value="create">
+                    <input type="hidden" name="action" value="comment">
                     <input type="submit" class="primary" value="Send">
                 </div>
             </form>

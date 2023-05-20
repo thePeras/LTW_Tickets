@@ -25,20 +25,37 @@ function create_ticket(string $title, string $description, PDO $db) : bool
 }
 
 
-function create_comment(string $content, int $ticketId, PDO $db) : bool
+function create_comment(string $content, int $ticketId, PDO $db) : ?string
 {
 
-    $session = is_session_valid($db);
-
-    $createdByUser = new Client($session->username);
-    $comment       = new Comment($content, $ticketId, $createdByUser, time());
-    $commentId     = insert_new_comment($comment, $db);
-
-    if ($commentId === null) {
-        return false;
+    if ($content === null || $ticketId === null) {
+        return 'Invalid comment';
     }
 
-    return true;
+    if ($content === '') {
+        return 'Comment cannot be empty';
+    }
+
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    $session = is_session_valid($db);
+    if ($session === null) {
+        return 'Session not found';
+    }
+
+    $createdByUser = new Client($session->username);
+    $createAt      = time();
+    $comment       = new Comment($content, $ticketId, $createdByUser, $createAt);
+    $commentId     = insert_new_comment($comment, $db);
+
+    if ($commentId === false) {
+        return 'Error inserting comment';
+    }
+
+    return null;
 
 }
 
@@ -131,6 +148,42 @@ function close_ticket(int $ticketId, PDO $db) : ?string
 }
 
 
+function open_ticket(int $ticketId, PDO $db) : ?string
+{
+
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    if ($ticket->status !== 'closed') {
+        return 'Ticket is already open';
+    }
+
+    $ticket->status = '';
+    if ($ticket->assignee->username !== '') {
+        $ticket->status = 'assigned';
+    }
+
+    if (update_ticket_status($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    $ticket->status = '';
+
+    // Creating a change
+    $changeBy = new Client($ticket->createdByUser, '', '');
+    $changeAt = time();
+    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status);
+    if (insert_new_change($change, $db) === null) {
+        return 'Error inserting the change';
+    }
+
+    return null;
+
+}
+
+
 function assign_ticket($ticketId, $user, $db)
 {
     $ticket = get_ticket($ticketId, $db);
@@ -146,6 +199,14 @@ function assign_ticket($ticketId, $user, $db)
     $ticket->assignee = $user;
 
     if (update_ticket_assignee($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    if ($ticket->status !== 'closed') {
+        $ticket->status = 'assigned';
+    }
+
+    if (update_ticket_status($ticket, $db) !== true) {
         return 'Error updating ticket';
     }
 
@@ -172,6 +233,14 @@ function unassign_ticket($ticketId, $db)
     $ticket->assignee = new Client('');
 
     if (update_ticket_assignee($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    if ($ticket->status === 'assigned') {
+        $ticket->status = '';
+    }
+
+    if (update_ticket_status($ticket, $db) !== true) {
         return 'Error updating ticket';
     }
 

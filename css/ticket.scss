@@ -1,7 +1,44 @@
 #buttons {
     list-style-type: none;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
+
+    li {
+        display: flex;
+        gap: 1rem;
+
+        p {
+            padding: 0.6rem;
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        span {
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.6rem;
+            cursor: pointer;
+
+            &[data-status="Open"] {
+                background-color: #347d39;
+                color: white;
+            }
+
+            &[data-status="Closed"] {
+                background-color: #8256d0;
+                color: white;
+            }
+
+            &[data-status="Assigned"] {
+                background-color: #c17c3f;
+                color: white;
+            }
+
+        }
+    }
+
+    margin: 0.5rem 0;
 }
 
 .ticket-page {

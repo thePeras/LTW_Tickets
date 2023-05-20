@@ -63,7 +63,6 @@ async function makeUserAssignModal(usertype) {
         }
 
         const users = await res.json();
-        console.log(users)
 
         suggestions.innerHTML = "";
         if (users.length !== 0) {
@@ -80,6 +79,7 @@ async function makeUserAssignModal(usertype) {
                     console.log("clicked");
                     const form = document.createElement("form");
                     form.method = "POST";
+                    form.display = "none";
                     const ticketId = document.querySelector("#ticketId").value;
                     form.action = `/ticket?id=${ticketId}`;
                     const input = document.createElement("input");
@@ -187,7 +187,7 @@ async function makeLabelsModal(usertype) {
     }
 }
 
-function closeTicket(e, element) {
+function submitForm(e, element) {
     e.preventDefault();
 
     const form = element.parentNode.parentNode;

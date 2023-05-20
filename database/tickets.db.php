@@ -64,7 +64,7 @@ function insert_new_ticket(Session $session, Ticket $ticket, PDO $db) : int
 
 function get_ticket(int $id, PDO $db) : ?Ticket
 {
-    $sql  = "SELECT * FROM Tickets LEFT JOIN Clients ON Tickets.assignee = Clients.username WHERE id = :id";
+    $sql  = "SELECT * FROM Clients RIGHT JOIN Tickets ON Clients.username = Tickets.assignee WHERE id = :id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -111,6 +111,13 @@ function remove_ticket_department(Ticket $ticket, PDO $db) : bool
 
 function update_ticket_status(Ticket $ticket, PDO $db) : bool
 {
+    if ($ticket->status === "") {
+        $sql  = "UPDATE Tickets SET status = NULL WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     $sql  = "UPDATE Tickets SET status = :status WHERE id = :id";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);

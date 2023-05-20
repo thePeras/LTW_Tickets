@@ -1,7 +1,36 @@
 #buttons {
   list-style-type: none;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+#buttons li {
+  display: flex;
+  gap: 1rem;
+}
+#buttons li p {
+  padding: 0.6rem;
+  border-radius: 8px;
+  background-color: white;
+}
+#buttons li span {
+  background-color: white;
+  border-radius: 8px;
+  padding: 0.6rem;
+  cursor: pointer;
+}
+#buttons li span[data-status=Open] {
+  background-color: #347d39;
+  color: white;
+}
+#buttons li span[data-status=Closed] {
+  background-color: #8256d0;
+  color: white;
+}
+#buttons li span[data-status=Assigned] {
+  background-color: #c17c3f;
+  color: white;
 }
 
 .ticket-page {
