@@ -45,6 +45,11 @@
     transition: all 0.1s ease-out;
 }
 
+#filters li a {
+    color: #363c4c;
+    text-decoration: none;
+}
+
 #filters li:hover {
     background-color: rgba(202, 207, 218, 0.2352941176);
 }

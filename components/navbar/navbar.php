@@ -77,7 +77,7 @@ function navbar(PDO $db)
                         echo 'class="active"';
                     }
                     ?>>
-                        <a href="#">
+                        <a href="/tickets">
                             <i class="ri-ticket-line"></i>
                             Tickets
                         </a>
