@@ -73,3 +73,29 @@ function handleSortOptionChange(value) {
     window.location.href = url.toString();
 }
 
+function handleSearchInput() {
+    var searchText = document.getElementById('search').value;
+    var url = new URL(location.href);
+
+    if (searchText.length > 0) {
+        url.searchParams.set("text", searchText);
+    } else {
+        url.searchParams.delete("text");
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Update the ticket list with the response
+                var ticketList = document.querySelector('.ticket-list');
+                ticketList.innerHTML = xhr.responseText;
+            } else {
+                console.error('Error: ' + xhr.status);
+            }
+        }
+    };
+
+    xhr.open('GET', url.toString(), true);
+    xhr.send();
+}

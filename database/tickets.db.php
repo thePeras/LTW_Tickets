@@ -88,16 +88,18 @@ class Ticket
 }
 
 
-function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder): array
+function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
-    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND status != 'archived' ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $text = "%$text%";
+    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
 
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->execute();
 
-    var_dump($result);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $tickets = [];
 
@@ -120,11 +122,13 @@ function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder): array
 }
 
 
-function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortOrder): array
+function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortOrder, $text): array
 {
-    $sql  = "SELECT * FROM tickets WHERE assignee = :username AND status != 'archived' ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $text = "%$text%";
+    $sql  = "SELECT * FROM tickets WHERE assignee = :username AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -152,11 +156,13 @@ function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortO
 }
 
 
-function getTicketsCreatedBy(string $username, PDO $db, $limit, $offset, $sortOrder): array
+function getTicketsCreatedBy(string $username, PDO $db, $limit, $offset, $sortOrder, $text): array
 {
-    $sql  = "SELECT * FROM Tickets WHERE createdByUser = :username AND status != 'archived' ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $text = "%$text%";
+    $sql  = "SELECT * FROM Tickets WHERE createdByUser = :username AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -184,10 +190,12 @@ function getTicketsCreatedBy(string $username, PDO $db, $limit, $offset, $sortOr
 }
 
 
-function getAllTickets(PDO $db, $limit, $offset, $sortOrder): array
+function getAllTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
-    $sql  = "SELECT * FROM tickets ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $text = "%$text%";
+    $sql  = "SELECT * FROM tickets WHERE (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -215,10 +223,12 @@ function getAllTickets(PDO $db, $limit, $offset, $sortOrder): array
 }
 
 
-function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder): array
+function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
-    $sql  = "SELECT * FROM tickets WHERE status = 'archived' ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $text = "%$text%";
+    $sql  = "SELECT * FROM tickets WHERE status = 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
     $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
     $stmt->execute();

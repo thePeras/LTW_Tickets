@@ -21,30 +21,30 @@ handle_api_route(
         }
 
         $session = is_session_valid($db);
-
-        $client = get_user($session->username, $db);
+        $client  = get_user($session->username, $db);
 
         $limit  = min(intval(($_GET["limit"] ?? 4)), 20);
         $offset = intval(($_GET["offset"] ?? 0));
 
-        $tab = ($_GET["tab"] ?? "unassigned");
-
         $sortOrder = ($_GET["sortOrder"] ?? 'DESC');
-
         if ($sortOrder !== 'ASC' && $sortOrder !== 'DESC') {
             $sortOrder = 'DESC';
         }
 
+        $text = ($_GET["text"] ?? '');
+        $text = "%$text%";
+
+        $tab = ($_GET["tab"] ?? "unassigned");
         if ($tab === "unassigned" || $tab === null) {
-            $tickets = getUnassignedTickets($db, $limit, $offset, $sortOrder);
+            $tickets = getUnassignedTickets($db, $limit, $offset, $sortOrder, $text);
         } else if ($tab === "assignedToMe") {
-            $tickets = getTicketsAssignedTo($client->username, $db, $limit, $offset, sortOrder: $sortOrder);
+            $tickets = getTicketsAssignedTo($client->username, $db, $limit, $offset, $sortOrder, $text);
         } else if ($tab === "createdByMe") {
-            $tickets = getTicketsCreatedBy($client->username, $db, $limit, $offset, $sortOrder);
+            $tickets = getTicketsCreatedBy($client->username, $db, $limit, $offset, $sortOrder, $text);
         } else if ($tab === "allTickets") {
-            $tickets = getAllTickets($db, $limit, $offset, $sortOrder);
+            $tickets = getAllTickets($db, $limit, $offset, $sortOrder, $text);
         } else if ($tab === "archived") {
-            $tickets = getArchivedTickets($db, $limit, $offset, $sortOrder);
+            $tickets = getArchivedTickets($db, $limit, $offset, $sortOrder, $text);
         }
 
         echo json_encode($tickets);
