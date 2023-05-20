@@ -41,7 +41,7 @@ async function buildResults(result) {
     const deleteButton = `<button class="delete-button" onclick="makeDeleteModal(${result["id"]})">Delete</button>`
 
 
-    var contents = result["content"].split("\n");
+    var contents = result["content"].split("\r\n");
     contents = contents.map((value, _) => "<p>" + value + "</p>");
 
     question.classList.add("faq-question");
@@ -56,10 +56,10 @@ async function buildResults(result) {
         </div>
     </header>
     <div class="content">
-        ${contents}
+        ${contents.join("\n")}
         <div class="created-by">
             <p>By:</p>
-            <img class="avatar" src="/assets/images/person.png" alt="user">
+            <img class="avatar" src="${userJson["image"]}" alt="user">
             <p class="display-name">${userJson["displayName"]}</p>
         </div>
     `;
