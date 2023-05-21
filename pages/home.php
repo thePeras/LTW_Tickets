@@ -79,8 +79,8 @@
                 </li>
             </ul>
             <div class="arrows">
-                <span class="prev" onclick="showPrevious()">&#8249;</span>
-                <span class="next" onclick="showNext()">&#8250;</span>
+                <span class="prev no-select" onclick="showPrevious()">&#8249;</span>
+                <span class="next no-select" onclick="showNext()">&#8250;</span>
             </div>
         </div>
     </section>
