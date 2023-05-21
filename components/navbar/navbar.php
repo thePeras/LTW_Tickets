@@ -95,18 +95,6 @@ function navbar(PDO $db)
                             FAQ
                         </a>
                     </li>
-                    <li data-active="<?php echo htmlspecialchars($isActive("departments"))?>">
-                        <a href="#">
-                            <i class="ri-building-line"></i>
-                            Departments
-                        </a>
-                    </li>
-                    <li data-active="<?php echo htmlspecialchars($isActive("analytics"))?>">
-                        <a href="#">
-                            <i class="ri-line-chart-line"></i>
-                            Analytics
-                        </a>
-                    </li>
                     <?php if (is_current_user_admin($db) === true) :?>
                      <li data-active="<?php echo htmlspecialchars($isActive("admin"))?>">
                         <a href="/admin">
