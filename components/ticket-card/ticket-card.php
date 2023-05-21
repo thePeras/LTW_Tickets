@@ -17,9 +17,7 @@ function ticketCard(Ticket $ticket)
     foreach ($hashtags as $hashtag) {
         $tags .= "<span class='tag'>$hashtag</span>";
     }
-    ?>
-        <link rel="stylesheet" type="text/css" href="components/ticket-card/ticket-card.css">
-        
+    ?>        
         <div class="ticket-card" onclick="location.href = '/ticket/<?php echo $id?>'">
             <h3>#<?php echo $id?> - <?php echo $title?></h3>
             <h5><?php echo $timeAgo?></h5>

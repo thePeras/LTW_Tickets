@@ -48,7 +48,7 @@ function drawNewTicketCard(jsonObject) {
 const getMoreTicketsData = async (ev) => {
     if (ev.deltaY < 0) return;
     if (end) return;
-    const element = document.querySelector(".tabSelector")
+    const element = document.querySelector(".ticket-list")
     if (element === null) return;
     if (element.lastElementChild === null) return;
     if (isOnScreen(element.lastElementChild) && !fetchingTickets) {
@@ -56,7 +56,7 @@ const getMoreTicketsData = async (ev) => {
         console.log("fetching new ticket data...");
         const res = await fetch(`/api/tickets?limit=10&offset=${offset + element.children.length}${sortOrder !== '' ? `&sortOrder=${sortOrder}` : ''}&tab=${tab}${searchInput !== '' ? `&text=${searchInput}` : ''}`,
             { method: "GET" });
-
+        console.log(res.url);
         if (res.status !== 200) {
             console.log(`Users list request failed with status ${res.status}`);
         }
