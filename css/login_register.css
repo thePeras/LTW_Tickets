@@ -3,6 +3,7 @@
   grid-template-columns: 1fr 1fr;
   height: 100vh;
 }
+
 .container div {
   display: flex;
   flex-direction: column;
@@ -10,12 +11,15 @@
   gap: 1rem;
   padding: 5rem;
 }
+
 .container .left {
   background-color: #5449f0;
 }
+
 .container .left img {
   width: 400px;
 }
+
 .container .right input[type=submit] {
   margin-top: 0.5rem;
 }
@@ -29,10 +33,14 @@ a:visited {
   .container {
     grid-template-columns: 1fr;
   }
+
   .container div {
     padding: 2rem;
   }
+
   .container .left {
     display: none;
   }
-}/*# sourceMappingURL=login_register.css.map */
+}
+
+/*# sourceMappingURL=login_register.css.map */

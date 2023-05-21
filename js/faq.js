@@ -8,6 +8,27 @@ var currentUserType = '';
 
 const limit = 10;
 
+function handleCancelClick(e) {
+    e.preventDefault();
+    window.location.reload();
+}
+
+function handleEditClick(e) {
+    e.preventDefault();
+    const title = document.querySelector('input[name="title"]');
+    const content = document.querySelector('textarea[name="content"]');
+    title.readOnly = !content.readOnly;
+    content.readOnly = !content.readOnly;
+
+    var editButton = document.getElementById('editButton');
+    var saveButton = document.getElementById('saveButton');
+    var cancelButton = document.getElementById('cancelButton');
+
+    editButton.style.display = 'none';
+    saveButton.style.display = 'inline-block';
+    cancelButton.style.display = 'inline-block';
+}
+
 function isOnScreen(element) {
     const rect = element.getBoundingClientRect();
     return window.innerHeight > rect.top && rect.top >= 0;
@@ -72,7 +93,7 @@ async function searchNewParam(event) {
     var res = undefined;
     if (searchInput.length === 0) {
         res = await fetch(`/api/faqs?limit=10&offset=0`,
-        { method: "GET" });
+            { method: "GET" });
     }
     if (searchInput.length < 3 && searchInput.length >= 1) return;
     offset = 0;

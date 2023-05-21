@@ -60,18 +60,21 @@ CREATE TABLE Tickets(
     status TEXT,
     hashtags TEXT,
     assignee TEXT,
-    createdByUser TEXT,
-    createdAt INTEGER NOT NULL,
     department TEXT,
+    faq INTEGER,
+    createdByUser TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
 
     FOREIGN KEY (assignee) REFERENCES Agents(username) ON DELETE SET NULL,
     FOREIGN KEY (createdByUser) REFERENCES Clients(username) ON DELETE SET NULL,
-    FOREIGN KEY (department) REFERENCES Departments(name) ON DELETE SET NULL
+    FOREIGN KEY (department) REFERENCES Departments(name) ON DELETE SET NULL,
+    FOREIGN KEY (faq) REFERENCES FAQs(id) ON DELETE SET NULL
 );
 CREATE TABLE Comments(
     id INTEGER PRIMARY KEY,
     content TEXT NOT NULL,
-    createdByUser TEXT,
+    createdByUser TEXT NOT NULL,
+    createdAt NUMBER NOT NULL,
     ticket INTEGER NOT NULL,
     FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
@@ -81,10 +84,17 @@ CREATE TABLE Changes(
     timestamp INTEGER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
+);
 
+CREATE TABLE TicketsChanges(
+    change NUMBER NOT NULL,
+    ticket NUMBER NOT NULL,
+    PRIMARY KEY (change, ticket),
+    FOREIGN KEY (change) REFERENCES Changes(id),
+    FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
 CREATE TABLE AssignedChanges(
-    agent TEXT NOT NULL,
+    agent TEXT,
     change INTEGER NOT NULL,
     PRIMARY KEY (change, agent),
     FOREIGN KEY (agent) REFERENCES Agents(username),

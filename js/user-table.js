@@ -82,14 +82,21 @@ function makeDeleteModal(username) {
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
 
-    const modalElement = document.querySelector(".modal");
-    if (modalElement === null) return;
+    const modalElement = document.createElement("div");
+    modalElement.classList.add("modal");
+    modalElement.onclick = (event) => {
+        if (event.target === modalElement) closeModal();
+    }
 
-    const modalContentElement = document.querySelector(".modal-content");
-    modalContentElement.classList.toggle("delete-user-modal");
-    if (modalContentElement === null) return;
+    const modalContentElement = document.createElement("div");
+    modalContentElement.classList.add("modal-content");
+    modalContentElement.classList.add("delete-user-modal");
+
+    modalElement.appendChild(modalContentElement);
+    body.appendChild(modalElement);
 
     //TODO: inject CSRF token
+
     modalContentElement.innerHTML = `
     <h1>Delete user</h1>
     <p>Are you sure that you want to delete user <b>${username}</b>? <br/> This action is irreversible!</p>
@@ -127,12 +134,18 @@ async function makeEditModal(username) {
 
     const resJson = await res.json();
 
-    const modalElement = document.querySelector(".modal");
-    if (modalElement === null) return;
+    const modalElement = document.createElement("div");
+    modalElement.classList.add("modal");
+    modalElement.onclick = (event) => {
+        if (event.target === modalElement) closeModal();
+    }
 
-    const modalContentElement = document.querySelector(".modal-content");
-    modalContentElement.classList.toggle("edit-user-modal");
-    if (modalContentElement === null) return;
+    const modalContentElement = document.createElement("div");
+    modalContentElement.classList.add("modal-content");
+    modalContentElement.classList.add("edit-user-modal");
+
+    modalElement.appendChild(modalContentElement);
+    body.appendChild(modalElement);
 
     //TODO: get csrf token
 

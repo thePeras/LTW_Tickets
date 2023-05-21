@@ -47,7 +47,6 @@ layout_start();
 ?>
 <link rel="stylesheet" href="/css/tickets.css">
 <link rel="stylesheet" href="/components/ticket-card/ticket-card.css">
-<script src="/js/datetime.js"></script>
 <script src="/js/tickets.js"></script>
 
 <h1>Tickets</h1>
@@ -68,7 +67,7 @@ layout_start();
         </select>
     </li>
     <li>
-        <button type="button" class="active">New ticket</button>
+        <a href="/newTicket" class="button primary">New ticket</a>
     </li>
 </ul>
 

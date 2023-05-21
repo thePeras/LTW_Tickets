@@ -22,7 +22,7 @@ function handleEditClick() {
     cancelButton.style.display = 'inline-block';
 }
 
-function handleCancelClick(){
+function handleCancelClick() {
     window.location.reload();
 }
 
@@ -55,8 +55,8 @@ function handleFileSelect(event) {
     }
 
     var reader = new FileReader();
-    reader.onload = (function(theFile) {
-        return function(e) {
+    reader.onload = (function (theFile) {
+        return function (e) {
             var image = document.getElementById('profilePicture');
             image.src = e.target.result;
         };
