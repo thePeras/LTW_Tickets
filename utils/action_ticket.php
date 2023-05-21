@@ -148,7 +148,8 @@ function close_ticket(int $ticketId, ?int $faqId, PDO $db) : ?string
     }
 
     // Creating a change
-    $changeBy = new Client($ticket->createdByUser, '', '');
+    $session  = is_session_valid($db);
+    $changeBy = new Client($session->username, '', '');
     $changeAt = time();
     $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status->status);
     if (insert_new_change($change, $db) === null) {
@@ -175,7 +176,7 @@ function open_ticket(int $ticketId, PDO $db) : ?string
     }
 
     $ticket->status = $open;
-    if ($ticket->assignee->username !== '') {
+    if ($ticket->assignee !== null) {
         $ticket->status = $assigned;
     }
 
@@ -186,7 +187,39 @@ function open_ticket(int $ticketId, PDO $db) : ?string
     $ticket->status = $open;
 
     // Creating a change
-    $changeBy = new Client($ticket->createdByUser, '', '');
+    $session  = is_session_valid($db);
+    $changeBy = new Client($session->username, '', '');
+    $changeAt = time();
+    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status->status);
+    if (insert_new_change($change, $db) === null) {
+        return 'Error inserting the change';
+    }
+
+    return null;
+
+}
+
+
+function change_status(int $ticketId, string $status, PDO $db) : ?string
+{
+    $ticket = get_ticket($ticketId, $db);
+    if ($ticket === null) {
+        return 'Ticket not found';
+    }
+
+    $status = get_status($status, $db);
+    if ($status === null) {
+        return 'Status not found';
+    }
+
+    $ticket->status = $status;
+
+    if (update_ticket_status($ticket, $db) !== true) {
+        return 'Error updating ticket';
+    }
+
+    $session  = is_session_valid($db);
+    $changeBy = new Client($session->username, '', '');
     $changeAt = time();
     $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status->status);
     if (insert_new_change($change, $db) === null) {
@@ -228,7 +261,8 @@ function assign_ticket($ticketId, $user, $db)
     }
 
     // Creating a change
-    $changeBy = new Client($ticket->createdByUser, '', '');
+    $session  = is_session_valid($db);
+    $changeBy = new Client($session->username, '', '');
     $changeAt = time();
     $change   = new AssignedChange(0, $ticket->id, $changeAt, $changeBy, $ticket->assignee);
     if (insert_new_change($change, $db) === null) {
@@ -264,7 +298,8 @@ function unassign_ticket($ticketId, $db)
     }
 
     // Creating a change
-    $changeBy = new Client($ticket->createdByUser, '', ''); //TODO: Change to the user that unassigned the ticket
+    $session  = is_session_valid($db);
+    $changeBy = new Client($session->username, '', '');
     $changeAt = time();
     $change   = new AssignedChange(0, $ticket->id, $changeAt, $changeBy, $ticket->assignee);
     if (insert_new_change($change, $db) === null) {
