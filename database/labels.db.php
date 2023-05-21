@@ -74,6 +74,25 @@ function edit_label(string $label, string $color, string $backgroundColor, PDO $
 }
 
 
+function get_label(string $name, PDO $db) : ?Label
+{
+    $sql  = "SELECT * FROM Labels WHERE label=:label";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":label", $name);
+    $stmt->execute();
+
+    $a = $stmt->fetch();
+
+    if ($a === false) {
+        log_to_stdout("Something went wrong while getting $name", "e");
+        return null;
+    }
+
+    return new Label($a["label"], $a["color"], $a["backgroundColor"], $a["createdAt"]);
+
+}
+
+
 function delete_label(string $label, PDO $db) : bool
 {
     $sql  = "DELETE FROM Labels WHERE label=:label";

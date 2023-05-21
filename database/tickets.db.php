@@ -335,3 +335,27 @@ function update_ticket_assignee(Ticket $ticket, PDO $db) : bool
     return $stmt->execute();
 
 }
+
+
+function add_label_to_ticket(Ticket $ticket, Label $label, PDO $db) : bool
+{
+    $sql  = "INSERT INTO LabelTicket VALUES (:label, :ticket);";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ticket', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':label', $label->label);
+
+    return $stmt->execute();
+
+}
+
+
+function remove_label_from_ticket(Ticket $ticket, Label $label, PDO $db) : bool
+{
+    $sql  = "DELETE FROM LabelTicket WHERE ticket=:ticket AND label=:label;";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ticket', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':label', $label->label);
+
+    return $stmt->execute();
+
+}

@@ -392,6 +392,7 @@ if ($ticket === null) {
             <div class="side-card">
                 <h4 class="task-label">Labels</h4>
                 <div>
+                    <?php if (count($ticket->labels) === 0) : ?>
                     <p onclick="makeLabelsModal(
                         <?php
                             echo "'$loggedUser->type'";
@@ -400,6 +401,24 @@ if ($ticket === null) {
                         <i class="ri-price-tag-3-line"></i>
                         No labels assigned
                     </p>
+                    <?php else :?>
+                        <div class="tag-list" onclick="makeLabelsModal(
+                            <?php
+                            echo "'$loggedUser->type'";
+                            ?> )">
+
+                        <?php foreach ($ticket->labels as $label) :
+                            $labelName            = htmlspecialchars($label->label);
+                            $labelColor           = htmlspecialchars($label->color);
+                            $labelBackgroundColor = htmlspecialchars($label->backgroundColor);?>
+
+                            <div class="tag" style="color: <?php echo $labelColor?>; 
+                                    background-color: <?php echo $labelBackgroundColor?>;" onclick="makeEditModal('editLabel',this)">
+                                    <p style="color: <?php echo $labelColor?>;"><?php echo $labelName?></p>
+                            </div>
+                        <?php endforeach;
+                        ?></div>
+                    <?php endif;?>
                 </div>
             </div>
             <div class="side-card">
@@ -421,11 +440,7 @@ if ($ticket === null) {
                             <?php endif; ?>
                         </div>
                     <?php else : ?>
-                    <p onclick="makeDepartmentAssignModal(
-                        <?php
-                            echo "'$loggedUser->type'";
-                        ?>
-                    )">
+                    <p onclick="makeDepartmentAssignModal('<?php echo $loggedUser->type; ?>')">
                         <i class="ri-account-circle-line"></i>
                         Unassigned
                     </p>
