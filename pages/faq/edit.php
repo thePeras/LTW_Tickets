@@ -19,11 +19,6 @@ if ($session === null) {
     exit();
 }
 
-if (is_current_user_agent($db) === false) {
-    header("Location /");
-    exit();
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //TODO: csrf
     if (isset($_POST["title"]) === false || isset($_POST["content"]) === false

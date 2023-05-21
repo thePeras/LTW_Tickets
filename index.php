@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_URI"] === "/") {
             include $fullpath;
         } catch (Exception $e) {
             log_to_stdout($_SERVER["REQUEST_METHOD"]." - ".$_SERVER["REQUEST_URI"]." ERROR:".$e->getMessage(), "e");
+            log_to_stdout($e->getTraceAsString(), "e");
         }
     } else {
         api_route_error();
@@ -47,6 +48,7 @@ if ($_SERVER["REQUEST_URI"] === "/") {
             include $fullpath;
         } catch (Exception $e) {
             log_to_stdout($_SERVER["REQUEST_METHOD"]." - ".$_SERVER["REQUEST_URI"]." ERROR:".$e->getMessage(), "e");
+            log_to_stdout($e->getTraceAsString(), "e");
         }
     } else {
         if (preg_match("/^\/api\//", $_SERVER["REQUEST_URI"]) === 1) {

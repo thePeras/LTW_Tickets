@@ -4,6 +4,9 @@ require_once __DIR__.'/../utils/roles.php';
 require_once __DIR__.'/../utils/session.php';
 require_once __DIR__.'/../components/navbar/navbar.php';
 require_once __DIR__.'/../database/client.db.php';
+require_once __DIR__.'/../database/status.db.php';
+require_once __DIR__.'/../database/labels.db.php';
+
 require_once __DIR__.'/../database/department.db.php';
 require_once __DIR__.'/../components/user-table/user-table.php';
 require_once __DIR__.'/../components/department-table/department-table.php';
@@ -29,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: /");
         exit();
     }
+
 
     if ($_POST["action"] === "deleteUser" && isset($_POST["username"]) === true) {
         if ($_POST["username"] !== $session->username) {
@@ -61,6 +65,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($_POST["action"] === "deleteDepartment") {
         delete_department($_POST["name"], $db);
+    }
+
+    if ($_POST["action"] === "addLabel") {
+        add_label($_POST["name"], $_POST["color"], $_POST["backgroundColor"], $db);
+    }
+
+    if ($_POST["action"] === "addStatus") {
+        add_status($_POST["name"], $_POST["color"], $_POST["backgroundColor"], $db);
+    }
+
+    if ($_POST["action"] === "editStatus") {
+        edit_status($_POST["name"], $_POST["color"], $_POST["backgroundColor"], $db);
+    }
+
+    if ($_POST["action"] === "editLabel") {
+        edit_label($_POST["name"], $_POST["color"], $_POST["backgroundColor"], $db);
+    }
+
+    if ($_POST["action"] === "deleteLabel") {
+        delete_label($_POST["name"], $db);
+    }
+
+    if ($_POST["action"] === "deleteStatus") {
+        delete_status($_POST["name"], $db);
     }
 
     if ($_POST["action"] === "addMember") {
@@ -128,6 +156,13 @@ $tab    = ($_GET["tab"] ?? "users");
         }?>>
             <a href="?tab=departments">Departments</a>
         </li>
+        <li 
+        <?php
+        if ($tab === "label-status") {
+            echo 'class="active"';
+        }?>>
+            <a href="?tab=label-status">Labels & Status</a>
+        </li>
     </ul>
 
     <?php if ($tab === "users") :?>
@@ -157,6 +192,45 @@ $tab    = ($_GET["tab"] ?? "users");
             </div>
             <?php drawDepartmentTable($departments);
         endif;?>
+    
+    <?php if ($tab === "label-status") :
+        $labels   = get_all_labels($db);
+        $statuses = get_all_status($db);?>
+        <link rel="stylesheet" href="/css/label-status.css">
+        <script src="/js/label-status.js"></script>
+
+        <div class="label-status-button">
+            <button class="primary" onclick="makeNewModal('addLabel', 'Add new label')">Add new label</button>
+            <button class="primary" onclick="makeNewModal('addStatus', 'Add new status')">Add new status</button>
+        </div>      
+        <h2>Statuses</h2>
+        <div class="status-list">
+            <?php foreach ($statuses as $status) :
+                $statusName            = htmlspecialchars($status->status);
+                $statusColor           = htmlspecialchars($status->color);
+                $statusBackgroundColor = htmlspecialchars($status->backgroundColor);?>
+                <div class="tag" style="color: <?php echo $statusColor?>; 
+                        background-color: <?php echo $statusBackgroundColor?>;" onclick="makeEditModal('editStatus',this)">
+                        <p><?php echo $statusName?></p>
+                </div>
+                
+            <?php endforeach;?>
+            
+        </div>  
+        <h2>Labels</h2>
+        <div class="label-list">
+            <?php foreach ($labels as $label) :
+                $labelName            = htmlspecialchars($label->label);
+                $labelColor           = htmlspecialchars($label->color);
+                $labelBackgroundColor = htmlspecialchars($label->backgroundColor);?>
+                <div class="tag" style="color: <?php echo $labelColor?>; 
+                        background-color: <?php echo $labelBackgroundColor?>;" onclick="makeEditModal('editLabel',this)">
+                        <p><?php echo $labelName?></p>
+                </div>
+            <?php endforeach;?>
+        </div>  
+        
+    <?php endif;?>
         
 </main>    
 </body>

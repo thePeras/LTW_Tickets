@@ -11,7 +11,7 @@ require_once __DIR__.'/../database/faq.db.php';
 function create_ticket(string $title, string $description, PDO $db) : bool
 {
 
-    $ticket  = new Ticket($title, $description, time());
+    $ticket  = new Ticket($title, $description, time(), get_status('open', $db), []);
     $session = is_session_valid($db);
 
     $ticketId = insert_new_ticket($session, $ticket, $db);
@@ -121,13 +121,14 @@ function change_department(int $ticketId, string $department, PDO $db) : ?string
 
 function close_ticket(int $ticketId, ?int $faqId, PDO $db) : ?string
 {
+    $closed = get_status("closed", $db);
 
     $ticket = get_ticket($ticketId, $db);
     if ($ticket === null) {
         return 'Ticket not found';
     }
 
-    if ($ticket->status === 'closed') {
+    if ($ticket->status->status === 'closed') {
         return 'Ticket is already closed';
     }
 
@@ -140,7 +141,7 @@ function close_ticket(int $ticketId, ?int $faqId, PDO $db) : ?string
         $ticket->faq = $faq;
     }
 
-    $ticket->status = 'closed';
+    $ticket->status = $closed;
 
     if (update_ticket_status($ticket, $db) !== true) {
         return 'Error updating ticket';
@@ -149,7 +150,7 @@ function close_ticket(int $ticketId, ?int $faqId, PDO $db) : ?string
     // Creating a change
     $changeBy = new Client($ticket->createdByUser, '', '');
     $changeAt = time();
-    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status);
+    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status->status);
     if (insert_new_change($change, $db) === null) {
         return 'Error inserting the change';
     }
@@ -161,31 +162,33 @@ function close_ticket(int $ticketId, ?int $faqId, PDO $db) : ?string
 
 function open_ticket(int $ticketId, PDO $db) : ?string
 {
+    $open     = get_status("open", $db);
+    $assigned = get_status("assigned", $db);
 
     $ticket = get_ticket($ticketId, $db);
     if ($ticket === null) {
         return 'Ticket not found';
     }
 
-    if ($ticket->status !== 'closed') {
+    if ($ticket->status->status !== 'closed') {
         return 'Ticket is already open';
     }
 
-    $ticket->status = '';
+    $ticket->status = $open;
     if ($ticket->assignee->username !== '') {
-        $ticket->status = 'assigned';
+        $ticket->status = $assigned;
     }
 
     if (update_ticket_status($ticket, $db) !== true) {
         return 'Error updating ticket';
     }
 
-    $ticket->status = '';
+    $ticket->status = $open;
 
     // Creating a change
     $changeBy = new Client($ticket->createdByUser, '', '');
     $changeAt = time();
-    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status);
+    $change   = new StatusChange(0, $ticket->id, $changeAt, $changeBy, $ticket->status->status);
     if (insert_new_change($change, $db) === null) {
         return 'Error inserting the change';
     }
@@ -197,6 +200,9 @@ function open_ticket(int $ticketId, PDO $db) : ?string
 
 function assign_ticket($ticketId, $user, $db)
 {
+    $assigned = get_status("assigned", $db);
+    $closed   = get_status("closed", $db);
+
     $ticket = get_ticket($ticketId, $db);
     if ($ticket === null) {
         return 'Ticket not found';
@@ -213,8 +219,8 @@ function assign_ticket($ticketId, $user, $db)
         return 'Error updating ticket';
     }
 
-    if ($ticket->status !== 'closed') {
-        $ticket->status = 'assigned';
+    if ($ticket->status->status !== 'closed') {
+        $ticket->status = $assigned;
     }
 
     if (update_ticket_status($ticket, $db) !== true) {
@@ -236,6 +242,8 @@ function assign_ticket($ticketId, $user, $db)
 
 function unassign_ticket($ticketId, $db)
 {
+    $open = get_status("open", $db);
+
     $ticket = get_ticket($ticketId, $db);
     if ($ticket === null) {
         return 'Ticket not found';
@@ -247,8 +255,8 @@ function unassign_ticket($ticketId, $db)
         return 'Error updating ticket';
     }
 
-    if ($ticket->status === 'assigned') {
-        $ticket->status = '';
+    if ($ticket->status->status === 'assigned') {
+        $ticket->status = $open;
     }
 
     if (update_ticket_status($ticket, $db) !== true) {

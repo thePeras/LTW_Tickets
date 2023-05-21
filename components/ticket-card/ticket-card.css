@@ -22,21 +22,5 @@
   border-radius: 1rem;
   font-size: 0.8rem;
   margin-right: 0.5rem;
-  border: 1px solid #e8e8e9;
   color: #535353;
-}
-.ticket-card .tag.urgent {
-  background-color: #ffd8e4;
-  color: #ec1557;
-  border: none;
-}
-.ticket-card .tag.medium {
-  background-color: #e4f5ff;
-  color: #3b7ee0;
-  border: none;
-}
-.ticket-card .tag.low {
-  background-color: #e3fce7;
-  color: #229542;
-  border: none;
 }/*# sourceMappingURL=ticket-card.css.map */
