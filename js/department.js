@@ -166,28 +166,68 @@ function isOnScreen(element) {
 
 }
 
-function drawNewRow(jsonObject) {
+function drawNewRow(department) {
     const element = document.querySelector(".department-tbody");
     const tr = document.createElement("tr");
 
     tr.classList.add("department-entry");
 
     tr.innerHTML = `
-    <td>
-    <p class="department-name">${jsonObject["name"]}</p>
-    </td>
-    <td>
-        <p class="department-description">${jsonObject["description"]}</p>
-    </td>
-    <td>
-        <p class="department-members">${jsonObject["clients"].length} Members</p>
-    </td>
-    <td>
-        <i class="ri-edit-line icon" onclick="makeEditModal('${jsonObject["name"]} ')"></i>
-    </td>
-    <td>
-        <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('${jsonObject["name"]}')")></i>
-    </td>
+        <td>
+            <p class="department-name">${department.name}</p>
+        </td>
+        <td>
+            <p class="department-description">${department.description}</p>
+        </td>
+        <td>
+            <div class="department-members">
+            ${department.clients.length === 0 ? "0 members" : "2"}
+            <header>
+                ${department.clients
+            .map(
+                (member) =>
+                    `<img src="${member.image}" alt="${member.displayName}" class="department-member">`
+            )
+            .join("")}
+            </header>
+            ${department.clients.length !== 0
+            ? `<ul>
+                    ${department.clients
+                .map(
+                    (member) => `
+                        <li>
+                            <div>
+                                <img src="${member.image}" alt="${member.displayName}" class="department-member">
+                                <p>${member.displayName}</p>
+                            </div>
+                            <form method="post" action="/admin">
+                                <input type="hidden" name="department" value="${department.name}">
+                                <input type="hidden" name="user" value="${member.username}">
+                                <input type="hidden" name="action" value="removeMember">
+                                <input type="hidden" name="lastHref" value="/admin?tab=departments">
+                                <i class="ri-close-line" onclick="submitFatherForm(this)"></i>
+                            </form>
+                        </li>
+                        `
+                )
+                .join("")}
+                    </ul>`
+            : ""
+        }
+            </div>
+        </td>
+        <td>
+            <button class="white" onclick="makeUserModal('${department.name}')">
+                <i class="ri-user-add-line"></i>
+                Add member
+            </button>
+        </td>
+        <td>
+            <i class="ri-edit-line icon" onclick="makeEditModal('${department.name}')"></i>
+        </td>
+        <td>
+            <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('${department.name}')"></i>
+        </td>
     `;
 
     element.appendChild(tr);
@@ -212,7 +252,6 @@ const getNewTableData = async (ev) => {
             console.log(`Department list request failed with status ${res.status}`);
         }
         const resJson = await res.json();
-        console.log(resJson);
         if (resJson.length === 0) {
             end = true;
             return;
@@ -292,9 +331,9 @@ async function makeUserModal(departmentId) {
                 `;
                 suggestion.addEventListener("click", () => {
                     const form = document.createElement("form");
-                    form.display = "none";
+                    form.style.display = "none";
                     form.method = "POST";
-                    form.display = "none";
+                    form.style.display = "none";
                     form.action = '/admin'
                     const input = document.createElement("input");
                     input.name = "action";

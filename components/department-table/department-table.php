@@ -65,7 +65,6 @@ function drawDepartmentTable(array $departments)
                             <i class="ri-user-add-line"></i>
                             Add member
                         </button>
-
                     </td>
                     <td>
                         <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $department->name?>')"></i>

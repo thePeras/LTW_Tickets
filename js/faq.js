@@ -170,7 +170,6 @@ async function getNewFaqs(ev) {
             console.log(`FAQ list request failed with status ${res.status}`);
         }
         const resJson = await res.json();
-        console.log(resJson);
         if (resJson.length === 0) {
             end = true;
             return;
