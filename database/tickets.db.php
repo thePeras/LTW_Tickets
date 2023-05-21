@@ -70,7 +70,8 @@ class Ticket implements JsonSerializable
 function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
-    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+
+    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND (status != 'closed' OR status IS NULL) AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
@@ -209,7 +210,7 @@ function getAllTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
-    $sql  = "SELECT * FROM tickets WHERE status = 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $sql  = "SELECT * FROM tickets WHERE status = 'closed' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
