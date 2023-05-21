@@ -1,3 +1,7 @@
+const params = new URLSearchParams(location.href.split("?")[1] ?? '');
+var labels = [];
+var id = params.get("id");
+
 document.querySelectorAll(".ticket-card").forEach((ticketCard) => {
     ticketCard.addEventListener("click", (e) => {
         const id = e.currentTarget.dataset.id;
@@ -345,7 +349,11 @@ async function makeLabelsModal(usertype) {
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
 
-    //const res = await fetch(`/api/clients`, { method: "GET" });
+
+    const res = await fetch(`/api/tickets/${params.get("id")}`, { method: "GET" });
+
+    labels = (await res.json())["labels"].map((element) => element["label"]);
+
 
     const modalElement = document.createElement("div");
     modalElement.classList.add("modal");
@@ -366,19 +374,16 @@ async function makeLabelsModal(usertype) {
 
         <div class="main-edit-content">
             
-
+            <input type="text" class="label-search" placeholder="Search label...">
+            <ul class="suggestions">
+            </ul>
             <div class="modal-buttons">
-                <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
+                <input type="button" class="cancel-button" onclick="location.reload()" value="Cancel">
             </div>
         </div>
         `;
 
-    const searchField = document.createElement("input");
-    searchField.type = "text";
-    searchField.placeholder = "Search label...";
-
-    mainContent = modalContentElement.querySelector(".main-edit-content");
-    mainContent.parentNode.insertBefore(searchField, mainContent);
+    const searchField = document.querySelector(".label-search");
 
     searchField.addEventListener("input", async (e) => {
         const search = searchField.value;
@@ -393,6 +398,19 @@ async function makeLabelsModal(usertype) {
         }
 
         const resJson = await res.json();
+        console.log(resJson);
+        const suggestions = document.querySelector(".suggestions");
+        if(resJson.length === 0){
+            suggestions.classList.remove("has-suggestions")
+        }
+        suggestions.classList.add('has-suggestions');
+
+        innerHTMLString = '';
+        resJson.forEach((element) =>{
+            innerHTMLString += `<li class="suggestion-element" onclick="toggleLabel('${element["label"]}', this)" ${labels.includes(element["label"]) ? `style="background-color:#27ba06; color=white;"`: ''}>${element["label"]}</li>`
+        })
+        suggestions.innerHTML = innerHTMLString;
+
     });
 
     modalElement.style.display = "block";
@@ -421,6 +439,32 @@ function submitGrandFatherForm(e, element) {
     form.submit();
 }
 
+async function toggleLabel(labelName, element){
+    const removing = labels.includes(labelName);
+    const res = await fetch(`/api/tickets/${id}/labels`, 
+        {
+            method: labels.includes(labelName) ? "delete": "post", 
+            body: JSON.stringify({"label":labelName})
+        }
+    );
+
+    if(res.status !== 200){
+        console.log(`Something went wrong adding/removing label from ticket with status ${res.status}`);
+        return;
+    }
+    if(removing){
+        labels = labels.filter(label => label !== labelName);
+        element.style.backgroundColor = "white";
+    } else {
+        labels.push(labelName);
+        element.style.backgroundColor = "#27ba06";
+
+    }
+
+
+
+
+}
 
 //TODO: use this code for change status
 window.addEventListener("load", async () => {

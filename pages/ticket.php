@@ -115,6 +115,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         break;
+    case "changeStatus":
+        $ticketId = ($_POST["ticketId"] ?? null);
+        $ticketId = intval($ticketId);
+        $status   = ($_POST["status"] ?? "");
+        $error    = change_status($ticketId, $status, $db);
+        if ($error === null) {
+            $success = "Status changed to $status";
+        }
+        break;
     }
 }
 
@@ -141,6 +150,8 @@ if ($ticket === null) {
     );
 
     $departments = get_departments(0, 30, $db, false);
+
+    $allStatus = get_all_status($db);
 
     ?>
 
@@ -184,25 +195,22 @@ if ($ticket === null) {
                     Status:
                 </p>
                 <?php
-                $icons = [
-                    "Open"     => "ri-checkbox-blank-circle-line",
-                    "Closed"   => "ri-checkbox-circle-line",
-                    "Assigned" => "ri-donut-chart-line",
+                $icons  = [
+                    "open"     => "ri-checkbox-blank-circle-line",
+                    "closed"   => "ri-checkbox-circle-line",
+                    "assigned" => "ri-donut-chart-line",
                 ];
-
-                if ($ticket->status === "") {
-                    $status = "Open";
-                } else {
-                    $status = ucfirst($ticket->status);
-                }
+                $status = $ticket->status->status;
                 ?>
                     
-                <span data-status="<?php echo $status?>">
-                    <i class="<?php echo $icons[$status] ?>"></i>
-                    <?php echo $status ?>
+                <span style="background-color: <?php echo $ticket->status->backgroundColor?>; color: <?php echo $ticket->status->color?>;">
+                    <?php if (isset($icons[$status]) === true) :?>
+                        <i class="<?php echo $icons[$status] ?>"></i>
+                    <?php endif;?>
+                    <?php echo ucfirst($status) ?>
                 </span>
             </li>
-            <?php if ($ticket->status === "closed") {?>
+            <?php if ($ticket->status->status === "closed") {?>
                 <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                     <input type="hidden" name="action" value="open">
                     <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
@@ -234,7 +242,18 @@ if ($ticket === null) {
                                     ?>
                                 )">Close with FAQ</button>
                             </li>
-                            <!-- TODO: Add the others status here -->
+                            <?php foreach ($allStatus as $status) : ?>
+                                <li>
+                                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                                        <input type="hidden" name="action" value="changeStatus">
+                                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                        <input type="hidden" name="status" value="<?php echo $status->status ?>">
+                                        <button type = "button" onClick="submitFatherForm(event,this)"> 
+                                            <?php echo ucfirst($status->status) ?>
+                                        </button>
+                                    </form>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </li>
@@ -295,8 +314,12 @@ if ($ticket === null) {
                             </h4>
                             <?php if ($item->status === "closed") : ?>
                                 <p><b>closed</b> this ticket</p>
+                            <?php elseif ($item->status === "open") : ?>
+                                <p><b>reopened</b> this ticket</p>
                             <?php else : ?>
-                                <p><b>opened</b> this ticket</p>
+                                <p>change status to <b>
+                                    <?php echo $item->status ?>
+                                </b></p>
                             <?php endif; ?>
                             <p>
                                 <?php echo time_ago($item->timestamp) ?>
@@ -365,7 +388,7 @@ if ($ticket === null) {
         <div class="action-panel">
             <div class="side-card">
                 <h4 class="task-label">Assignee</h4>
-                <?php if ($ticket->assignee->username !== "") : ?>
+                <?php if ($ticket->assignee !== null) : ?>
                     <div class="user">
                         <div>
                             <img class="avatar" src="<?php echo $ticket->assignee->image ?>" alt="user">
@@ -395,6 +418,7 @@ if ($ticket === null) {
             <div class="side-card">
                 <h4 class="task-label">Labels</h4>
                 <div>
+                    <?php if (count($ticket->labels) === 0) : ?>
                     <p onclick="makeLabelsModal(
                         <?php
                             echo "'$loggedUser->type'";
@@ -403,6 +427,24 @@ if ($ticket === null) {
                         <i class="ri-price-tag-3-line"></i>
                         No labels assigned
                     </p>
+                    <?php else :?>
+                        <div class="tag-list" onclick="makeLabelsModal(
+                            <?php
+                            echo "'$loggedUser->type'";
+                            ?> )">
+
+                        <?php foreach ($ticket->labels as $label) :
+                            $labelName            = htmlspecialchars($label->label);
+                            $labelColor           = htmlspecialchars($label->color);
+                            $labelBackgroundColor = htmlspecialchars($label->backgroundColor);?>
+
+                            <div class="tag" style="color: <?php echo $labelColor?>; 
+                                    background-color: <?php echo $labelBackgroundColor?>;" onclick="makeEditModal('editLabel',this)">
+                                    <p style="color: <?php echo $labelColor?>;"><?php echo $labelName?></p>
+                            </div>
+                        <?php endforeach;
+                        ?></div>
+                    <?php endif;?>
                 </div>
             </div>
             <div class="side-card">
@@ -424,11 +466,7 @@ if ($ticket === null) {
                             <?php endif; ?>
                         </div>
                     <?php else : ?>
-                    <p onclick="makeDepartmentAssignModal(
-                        <?php
-                            echo "'$loggedUser->type'";
-                        ?>
-                    )">
+                    <p onclick="makeDepartmentAssignModal('<?php echo $loggedUser->type; ?>')">
                         <i class="ri-account-circle-line"></i>
                         Unassigned
                     </p>

@@ -1,4 +1,8 @@
 pragma foreign_keys = on;
+DROP TABLE IF EXISTS Status;
+DROP TABLE IF EXISTS Labels;
+DROP TABLE IF EXISTS StatusTicket;
+DROP TABLE IF EXISTS LabelTicket;
 DROP TABLE IF EXISTS FAQs;
 DROP TABLE IF EXISTS Admins;
 DROP TABLE IF EXISTS StatusChanges;
@@ -11,6 +15,8 @@ DROP TABLE IF EXISTS Comments;
 DROP TABLE IF EXISTS Tickets;
 DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS Clients;
+
+
 CREATE TABLE Clients(
     username TEXT PRIMARY KEY,
     email TEXT NOT NULL,
@@ -58,18 +64,19 @@ CREATE TABLE Tickets(
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     status TEXT,
-    hashtags TEXT,
     assignee TEXT,
     department TEXT,
     faq INTEGER,
     createdByUser TEXT NOT NULL,
     createdAt INTEGER NOT NULL,
 
+    FOREIGN KEY (status) REFERENCES Status(status) ON DELETE SET NULL,
     FOREIGN KEY (assignee) REFERENCES Agents(username) ON DELETE SET NULL,
     FOREIGN KEY (createdByUser) REFERENCES Clients(username) ON DELETE SET NULL,
     FOREIGN KEY (department) REFERENCES Departments(name) ON DELETE SET NULL,
     FOREIGN KEY (faq) REFERENCES FAQs(id) ON DELETE SET NULL
 );
+
 CREATE TABLE Comments(
     id INTEGER PRIMARY KEY,
     content TEXT NOT NULL,
@@ -79,6 +86,7 @@ CREATE TABLE Comments(
     FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
+
 CREATE TABLE Changes(
     id INTEGER PRIMARY KEY,
     timestamp INTEGER NOT NULL,
@@ -93,6 +101,7 @@ CREATE TABLE TicketsChanges(
     FOREIGN KEY (change) REFERENCES Changes(id),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
+
 CREATE TABLE AssignedChanges(
     agent TEXT,
     change INTEGER NOT NULL,
@@ -100,8 +109,38 @@ CREATE TABLE AssignedChanges(
     FOREIGN KEY (agent) REFERENCES Agents(username),
     FOREIGN KEY (change) REFERENCES Changes(id)
 );
+
 CREATE TABLE StatusChanges(
-    status TEXT NOT NULL,
+    status TEXT,
     change INTEGER PRIMARY KEY,
-    FOREIGN KEY (change) REFERENCES Changes(id)
+    FOREIGN KEY (change) REFERENCES Changes(id),
+    FOREIGN KEY (status) REFERENCES Status(status)
 );
+
+
+CREATE TABLE LabelTicket(
+    label TEXT,
+    ticket INTEGER,
+    PRIMARY KEY (label, ticket),
+    FOREIGN KEY (label) REFERENCES Labels(label) ON DELETE CASCADE,
+    FOREIGN KEY (ticket) REFERENCES Tickets(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Labels(
+    label TEXT PRIMARY KEY NOT NULL,
+    color TEXT NOT NULL DEFAULT "#ffffff",
+    backgroundColor TEXT NOT NULL DEFAULT "#ffffff",
+    createdAt INTEGER NOT NULL
+);
+
+CREATE TABLE Status(
+    status TEXT PRIMARY KEY NOT NULL,
+    color TEXT NOT NULL DEFAULT "#ffffff",
+    backgroundColor TEXT NOT NULL DEFAULT "#ffffff",
+    createdAt INTEGER NOT NULL
+);
+
+INSERT INTO Status Values ('open', '#ffffff', '#0d6e16', (SELECT UNIXEPOCH()));
+INSERT INTO Status Values ('closed', '#ffffff', '#8256d0', (SELECT UNIXEPOCH()));
+INSERT INTO Status Values ('assigned', '#ffffff', '#c17c3f', (SELECT UNIXEPOCH()));
+

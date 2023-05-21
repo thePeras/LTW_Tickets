@@ -23,22 +23,6 @@
             background-color: white;
             border-radius: 8px;
             padding: 0.6rem;
-            cursor: pointer;
-
-            &[data-status="Open"] {
-                background-color: #347d39;
-                color: white;
-            }
-
-            &[data-status="Closed"] {
-                background-color: #8256d0;
-                color: white;
-            }
-
-            &[data-status="Assigned"] {
-                background-color: #c17c3f;
-                color: white;
-            }
 
         }
     }
@@ -329,4 +313,27 @@
         align-items: center;
         gap: 0.4rem;
     }
+}
+
+.tag {
+    padding: 0.3rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    color: #535353;
+    width: fit-content;
+}
+
+.tag-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: start;
+    align-content: center;
+    
+}
+
+.suggestion-element{
+    margin: 0.5em 0em;
 }
