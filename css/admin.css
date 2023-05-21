@@ -129,6 +129,9 @@ table td:first-child {
 .department-table th:first-child {
   text-align: left;
 }
+.department-table td > button {
+  margin: 0 auto;
+}
 .department-table td {
   padding: 0.5rem 1rem;
   text-align: center;
@@ -149,20 +152,57 @@ table td:first-child {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.department-table .department-entry .department-members {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding-left: 0;
+  justify-content: center;
+  position: relative;
+}
+.department-table .department-entry .department-members:hover ul {
+  display: flex;
+}
+.department-table .department-entry .department-members img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+.department-table .department-entry .department-members ul {
+  text-align: center;
+  position: absolute;
+  top: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1;
+  list-style-type: none;
+}
+.department-table .department-entry .department-members ul li {
+  padding: 0 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.department-table .department-entry .department-members ul li div {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.department-table .department-entry .department-members ul li i {
+  font-size: 1.2em;
+  cursor: pointer;
+}
 
 i.delete {
   color: #c01104;
 }
 
-.add-new-department-modal .submit-button {
-  background-color: #06ad00;
-  color: white;
-  border: 0;
-}
-.add-new-department-modal .submit-button:hover {
-  background-color: #027700;
-  opacity: 1;
-}
 .add-new-department-modal .modal-buttons {
   margin-top: 1em;
 }/*# sourceMappingURL=admin.css.map */
