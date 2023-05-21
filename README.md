@@ -2,7 +2,7 @@
 
 - Francisco da Ana      | 202108762 |
 - João Pereira          | 202108848 |
-- Luís Duarte           | XXXXXXXXX |
+- Luís Duarte           | 202108734 |
 
 
 ## How to run
