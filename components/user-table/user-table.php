@@ -40,17 +40,17 @@ function drawUserTable(array $clients)
     <?php foreach ($clients as $client) :?>
     <tr class="user-entry">
         <td class="user-info">
-            <img class="user-photo" src="<?php echo $client->image?>" alt="user">
+            <img class="user-photo" src="<?php echo htmlspecialchars($client->image)?>" alt="user">
             <div class="user-name">
-                <p><?php echo $client->displayName?></p>
-                <p><?php echo $client->username?></p>
+                <p><?php echo htmlspecialchars($client->displayName)?></p>
+                <p><?php echo htmlspecialchars($client->username)?></p>
             </div>
         </td>
         <td>
-            <a href="mailto:<?php echo $client->email?>" ><?php echo $client->email?></a>
+            <a href="mailto:<?php echo htmlspecialchars($client->email)?>" ><?php echo htmlspecialchars($client->email)?></a>
         </td>
         <td>
-            <p class="role <?php echo $client->type?>"><?php echo ucfirst($client->type)?></p>
+            <p class="role <?php echo htmlspecialchars($client->type)?>"><?php echo htmlspecialchars(ucfirst($client->type))?></p>
         </td>
         <td>
             <p><?php
@@ -60,10 +60,10 @@ function drawUserTable(array $clients)
             ?></p>
         </td>
         <td>
-            <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $client->username?>')"></i>
+            <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo htmlspecialchars($client->username)?>')"></i>
         </td>
         <td>
-            <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo $client->username?>')"></i>
+            <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo htmlspecialchars($client->username)?>')"></i>
         </td>
     </tr>
     <?php endforeach;?>

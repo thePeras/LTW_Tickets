@@ -11,7 +11,16 @@ $expiryTime = (60 * 60 * 24);
 function set_cookie_session(Session $session)
 {
     global $expiryTime;
-    setcookie('sessionID', $session->token, (time() + $expiryTime), '/', httponly:true);
+    setcookie(
+        'sessionID',
+        $session->token,
+        [
+            'expires'  => (time() + $expiryTime),
+            'path'     => '/',
+            'httponly' => true,
+            "samesite" => "Strict",
+        ]
+    );
 
 }
 

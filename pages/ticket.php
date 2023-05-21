@@ -160,7 +160,7 @@ if ($ticket === null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket #<?php echo $ticket->id ?></title>
+    <title>Ticket #<?php echo htmlspecialchars($ticket->id)?></title>
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
@@ -185,9 +185,9 @@ if ($ticket === null) {
         echo "<script>snackbar('$success', 'success')</script>";
     }
     ?>
-    <input type="hidden" id="ticketId" value="<?php echo $ticket->id ?>">
+    <input type="hidden" id="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
     <main class="ticket-page">
-        <h1><?php echo "$ticket->title #$ticket->id"?></h1>
+        <h1><?php echo htmlspecialchars("$ticket->title #$ticket->id")?></h1>
         <ul id="buttons">
             <li class="status"> <!-- Status: Open -->
                 <p>
@@ -203,17 +203,17 @@ if ($ticket === null) {
                 $status = $ticket->status->status;
                 ?>
                     
-                <span style="background-color: <?php echo $ticket->status->backgroundColor?>; color: <?php echo $ticket->status->color?>;">
+                <span style="background-color: <?php echo htmlspecialchars($ticket->status->backgroundColor)?>; color: <?php echo htmlspecialchars($ticket->status->color)?>;">
                     <?php if (isset($icons[$status]) === true) :?>
-                        <i class="<?php echo $icons[$status] ?>"></i>
+                        <i class="<?php echo htmlspecialchars($icons[$status])?>"></i>
                     <?php endif;?>
-                    <?php echo ucfirst($status) ?>
+                    <?php echo htmlspecialchars(ucfirst($status))?>
                 </span>
             </li>
             <?php if ($ticket->status->status === "closed") {?>
                 <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                     <input type="hidden" name="action" value="open">
-                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                    <input type="hidden" name="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
                     <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
                         <i class="ri-book-open-line"></i>
                         Reopen ticket 
@@ -221,9 +221,9 @@ if ($ticket === null) {
                 </form>
             <?php } else { ?>
                 <li>
-                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                    <form method="post" action="ticket?id=<?php echo htmlspecialchars($ticket->id)?>">
                         <input type="hidden" name="action" value="close">
-                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                        <input type="hidden" name="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
                         <button type = "button" onClick="submitFatherForm(event,this)"> 
                             <i class="ri-archive-line"></i>
                             Close ticket 
@@ -265,16 +265,16 @@ if ($ticket === null) {
             <div class="ticket-comment">
                 <div class="user-comment">
                     <div class="user">
-                        <img class="avatar" src="<?php echo $author->image ?>" alt="user">
+                        <img class="avatar" src="<?php echo htmlspecialchars($author->image)?>" alt="user">
                         <h3>
-                            <?php echo $author->displayName ?>
+                            <?php echo htmlspecialchars($author->displayName)?>
                         </h3>
                         <p>
-                            <?php echo time_ago($ticket->createdAt) ?>
+                            <?php echo htmlspecialchars(time_ago($ticket->createdAt))?>
                         </p>
                     </div>
                     <p>
-                        <?php echo $ticket->description ?>
+                        <?php echo htmlspecialchars($ticket->description)?>
                     </p>
                 </div>
             </div>
@@ -285,32 +285,32 @@ if ($ticket === null) {
                 <?php if (($item instanceof AssignedChange) === true) : ?> 
                         <div class="event">
                             <img class="avatar" src="
-                                <?php echo $item->user->image ?>
+                                <?php echo htmlspecialchars($item->user->image)?>
                             " alt="user">
                             <div>
                                 <h4>
-                                    <?php echo $item->user->displayName?>
+                                    <?php echo htmlspecialchars($item->user->displayName)?>
                                 </h4>
                                 <?php if ($item->agent->username === "") : ?>
                                     <p>remove <b>assigned</b> from ticket</p>
                                 <?php else : ?>
                                 <p><b>assign</b> this ticket to 
-                                    <b><?php echo $item->agent->displayName ?></b>
+                                    <b><?php echo htmlspecialchars($item->agent->displayName)?></b>
                                 </p>
                                 <?php endif; ?>
                                 <p>
-                                    <?php echo time_ago($item->timestamp) ?>
+                                    <?php echo htmlspecialchars(time_ago($item->timestamp))?>
                                 </p>
                             </div>
                         </div>
                 <?php ; elseif (($item instanceof StatusChange) === true) :?> 
                     <div class="event">
                         <img class="avatar" src="
-                            <?php echo $item->user->image ?>
+                            <?php echo htmlspecialchars($item->user->image)?>
                         " alt="user">
                         <div>
                             <h4>
-                                <?php echo $item->user->displayName?>
+                                <?php echo htmlspecialchars($item->user->displayName)?>
                             </h4>
                             <?php if ($item->status === "closed") : ?>
                                 <p><b>closed</b> this ticket</p>
@@ -322,7 +322,7 @@ if ($ticket === null) {
                                 </b></p>
                             <?php endif; ?>
                             <p>
-                                <?php echo time_ago($item->timestamp) ?>
+                                <?php echo htmlspecialchars(time_ago($item->timestamp))?>
                             </p>
                         </div>
                     </div>
@@ -332,15 +332,15 @@ if ($ticket === null) {
                         <div class="user-comment">
                             <div class="user">
                                 <img class="avatar" src="
-                                    <?php echo $item->createdByUser->image ?>
+                                    <?php echo htmlspecialchars($item->createdByUser->image)?>
                                 " alt="user" />
-                                <h3><?php echo $item->createdByUser->displayName ?></h3>
+                                <h3><?php echo htmlspecialchars($item->createdByUser->displayName)?></h3>
                                 <p>
-                                    <?php echo time_ago($item->timestamp) ?>
+                                    <?php echo htmlspecialchars(time_ago($item->timestamp))?>
                                 </p>
                             </div>
                             <p>
-                                <?php echo $item->content ?>
+                                <?php echo htmlspecialchars($item->content)?>
                             </p>
                         </div>
                     </div>
@@ -355,31 +355,31 @@ if ($ticket === null) {
                     <div class="user-comment">
                         <h3>
                             <i class="ri-question-line"></i>
-                            Ticket closed with FAQ <a href="/faq/<?php echo $id ?>">#<?php echo $id ?></a>
+                            Ticket closed with FAQ <a href="/faq/<?php echo htmlspecialchars($id) ?>">#<?php echo htmlspecialchars($id)?></a>
                         </h3>
                         <?php
                         $content = explode("\n", $ticket->faq->content);
                         foreach ($content as $paragraph) : ?>
                             <p>
-                                <?php echo $paragraph ?>
+                                <?php echo htmlspecialchars($paragraph)?>
                             </p>
                         <?php endforeach; ?>
                         <h3>
                             From original question: 
                         </h3>
                         <p class="original-question">
-                            <?php echo $ticket->faq->title ?>
+                            <?php echo htmlspecialchars($ticket->faq->title)?>
                         </p>
                     </div>
                 </div>
             <?php endif; ?>
         </div>
 
-        <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+        <form method="post" action="ticket?id=<?php echo htmlspecialchars($ticket->id)?>">
             <div class="comment-box top-line">
                 <h3>New comment</h3>
                 <textarea name="content" cols="30" rows="10" placeholder="Write your comment"></textarea>
-                <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                <input type="hidden" name="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
                 <input type="hidden" name="action" value="comment">
                 <input type="submit" class="primary" value="Send">
             </div>
@@ -391,15 +391,15 @@ if ($ticket === null) {
                 <?php if ($ticket->assignee !== null) : ?>
                     <div class="user">
                         <div>
-                            <img class="avatar" src="<?php echo $ticket->assignee->image ?>" alt="user">
-                            <?php echo $ticket->assignee->displayName ?>
+                            <img class="avatar" src="<?php echo htmlspecialchars($ticket->assignee->image)?>" alt="user">
+                            <?php echo htmlspecialchars($ticket->assignee->displayName)?>
                         </div>
                         <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
                             <form method="POST" action="
-                                <?php echo "ticket?id=$ticket->id" ?>
+                                <?php echo htmlspecialchars("ticket?id=$ticket->id")?>
                             ">
                                 <input type="hidden" name="action" value="unassign">
-                                <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                <input type="hidden" name="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
                                 <i class="ri-close-line" onclick="submitFatherForm(event, this)"></i>
                             </form>
                         <?php endif; ?>
@@ -438,9 +438,9 @@ if ($ticket === null) {
                             $labelColor           = htmlspecialchars($label->color);
                             $labelBackgroundColor = htmlspecialchars($label->backgroundColor);?>
 
-                            <div class="tag" style="color: <?php echo $labelColor?>; 
-                                    background-color: <?php echo $labelBackgroundColor?>;" onclick="makeEditModal('editLabel',this)">
-                                    <p style="color: <?php echo $labelColor?>;"><?php echo $labelName?></p>
+                            <div class="tag" style="color: <?php echo htmlspecialchars($labelColor)?>; 
+                                    background-color: <?php echo htmlspecialchars($labelBackgroundColor)?>;" onclick="makeEditModal('editLabel',this)">
+                                    <p style="color: <?php echo htmlspecialchars($labelColor)?>;"><?php echo htmlspecialchars($labelName)?></p>
                             </div>
                         <?php endforeach;
                         ?></div>
@@ -453,20 +453,20 @@ if ($ticket === null) {
                         <div class="user">
                             <div>
                                 <span><i class="ri-building-4-line"></i></span>
-                                <?php echo $ticket->department ?>
+                                <?php echo htmlspecialchars($ticket->department)?>
                             </div>
                             <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
                                 <form method="POST" action="
-                                    <?php echo "ticket?id=$ticket->id" ?>
+                                    <?php echo htmlspecialchars("ticket?id=$ticket->id")?>
                                 ">
                                     <input type="hidden" name="action" value="changeDepartment">
-                                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                    <input type="hidden" name="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
                                     <i class="ri-close-line" onclick="submitFatherForm(event, this)"></i>
                                 </form>
                             <?php endif; ?>
                         </div>
                     <?php else : ?>
-                    <p onclick="makeDepartmentAssignModal('<?php echo $loggedUser->type; ?>')">
+                    <p onclick="makeDepartmentAssignModal('<?php echo htmlspecialchars(htmlspecialchars($loggedUser->type))?>')">
                         <i class="ri-account-circle-line"></i>
                         Unassigned
                     </p>

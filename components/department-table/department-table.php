@@ -20,10 +20,10 @@ function drawDepartmentTable(array $departments)
             <?php foreach ($departments as $department) :?>
                 <tr class="department-entry">
                     <td>
-                        <p class="department-name"><?php echo $department->name?></p>
+                        <p class="department-name"><?php echo htmlspecialchars($department->name)?></p>
                     </td>
                     <td>
-                        <p class="department-description"><?php echo $department->description?></p>
+                        <p class="department-description"><?php echo htmlspecialchars($department->description)?></p>
                     </td>
                     <td>
                         <div class="department-members">
@@ -67,10 +67,10 @@ function drawDepartmentTable(array $departments)
                         </button>
                     </td>
                     <td>
-                        <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $department->name?>')"></i>
+                        <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo htmlspecialchars($department->name)?>')"></i>
                     </td>
                     <td>
-                        <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo $department->name?>')")></i>
+                        <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo htmlspecialchars($department->name)?>')")></i>
                     </td>
                 </tr>
                 <?php

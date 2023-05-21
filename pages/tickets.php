@@ -52,7 +52,7 @@ layout_start();
 <h1>Tickets</h1>
 <ul id="buttons">
     <li>
-        <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars($text); ?>">
+        <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars(htmlspecialchars($text))?>">
     </li>
     <li>
         <select id="sortSelect" onchange="handleSortOptionChange(this.value)">
@@ -76,31 +76,31 @@ layout_start();
     if ($tab === "unassigned" || $tab === null) {
         echo 'class="active"';
     } ?>>
-        <a href="?tab=unassigned&text=<?php echo urlencode($text); ?>">Unassigned</a>
+        <a href="?tab=unassigned&text=<?php echo htmlspecialchars(urlencode($text))?>">Unassigned</a>
     </li>
     <li <?php
     if ($tab === "assignedToMe") {
         echo 'class="active"';
     } ?>>
-        <a href="?tab=assignedToMe&text=<?php echo urlencode($text); ?>">Assigned to me</a>
+        <a href="?tab=assignedToMe&text=<?php echo htmlspecialchars(urlencode($text))?>">Assigned to me</a>
     </li>
     <li <?php
     if ($tab === "createdByMe") {
         echo 'class="active"';
     } ?>>
-        <a href="?tab=createdByMe&text=<?php echo urlencode($text); ?>">Created by me</a>
+        <a href="?tab=createdByMe&text=<?php echo htmlspecialchars(urlencode($text))?>">Created by me</a>
     </li>
     <li <?php
     if ($tab === "allTickets") {
         echo 'class="active"';
     } ?>>
-        <a href="?tab=allTickets&text=<?php echo urlencode($text); ?>">All tickets</a>
+        <a href="?tab=allTickets&text=<?php echo htmlspecialchars(urlencode($text))?>">All tickets</a>
     </li>
     <li <?php
     if ($tab === "archived") {
         echo 'class="active"';
     } ?>>
-        <a href="?tab=archived&text=<?php echo urlencode($text); ?>">Archived</a>
+        <a href="?tab=archived&text=<?php echo htmlspecialchars(urlencode($text))?>">Archived</a>
     </li>
 </ul>
 
