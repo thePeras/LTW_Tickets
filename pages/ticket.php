@@ -115,6 +115,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         break;
+    case "changeStatus":
+        $ticketId = ($_POST["ticketId"] ?? null);
+        $ticketId = intval($ticketId);
+        $status   = ($_POST["status"] ?? "");
+        $error    = change_status($ticketId, $status, $db);
+        if ($error === null) {
+            $success = "Status changed to $status";
+        }
+        break;
     }
 }
 
@@ -141,6 +150,8 @@ if ($ticket === null) {
     );
 
     $departments = get_departments(0, 30, $db, false);
+
+    $allStatus = get_all_status($db);
 
     ?>
 
@@ -199,8 +210,8 @@ if ($ticket === null) {
                     <?php echo htmlspecialchars(ucfirst($status))?>
                 </span>
             </li>
-            <?php if ($ticket->status === "closed") {?>
-                <form method="post" action="ticket?id=<?php echo htmlspecialchars($ticket->id)?>">
+            <?php if ($ticket->status->status === "closed") {?>
+                <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                     <input type="hidden" name="action" value="open">
                     <input type="hidden" name="ticketId" value="<?php echo htmlspecialchars($ticket->id)?>">
                     <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
@@ -231,7 +242,18 @@ if ($ticket === null) {
                                     ?>
                                 )">Close with FAQ</button>
                             </li>
-                            <!-- TODO: Add the others status here -->
+                            <?php foreach ($allStatus as $status) : ?>
+                                <li>
+                                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                                        <input type="hidden" name="action" value="changeStatus">
+                                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                        <input type="hidden" name="status" value="<?php echo $status->status ?>">
+                                        <button type = "button" onClick="submitFatherForm(event,this)"> 
+                                            <?php echo ucfirst($status->status) ?>
+                                        </button>
+                                    </form>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </li>
@@ -292,8 +314,12 @@ if ($ticket === null) {
                             </h4>
                             <?php if ($item->status === "closed") : ?>
                                 <p><b>closed</b> this ticket</p>
+                            <?php elseif ($item->status === "open") : ?>
+                                <p><b>reopened</b> this ticket</p>
                             <?php else : ?>
-                                <p><b>opened</b> this ticket</p>
+                                <p>change status to <b>
+                                    <?php echo $item->status ?>
+                                </b></p>
                             <?php endif; ?>
                             <p>
                                 <?php echo htmlspecialchars(time_ago($item->timestamp))?>
