@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+require_once __DIR__."/status.db.php";
+require_once __DIR__."/labels.db.php";
+
+
 class Ticket
 {
 
@@ -11,9 +15,9 @@ class Ticket
 
     public readonly string $description;
 
-    public readonly string $status;
+    public readonly Status $status;
 
-    public readonly string $hashtags;
+    public readonly array $labels;
 
     public readonly ?string $assignee;
 
@@ -30,8 +34,8 @@ class Ticket
             "id"            => $this->id,
             "title"         => $this->title,
             "description"   => $this->description,
-            "status"        => $this->status,
-            "hashtags"      => $this->hashtags,
+            "status"        => json_encode($this->status),
+            "labels"        => json_encode($this->labels),
             "assignee"      => $this->assignee,
             "createdByUser" => $this->createdByUser,
             "createdAt"     => $this->createdAt,
@@ -43,14 +47,14 @@ class Ticket
     }
 
 
-    public function __construct($id, string $title, string $description, string $status,
-        string $hashtags, ?string $assignee, string $createdByUser, string $department, ?int $_createdAt=null
+    public function __construct($id, string $title, string $description, Status $status,
+        array $labels, ?string $assignee, string $createdByUser, string $department, ?int $_createdAt=null
     ) {
         $this->id            = $id;
         $this->title         = $title;
         $this->description   = $description;
         $this->status        = $status;
-        $this->hashtags      = $hashtags;
+        $this->labels        = $labels;
         $this->assignee      = ($assignee ?? null);
         $this->createdByUser = $createdByUser;
         $this->createdAt     = ($_createdAt ?? time());
@@ -88,6 +92,55 @@ class Ticket
 }
 
 
+function create_ticket_object(array $ticket, PDO $db) : Ticket
+{
+    $sql  = "SELECT * FROM Status WHERE status=:status";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":status", $ticket["status"]);
+    $stmt->execute();
+
+    $result = $stmt->fetch();
+
+    $status = new Status(
+        $result["status"],
+        $result["color"],
+        $result["backgroundColor"],
+        $result["createdAt"]
+    );
+
+    $sql  = "SELECT * FROM LabelTicket l JOIN Labels h ON h.label=l.label WHERE ticket=:id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":id", $ticket["id"], PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    $labels = array_map(
+        function (array $a): Label {
+            return new Label(
+                $a["label"],
+                $a["color"],
+                $a["backgroundColor"],
+                $a["createdAt"]
+            );
+        },
+        $result
+    );
+
+    return new Ticket(
+        $ticket["id"],
+        $ticket["title"],
+        $ticket["description"],
+        $status,
+        $labels,
+        $ticket["assignee"],
+        $ticket["createdByUser"],
+        $ticket["department"],
+        $ticket["createdAt"]
+    );
+
+};
+
+
 function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
@@ -104,17 +157,7 @@ function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): arra
     $tickets = [];
 
     foreach ($result as $ticket) {
-        $tickets[] = new Ticket(
-            $ticket["id"],
-            $ticket["title"],
-            $ticket["description"],
-            $ticket["status"],
-            $ticket["hashtags"],
-            $ticket["assignee"],
-            $ticket["createdByUser"],
-            $ticket["department"],
-            $ticket["createdAt"]
-        );
+        $tickets[] = create_ticket_object($ticket, $db);
     }
 
     return $tickets;
@@ -138,17 +181,7 @@ function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortO
     $tickets = [];
 
     foreach ($result as $ticket) {
-        $tickets[] = new Ticket(
-            $ticket["id"],
-            $ticket["title"],
-            $ticket["description"],
-            $ticket["status"],
-            $ticket["hashtags"],
-            $ticket["assignee"],
-            $ticket["createdByUser"],
-            $ticket["department"],
-            $ticket["createdAt"]
-        );
+        $tickets[] = create_ticket_object($ticket, $db);
     }
 
     return $tickets;
@@ -172,17 +205,7 @@ function getTicketsCreatedBy(string $username, PDO $db, $limit, $offset, $sortOr
     $tickets = [];
 
     foreach ($result as $ticket) {
-        $tickets[] = new Ticket(
-            $ticket["id"],
-            $ticket["title"],
-            $ticket["description"],
-            $ticket["status"],
-            $ticket["hashtags"],
-            $ticket["assignee"],
-            $ticket["createdByUser"],
-            $ticket["department"],
-            $ticket["createdAt"]
-        );
+        $tickets[] = create_ticket_object($ticket, $db);
     }
 
     return $tickets;
@@ -205,17 +228,7 @@ function getAllTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
     $tickets = [];
 
     foreach ($result as $ticket) {
-        $tickets[] = new Ticket(
-            $ticket["id"],
-            $ticket["title"],
-            $ticket["description"],
-            $ticket["status"],
-            $ticket["hashtags"],
-            $ticket["assignee"],
-            $ticket["createdByUser"],
-            $ticket["department"],
-            $ticket["createdAt"]
-        );
+        $tickets[] = create_ticket_object($ticket, $db);
     }
 
     return $tickets;
@@ -238,17 +251,7 @@ function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
     $tickets = [];
 
     foreach ($result as $ticket) {
-        $tickets[] = new Ticket(
-            $ticket["id"],
-            $ticket["title"],
-            $ticket["description"],
-            $ticket["status"],
-            $ticket["hashtags"],
-            $ticket["assignee"],
-            $ticket["createdByUser"],
-            $ticket["department"],
-            $ticket["createdAt"]
-        );
+        $tickets[] = create_ticket_object($ticket, $db);
     }
 
     return $tickets;

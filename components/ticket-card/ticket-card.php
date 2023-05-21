@@ -7,15 +7,19 @@ function ticketCard(Ticket $ticket)
     $id          = $ticket->id;
     $title       = htmlspecialchars($ticket->title);
     $description = htmlspecialchars($ticket->description);
-    $status      = htmlspecialchars($ticket->status);
-    $timeAgo     = $ticket->getTimeAgo();
-    $hashtags    = htmlspecialchars($ticket->hashtags);
+    $status      = htmlspecialchars($ticket->status->status);
+    $statusColor = htmlspecialchars($ticket->status->color);
+    $statusBackgroundColor = htmlspecialchars($ticket->status->backgroundColor);
 
-    $hashtags = explode(",", $hashtags);
+    $timeAgo = $ticket->getTimeAgo();
 
     $tags = '';
-    foreach ($hashtags as $hashtag) {
-        $tags .= "<span class='tag'>$hashtag</span>";
+    foreach ($ticket->labels as $label) {
+        $labelName            = htmlspecialchars($label->label);
+        $labelColor           = htmlspecialchars($label->color);
+        $labelBackgroundColor = htmlspecialchars($label->backgroundColor);
+
+        $tags .= "<span class='tag' style='color:$labelColor; background-color: $labelBackgroundColor'>$labelName</span>";
     }
     ?>        
         <div class="ticket-card" onclick="location.href = '/ticket/<?php echo $id?>'">
@@ -24,7 +28,10 @@ function ticketCard(Ticket $ticket)
             <p><?php echo $description?></p>
             <footer>
                 <div>
-                    <span class="tag"><?php echo $status?></span>
+                    <span class="tag" style="color: <?php echo $statusColor?>; 
+                        background-color: <?php echo $statusBackgroundColor?>;">
+                        <?php echo $status?>
+                    </span>
                     <?php echo $tags?>
                 </div>
                 <!---

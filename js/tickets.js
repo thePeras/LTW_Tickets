@@ -33,8 +33,13 @@ function drawNewTicketCard(jsonObject) {
         <p>${jsonObject['description']}</p>
         <footer>
             <div>  
-                <span class="tag">${jsonObject['status']}</span>
-                ${jsonObject['hashtags'].split(',').map(hashtag => `<span class="tag">${hashtag}</span>`).join('')}
+                <span class="tag" style="background-color:${jsonObject['status']['backgroundColor']}; color:${jsonObject['status']['color']}">
+                    ${jsonObject['status']['status']}
+                </span>
+                ${jsonObject['labels'].map(
+                    label => `<span class="tag" style="background-color:${label["backgroundColor"]}; color:${label["color"]}">${label["label"]}</span>`)
+                    .join('')
+                }
             </div>
             
         </footer>
@@ -67,6 +72,7 @@ const getMoreTicketsData = async (ev) => {
             return;
         }
         resJson.forEach(drawNewTicketCard);
+        addBorderTag();
         fetchingTickets = false;
 
     }
@@ -115,6 +121,7 @@ async function fetchTickets() {
     }
 
     resJson.map(drawNewTicketCard);
+    addBorderTag();
     fetchingTickets = false;
 }
 
@@ -123,4 +130,14 @@ const searchDebounce = debounce(searchNewParam, 300);
 document.addEventListener("DOMContentLoaded", (ev) => {
     const search = document.querySelector("#search");
     search.addEventListener("input", searchDebounce);
+    addBorderTag();
 });
+
+function addBorderTag(){
+    const tags = document.querySelectorAll(".tag");
+    tags.forEach((element) => {
+        if(element.style.backgroundColor === "rgb(255, 255, 255)"){
+            element.style.border = "1px solid #e8e8e9";
+        }
+    })
+}
