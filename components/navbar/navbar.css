@@ -2,6 +2,14 @@
   display: none;
 }
 
+nav .logo h1 {
+  text-align: center;
+}
+nav .logo h1 a {
+  text-decoration: none;
+  color: #363c4c;
+}
+
 label[for=navbar-checkbox] {
   position: fixed;
   top: 0;
@@ -189,4 +197,6 @@ nav.sidebar .login {
     align-items: center;
     gap: 0.2rem;
   }
-}/*# sourceMappingURL=navbar.css.map */
+}
+
+/*# sourceMappingURL=navbar.css.map */
