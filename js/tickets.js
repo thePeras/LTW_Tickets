@@ -61,12 +61,10 @@ const getMoreTicketsData = async (ev) => {
         console.log("fetching new ticket data...");
         const res = await fetch(`/api/tickets?limit=10&offset=${offset + element.children.length}${sortOrder !== '' ? `&sortOrder=${sortOrder}` : ''}&tab=${tab}${searchInput !== '' ? `&text=${searchInput}` : ''}`,
             { method: "GET" });
-        console.log(res.url);
         if (res.status !== 200) {
             console.log(`Users list request failed with status ${res.status}`);
         }
         const resJson = await res.json();
-        console.log(resJson);
         if (resJson.length === 0) {
             end = true;
             return;

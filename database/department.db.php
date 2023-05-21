@@ -36,7 +36,7 @@ class Department implements JsonSerializable
 }
 
 
-function get_departments(?int $limit, int $offset, PDO $db, $returnClients=true) : array
+function get_departments(?int $limit, int $offset, PDO $db, bool $returnClients=true) : array
 {
     $sql = "SELECT * FROM Departments";
     if ($limit !== null) {
@@ -72,13 +72,11 @@ function get_departments(?int $limit, int $offset, PDO $db, $returnClients=true)
         return array_map(
             function (array $a) use ($db) {
                 $department = new Department($a["name"], $a["description"]);
-
-                $sql  = "SELECT * FROM AgentDepartments ad WHERE department=:department";
-                $stmt = $db->prepare($sql);
-                $stmt->bindParam(":department", $a["name"], PDO::PARAM_INT);
+                $sql        = "SELECT * FROM AgentDepartments ad WHERE department=:department";
+                $stmt       = $db->prepare($sql);
+                $stmt->bindParam(":department", $a["name"]);
                 $stmt->execute();
-                $userData = $stmt->fetchAll();
-
+                $userData            = $stmt->fetchAll();
                 $department->clients = array_map(
                     function (array $a) use ($db) {
                         return get_user($a["agent"], $db);
@@ -137,10 +135,14 @@ function get_department(?string $name, PDO $db) : ?Department
 function add_department(string $name, string $description, array $members, PDO $db)
 {
 
-    $sql = "INSERT INTO Departments VALUES (:namee, :description)";
+    $sql = "INSERT INTO Departments (name, description)
+        SELECT :name, :description
+        WHERE NOT EXISTS (
+            SELECT 1 FROM Departments WHERE name= :name
+        )";
 
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(":namee", $name);
+    $stmt->bindParam(":name", $name);
     $stmt->bindParam(":description", $description);
 
     if ($stmt->execute() === false) {
@@ -166,9 +168,16 @@ function add_department(string $name, string $description, array $members, PDO $
 }
 
 
-function edit_department(string $name, string $description, array $members, PDO $db)
+function edit_department(string $name, string $description, PDO $db)
 {
-    //TODO: make this when the department can add members
+    $sql  = "UPDATE Departments SET description=:description WHERE name=:name";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":name", $name);
+    $stmt->bindParam(":description", $description);
+
+    if ($stmt->execute() === false) {
+        log_to_stdout("Failed to edit department ".$name, "e");
+    }
 
 }
 
@@ -178,6 +187,35 @@ function delete_department(string $name, PDO $db) : bool
     $sql  = "DELETE FROM Departments WHERE name=:name";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":name", $name);
+
+    return $stmt->execute();
+
+}
+
+
+function add_member_to_department(string $department, string $member, PDO $db) : bool
+{
+
+    $sql  = "INSERT INTO AgentDepartments (agent, department)
+         SELECT :member, :department
+         WHERE NOT EXISTS (
+             SELECT 1 FROM AgentDepartments WHERE agent = :member AND department = :department
+         )";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":member", $member);
+    $stmt->bindParam(":department", $department);
+
+    return $stmt->execute();
+
+}
+
+
+function remove_member_to_department(string $department, string $member, PDO $db) : bool
+{
+    $sql  = "DELETE FROM AgentDepartments WHERE department=:department AND agent=:member";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":department", $department);
+    $stmt->bindParam(":member", $member);
 
     return $stmt->execute();
 

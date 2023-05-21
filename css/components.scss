@@ -34,6 +34,15 @@ a.button {
         background-color: desaturate($primary-color, 15%);
     }
 
+    &.white {
+        border: 1px solid rgb(215, 217, 250);
+        background-color: white;
+    }
+
+    &.white:hover {
+        background-color: rgb(243, 243, 243);
+    }
+
     &.cancel {
         background-color: $hover-color;
         color: $black-color;

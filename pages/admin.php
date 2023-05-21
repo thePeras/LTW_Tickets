@@ -60,12 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if ($_POST["action"] === "editDepartment") {
-        $members = explode(",", ($_POST["members"] ?? ''));
-        if ($members === false || (count($members) === 1 && $members[0] === '')) {
-            $members = [];
-        }
-
-        edit_department($_POST["name"], $_POST["description"], $members, $db);
+        edit_department($_POST["name"], $_POST["description"], $db);
     }
 
     if ($_POST["action"] === "deleteDepartment") {
@@ -94,6 +89,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($_POST["action"] === "deleteStatus") {
         delete_status($_POST["name"], $db);
+    }
+
+    if ($_POST["action"] === "addMember") {
+        //TODO: verify that user exists
+        //TODO: verify that user is not already in department
+        //TODO: verify department exists
+        add_member_to_department($_POST["departmentId"], $_POST["user"], $db);
+    }
+
+    if ($_POST["action"] === "removeMember" && isset($_POST["department"]) === true && isset($_POST["user"]) === true) {
+        remove_member_to_department($_POST["department"], $_POST["user"], $db);
     }
 
 
@@ -177,7 +183,7 @@ $tab    = ($_GET["tab"] ?? "users");
         <?php
         drawUserTable($clients);
         elseif ($tab === "departments") :
-            $departments = get_departments($limit, $offset, $db, false);
+            $departments = get_departments($limit, $offset, $db, true);
             ?>
             <script src="/js/department.js"></script>
 

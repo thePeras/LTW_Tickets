@@ -30,6 +30,7 @@ handle_api_route(
         $offset        = intval(($_GET["offset"] ?? 0));
         $query         = ($_GET["q"] ?? null);
         $returnClients = ($_GET["returnClients"] ?? false);
+        $returnClients = $returnClients === "true";
 
         $departments = get_departments($limit, $offset, $db, $returnClients);
 
