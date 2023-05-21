@@ -25,11 +25,11 @@ function drawNewTicketCard(jsonObject) {
     const element = document.querySelector(".ticket-list");
     const card = document.createElement("div");
     card.classList.add("ticket-card");
-    card.onclick = () => { location.href = `/ticket/${jsonObject["id"]}` };
+    card.onclick = () => { location.href = `/ticket?id=${jsonObject["id"]}` };
     //TODO: time ago JS side
     card.innerHTML += `
         <h3>#${jsonObject['id']} - ${jsonObject['title']}</h3>
-        <h5>${formatTimeDifference(jsonObject['createdAt'], (new Date().getTime()) / 1000)}</h5>
+        <h5>${jsonObject['timeAgo']}</h5>
         <p>${jsonObject['description']}</p>
         <footer>
             <div>  

@@ -30,7 +30,7 @@ handle_api_route(
             $faqs = get_FAQs($limit, $offset, $db);
         }
 
-        echo json_encode($faqs);
+        echo json_encode(array_values($faqs));
     }
 );
 

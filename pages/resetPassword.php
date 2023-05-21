@@ -29,8 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="/css/layout.css" rel="stylesheet" type="text/css">
     <link href="/css/components.css" rel="stylesheet" type="text/css">
 
-    <link href="/css/login_register.css" rel="stylesheet" type="text/css">
+    <link href="css/login_register.css" rel="stylesheet" type="text/css">
+    <link href="css/components.css" rel="stylesheet" type="text/css">
     <script src="/js/validators.js"></script>
+
 </head>
 <body>
     <div class="container">

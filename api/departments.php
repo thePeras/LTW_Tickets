@@ -22,12 +22,27 @@ handle_api_route(
             exit();
         }
 
-        $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
-        $offset = intval(($_GET["offset"] ?? 0));
+        $limit = ($_GET["limit"] ?? null);
+        if ($limit !== null) {
+            $limit = min(intval($limit), 20);
+        }
 
-        $departments = get_departments($limit, $offset, $db);
+        $offset        = intval(($_GET["offset"] ?? 0));
+        $query         = ($_GET["q"] ?? null);
+        $returnClients = ($_GET["returnClients"] ?? false);
 
-        echo json_encode($departments);
+        $departments = get_departments($limit, $offset, $db, $returnClients);
+
+        if ($query !== null) {
+            $departments = array_filter(
+                $departments,
+                function ($department) use ($query) {
+                    return strpos($department->name, $query) !== false;
+                }
+            );
+        }
+
+        echo json_encode(array_values($departments));
     }
 );
 
@@ -41,9 +56,6 @@ handle_api_route(
             echo '{"error":"user not authenticated"}';
             exit();
         }
-
-        $limit  = min(intval(($_GET["limit"] ?? 10)), 20);
-        $offset = intval(($_GET["offset"] ?? 0));
 
         $department = get_department($id, $db);
 
