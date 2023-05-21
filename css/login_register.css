@@ -26,30 +26,4 @@ input[type=submit]:hover {
 }
 .container .left {
   background-color: #5449f0;
-}
-
-input[type="submit"]{
-  background-color: #5449f0;
-  color: #fff;
-  border: none;
-  padding: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  width: auto;
-}
-
-label{
-  font-size: 0.9rem;
-}
-
-input[type="submit"]:hover{
-  background-color: #3c34c7;
-}
-
-input[type="checkbox"]{
-  width: 1rem;
-  height: 1rem;
-}
+}/*# sourceMappingURL=login_register.css.map */

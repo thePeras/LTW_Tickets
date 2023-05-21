@@ -171,72 +171,72 @@ if ($ticket === null) {
     ?>
     <input type="hidden" id="ticketId" value="<?php echo $ticket->id ?>">
     <main class="ticket-page">
-        <div>
-            <h1><?php echo "$ticket->title #$ticket->id"?></h1>
-            <ul id="buttons">
-                <li class="status"> <!-- Status: Open -->
-                    <p>
-                        <i class="ri-flag-line"></i>
-                        Status:
-                    </p>
-                    <?php
-                    $icons = [
-                        "Open"     => "ri-checkbox-blank-circle-line",
-                        "Closed"   => "ri-checkbox-circle-line",
-                        "Assigned" => "ri-donut-chart-line",
-                    ];
+        <h1><?php echo "$ticket->title #$ticket->id"?></h1>
+        <ul id="buttons">
+            <li class="status"> <!-- Status: Open -->
+                <p>
+                    <i class="ri-flag-line"></i>
+                    Status:
+                </p>
+                <?php
+                $icons = [
+                    "Open"     => "ri-checkbox-blank-circle-line",
+                    "Closed"   => "ri-checkbox-circle-line",
+                    "Assigned" => "ri-donut-chart-line",
+                ];
 
-                    if ($ticket->status === "") {
-                        $status = "Open";
-                    } else {
-                        $status = ucfirst($ticket->status);
-                    }
-                    ?>
-                        
-                    <span data-status="<?php echo $status?>">
-                        <i class="<?php echo $icons[$status] ?>"></i>
-                        <?php echo $status ?>
-                    </span>
-                </li>
-                <?php if ($ticket->status === "closed") {?>
-                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
-                        <input type="hidden" name="action" value="open">
-                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                        <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
-                            <i class="ri-book-open-line"></i>
-                            Reopen ticket 
-                        </button></li>
-                    </form>
-                <?php } else { ?>
-                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
-                        <input type="hidden" name="action" value="close">
-                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                        <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
-                            <i class="ri-archive-line"></i>
-                            Close ticket 
-                        </button></li>
-                    </form>
-                <?php } ?>
-            </ul>
+                if ($ticket->status === "") {
+                    $status = "Open";
+                } else {
+                    $status = ucfirst($ticket->status);
+                }
+                ?>
+                    
+                <span data-status="<?php echo $status?>">
+                    <i class="<?php echo $icons[$status] ?>"></i>
+                    <?php echo $status ?>
+                </span>
+            </li>
+            <?php if ($ticket->status === "closed") {?>
+                <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                    <input type="hidden" name="action" value="open">
+                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                    <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
+                        <i class="ri-book-open-line"></i>
+                        Reopen ticket 
+                    </button></li>
+                </form>
+            <?php } else { ?>
+                <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                    <input type="hidden" name="action" value="close">
+                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                    <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
+                        <i class="ri-archive-line"></i>
+                        Close ticket 
+                    </button></li>
+                </form>
+            <?php } ?>
+        </ul>
 
-            <!-- Ticket description -->
-            <div class="ticket-comment">
-                <div class="user-comment">
-                    <div class="user">
-                        <img class="avatar" src="<?php echo $author->image ?>" alt="user">
-                        <h3>
-                            <?php echo $author->displayName ?>
-                        </h3>
-                        <p>
-                            <?php echo time_ago($ticket->createdAt) ?>
-                        </p>
-                    </div>
+        <!-- Ticket description -->
+        <div class="ticket-comment">
+            <div class="user-comment">
+                <div class="user">
+                    <img class="avatar" src="<?php echo $author->image ?>" alt="user">
+                    <h3>
+                        <?php echo $author->displayName ?>
+                    </h3>
                     <p>
-                        <?php echo $ticket->description ?>
+                        <?php echo time_ago($ticket->createdAt) ?>
                     </p>
                 </div>
+                <p>
+                    <?php echo $ticket->description ?>
+                </p>
             </div>
+        </div>
 
+        <div>
             <?php foreach ($all as $item) : ?>
                 <!-- Change --> 
                 <?php if (($item instanceof AssignedChange) === true) : ?> 
@@ -299,17 +299,17 @@ if ($ticket === null) {
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
-
-            <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
-                <div class="comment-box top-line">
-                    <h3>New comment</h3>
-                    <textarea name="content" cols="30" rows="10" placeholder="Write your comment"></textarea>
-                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                    <input type="hidden" name="action" value="comment">
-                    <input type="submit" class="primary" value="Send">
-                </div>
-            </form>
         </div>
+        
+        <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+            <div class="comment-box top-line">
+                <h3>New comment</h3>
+                <textarea name="content" cols="30" rows="10" placeholder="Write your comment"></textarea>
+                <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                <input type="hidden" name="action" value="comment">
+                <input type="submit" class="primary" value="Send">
+            </div>
+        </form>
 
         <div class="action-panel">
             <div class="side-card">
