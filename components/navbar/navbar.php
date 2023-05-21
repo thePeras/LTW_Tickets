@@ -81,32 +81,32 @@ function navbar(PDO $db)
                     <h1>Tickets Manager</h1>
                 </div>
                 <ul>
-                    <li data-active="<?php echo $isActive("tickets"); ?>">
+                    <li data-active="<?php echo htmlspecialchars($isActive("tickets"))?>">
                         <a href="/tickets">
                             <i class="ri-ticket-line"></i>
                             Tickets
                         </a>
                     </li>
-                    <li data-active="<?php echo $isActive("faq"); ?>">
+                    <li data-active="<?php echo htmlspecialchars($isActive("faq"))?>">
                         <a href="/faq">
                             <i class="ri-question-line"></i>
                             FAQ
                         </a>
                     </li>
-                    <li data-active="<?php echo $isActive("departments"); ?>">
+                    <li data-active="<?php echo htmlspecialchars($isActive("departments"))?>">
                         <a href="#">
                             <i class="ri-building-line"></i>
                             Departments
                         </a>
                     </li>
-                    <li data-active="<?php echo $isActive("analytics"); ?>">
+                    <li data-active="<?php echo htmlspecialchars($isActive("analytics"))?>">
                         <a href="#">
                             <i class="ri-line-chart-line"></i>
                             Analytics
                         </a>
                     </li>
                     <?php if (is_current_user_admin($db) === true) :?>
-                     <li data-active="<?php echo $isActive("admin"); ?>">
+                     <li data-active="<?php echo htmlspecialchars($isActive("admin"))?>">
                         <a href="/admin">
                             <i class="ri-admin-line"></i>
                             Admin settings

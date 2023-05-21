@@ -23,17 +23,17 @@ function ticketCard(Ticket $ticket)
         $tags .= "<span class='tag' style='color:$labelColor; background-color: $labelBackgroundColor'>$labelName</span>";
     }
     ?>        
-        <div class="ticket-card" onclick="location.href = '/ticket?id=<?php echo $id?>'">
-            <h3>#<?php echo $id?> - <?php echo $title?></h3>
-            <h5><?php echo time_ago($ticket->createdAt)?></h5>
-            <p><?php echo $description?></p>
+        <div class="ticket-card" onclick="location.href = '/ticket?id=<?php echo htmlspecialchars($id)?>'">
+            <h3>#<?php echo htmlspecialchars($id)?> - <?php echo htmlspecialchars($title)?></h3>
+            <h5><?php echo htmlspecialchars(time_ago($ticket->createdAt))?></h5>
+            <p><?php echo htmlspecialchars($description)?></p>
             <footer>
                 <div>
-                    <span class="tag" style="color: <?php echo $statusColor?>; 
-                        background-color: <?php echo $statusBackgroundColor?>;">
-                        <?php echo $status?>
+                    <span class="tag" style="color: <?php echo htmlspecialchars($statusColor)?>; 
+                        background-color: <?php echo htmlspecialchars($statusBackgroundColor)?>;">
+                        <?php echo htmlspecialchars($status)?>
                     </span>
-                    <?php echo $tags?>
+                    <?php echo htmlspecialchars($tags)?>
                 </div>
                 <!---
                 <comments>

@@ -81,25 +81,25 @@ $faqs = get_FAQs($limit, $offset, $db);
             $content = explode("\n", $faq->content)?>
         <div class="faq-question">
             <header>
-                <h2>#<?php echo $faq->id?> - <?php echo $faq->title?></h2>
+                <h2>#<?php echo htmlspecialchars($faq->id)?> - <?php echo htmlspecialchars($faq->title)?></h2>
                 <div class="faq-buttons">
                     <?php if (is_current_user_agent($db) === true) :?>
-                        <i class="ri-edit-line" onclick="location.href = '/faq/<?php echo $faq->id?>'"></i>
+                        <i class="ri-edit-line" onclick="location.href = '/faq/<?php echo htmlspecialchars($faq->id)?>'"></i>
                     <?php endif;?>
                     <?php if (is_current_user_agent($db) === true) :?>
-                        <i class="ri-delete-bin-line" onclick="makeDeleteModal(<?php echo $faq->id?>)"></i>
+                        <i class="ri-delete-bin-line" onclick="makeDeleteModal(<?php echo htmlspecialchars($faq->id)?>)"></i>
                     <?php endif;?>
                     <i class="ri-add-circle-line open-close"></i>
                 </div>
             </header>
             <div class="content">
                 <?php foreach ($content as $paragraph) :?>
-                <p><?php echo $paragraph?></p>
+                <p><?php echo htmlspecialchars($paragraph)?></p>
                 <?php endforeach;?>
                 <div class="created-by">
                     <p>By:</p>
-                    <img class="avatar" src="/<?php echo $user->image?>" alt="user">
-                    <p class="display-name"><?php echo $user->displayName?></p>
+                    <img class="avatar" src="/<?php echo htmlspecialchars($user->image)?>" alt="user">
+                    <p class="display-name"><?php echo htmlspecialchars($user->displayName)?></p>
                 </div>
             </div>
         </div>

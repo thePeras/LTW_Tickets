@@ -68,22 +68,22 @@ echo navbar($db);
     <div class="profile-container">
         <div class="image-container">
             <?php if ($client->image !== null) : ?>
-                <img src="<?php echo $client->image ?>" alt="Client Image" id = "profilePicture">
+                <img src="<?php echo htmlspecialchars($client->image)?>" alt="Client Image" id = "profilePicture">
             <?php else : ?>
                 <img src="assets/images/default_user.png" alt="Default User Image" id = "profilePicture">
             <?php endif; ?>
         </div>
         <form action="profile" method="post" enctype="multipart/form-data" onsubmit="return handleSaveClick()">
             <label for="username">Username
-                <input type="text" name="username" id="username" value="<?php echo $client->username; ?>" autocomplete="off" pattern="^[a-zA-Z0-9_\-\.]{3,20}$" disabled>
+                <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($client->username)?>" autocomplete="off" pattern="^[a-zA-Z0-9_\-\.]{3,20}$" disabled>
             </label>
 
             <label for="displayName">Name
-                <input type="text" name="displayName" id="displayName" value="<?php echo $client->displayName; ?>" autocomplete="off" required readonly>
+                <input type="text" name="displayName" id="displayName" value="<?php echo htmlspecialchars($client->displayName)?>" autocomplete="off" required readonly>
             </label>
 
             <label for="email">Email
-                <input type="email" name="email" id="email" value="<?php echo $client->email; ?>" required readonly>
+                <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($client->email)?>" required readonly>
             </label>
 
             <input type="button" id="editButton" value="Edit">

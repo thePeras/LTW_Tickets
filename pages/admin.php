@@ -203,9 +203,9 @@ $tab    = ($_GET["tab"] ?? "users");
                 $statusName            = htmlspecialchars($status->status);
                 $statusColor           = htmlspecialchars($status->color);
                 $statusBackgroundColor = htmlspecialchars($status->backgroundColor);?>
-                <div class="tag" style="color: <?php echo $statusColor?>; 
-                        background-color: <?php echo $statusBackgroundColor?>;" onclick="makeEditModal('editStatus',this)">
-                        <p><?php echo $statusName?></p>
+                <div class="tag" style="color: <?php echo htmlspecialchars($statusColor)?>; 
+                        background-color: <?php echo htmlspecialchars($statusBackgroundColor)?>;" onclick="makeEditModal('editStatus',this)">
+                        <p><?php echo htmlspecialchars($statusName)?></p>
                 </div>
                 
             <?php endforeach;?>
@@ -217,9 +217,9 @@ $tab    = ($_GET["tab"] ?? "users");
                 $labelName            = htmlspecialchars($label->label);
                 $labelColor           = htmlspecialchars($label->color);
                 $labelBackgroundColor = htmlspecialchars($label->backgroundColor);?>
-                <div class="tag" style="color: <?php echo $labelColor?>; 
-                        background-color: <?php echo $labelBackgroundColor?>;" onclick="makeEditModal('editLabel',this)">
-                        <p><?php echo $labelName?></p>
+                <div class="tag" style="color: <?php echo htmlspecialchars($labelColor)?>; 
+                        background-color: <?php echo htmlspecialchars($labelBackgroundColor)?>;" onclick="makeEditModal('editLabel',this)">
+                        <p><?php echo htmlspecialchars($labelName)?></p>
                 </div>
             <?php endforeach;?>
         </div>  

@@ -67,21 +67,21 @@ layout_start();
 <link rel="stylesheet" type="text/css" href="/css/faq-new.css">
 <script src="/js/faq.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/components.css">
-<h1>FAQ #<?php echo $faq->id?></h1>
+<h1>FAQ #<?php echo htmlspecialchars($faq->id)?></h1>
 <hr>
 
 <form method="post" class="create-faq">
 
-<input type="hidden" name="id" value="<?php echo $faq->id?>">
+<input type="hidden" name="id" value="<?php echo htmlspecialchars($faq->id)?>">
     <label for="title">
         <p>Question</p>
     </label>
-    <input type="text" name="title" required placeholder="What is the question?" value="<?php echo $faq->title?>" readonly />
+    <input type="text" name="title" required placeholder="What is the question?" value="<?php echo htmlspecialchars($faq->title)?>" readonly />
 
     <label for="content">
         <p>Answer</p>
     </label>
-    <textarea class="content-area" name="content" rows="10" required placeholder="Write the corresponding answer" readonly><?php echo $faq->content?></textarea>
+    <textarea class="content-area" name="content" rows="10" required placeholder="Write the corresponding answer" readonly><?php echo htmlspecialchars($faq->content)?></textarea>
 
     <br>
 
