@@ -2,17 +2,18 @@
     display: flex;
     align-items: flex-start;
     margin-top: 3em;
+    flex-wrap: wrap;
 }
 
 .image-container {
-    margin: 40px;
+    margin: 2rem;
 }
 
 img {
-    width: 250px;
-    height: 250px;
+    width: 10rem;
+    height: 10rem;
     border-radius: 50%;
-    object-fit : cover;
+    object-fit: cover;
 }
 
 input {
@@ -29,13 +30,14 @@ input {
     width: 100%;
 }
 
-#cancelButton{
+#cancelButton {
     width: 100px;
     margin-top: 10px;
     margin-right: 10px;
 }
 
-input[type=submit], #editButton {
+input[type=submit],
+#editButton {
     background-color: #5449f0;
     color: white;
     font-weight: bold;
@@ -48,14 +50,16 @@ input[type=submit], #editButton {
     margin-top: 10px;
 }
 
-input[type=submit]:hover, #editButton:hover, #cancelButton:hover {
+input[type=submit]:hover,
+#editButton:hover,
+#cancelButton:hover {
     opacity: 0.8;
     cursor: pointer;
 }
 
 
 form {
-    margin: 20px 40px;
+    margin: 2rem 2rem;
     display: flex;
     flex-direction: column;
 }

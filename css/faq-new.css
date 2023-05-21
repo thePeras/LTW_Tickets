@@ -5,14 +5,19 @@ hr {
   opacity: 0.5;
 }
 
-.create-faq textarea, .create-faq input[type=text] {
+.create-faq textarea,
+.create-faq input[type=text] {
   width: 90%;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
 }
+
 .create-faq textarea {
   padding: 0.5em;
 }
+
 .create-faq input[type=submit] {
   margin: 1rem 0rem;
   border: 0;
-}/*# sourceMappingURL=faq-new.css.map */
+}
+
+/*# sourceMappingURL=faq-new.css.map */

@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <div class="left">
-
+            <img src="assets/images/illustration.svg" alt="illustration">
         </div>
         <div class="right">
             <h1>Create a new account</h1>
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Show password</label>
         
                 <br><br>
-                <input type="submit" value="Create account" onclick="passwordsMatch('password', 'confirmPassword')">
+                <input type="submit" class="primary" value="Create account" onclick="passwordsMatch('password', 'confirmPassword')">
             </form>
 
             <?php if ($registered === false &&  $_SERVER['REQUEST_METHOD'] === 'POST') : ?>

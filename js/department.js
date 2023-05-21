@@ -5,7 +5,7 @@ var end = false;
 var fetchingDepartments = false;
 const limit = 10;
 
-function makeAddDepartmentModal(){
+function makeAddDepartmentModal() {
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
 
@@ -19,7 +19,7 @@ function makeAddDepartmentModal(){
     //TODO: make members search bar
 
     modalContentElement.innerHTML = `
-    <h1>Add new Department</h1>
+    <h1>Add new department</h1>
     <form method="post">
         <input type="hidden" name="action" value="newDepartment">
         <input type="hidden" name="lastHref" value="${location.href}">
@@ -35,9 +35,8 @@ function makeAddDepartmentModal(){
         <input type="hidden" name=members"> 
         <textarea type="text" rows="10" name="description" required></textarea> 
         <div class="modal-buttons">
-            <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
-            <input type="submit" class="submit-button" value="Add">
-
+            <input type="button" class="button cancel" onclick="closeModal()" value="Cancel">
+            <input type="submit" class="button primary" value="Create">
         </div>
     </form>
     `;
@@ -53,7 +52,7 @@ function makeAddDepartmentModal(){
 }
 
 
-function makeDeleteModal(department){
+function makeDeleteModal(department) {
     const body = document.querySelector("body");
     body.style.overflow = "hidden";
 
@@ -66,17 +65,17 @@ function makeDeleteModal(department){
 
     //TODO: inject CSRF token
     modalContentElement.innerHTML = `
-    <h1>Delete User</h1>
-    <p>Are you sure that you want to delete user <b>${department}</b>? This action is irreversible...</p>
+    <h1>Delete department</h1>
+    <p>Are you sure that you want to delete department <b>${department}</b>? <br/> This action is irreversible!</p>
     <div class="modal-buttons">
-        <button class="cancel-button" onclick="closeModal()"><p>Cancel</p></button>
+        <button class="button cancel" onclick="closeModal()"><p>Cancel</p></button>
         <form method="post" action="admin">
             <input type="hidden" name="action" value="deleteDepartment">
             <input type="hidden" name="name" value="${department}">
             <input type="hidden" name="lastHref" value="${location.href}">
 
 
-            <input type="submit" class="delete-button" value="Delete">
+            <input type="submit" class="button delete" value="Delete">
         </form>
         </div>`;
     modalElement.style.display = "block";
@@ -90,7 +89,7 @@ function makeDeleteModal(department){
 }
 
 
-async function makeEditModal(department){
+async function makeEditModal(department) {
 
     const res = await fetch(`/api/departments/${department}`, { method: "GET" });
 
@@ -130,8 +129,8 @@ async function makeEditModal(department){
         <input type="hidden" name=members"> 
         <textarea type="text" rows="10" name="description" required>${resJson["description"]}</textarea> 
         <div class="modal-buttons">
-            <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
-            <input type="submit" class="submit-button" value="Edit">
+            <input type="button" class="button cancel" onclick="closeModal()" value="Cancel">
+            <input type="submit" class="button primary" value="Save">
 
         </div>
     </form>
@@ -177,7 +176,7 @@ function drawNewRow(jsonObject) {
         <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('${jsonObject["name"]}')")></i>
     </td>
     `;
-    
+
     element.appendChild(tr);
 }
 
