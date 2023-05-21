@@ -1,5 +1,6 @@
 <?php
 require_once "database/tickets.db.php";
+require_once "utils/datetime.php";
 
 
 function ticketCard(Ticket $ticket)
@@ -11,7 +12,7 @@ function ticketCard(Ticket $ticket)
     $statusColor = htmlspecialchars($ticket->status->color);
     $statusBackgroundColor = htmlspecialchars($ticket->status->backgroundColor);
 
-    $timeAgo = $ticket->getTimeAgo();
+    $timeAgo = time_ago($ticket->createdAt);
 
     $tags = '';
     foreach ($ticket->labels as $label) {
@@ -22,9 +23,9 @@ function ticketCard(Ticket $ticket)
         $tags .= "<span class='tag' style='color:$labelColor; background-color: $labelBackgroundColor'>$labelName</span>";
     }
     ?>        
-        <div class="ticket-card" onclick="location.href = '/ticket/<?php echo $id?>'">
+        <div class="ticket-card" onclick="location.href = '/ticket?id=<?php echo $id?>'">
             <h3>#<?php echo $id?> - <?php echo $title?></h3>
-            <h5><?php echo $timeAgo?></h5>
+            <h5><?php echo time_ago($ticket->createdAt)?></h5>
             <p><?php echo $description?></p>
             <footer>
                 <div>

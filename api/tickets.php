@@ -47,7 +47,7 @@ handle_api_route(
             $tickets = getArchivedTickets($db, $limit, $offset, $sortOrder, $text);
         }
 
-        echo json_encode($tickets);
+        echo json_encode(array_values($tickets));
     }
 );
 

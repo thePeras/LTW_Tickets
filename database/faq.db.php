@@ -14,8 +14,8 @@ class FAQ
     public string $content;
 
 
-    public function __construct(int $_id, ?string $_createdByUser,
-        string $_title, string $_content
+    public function __construct(int $_id, ?string $_createdByUser=null,
+        ?string $_title="", ?string $_content=""
     ) {
         $this->id            = $_id;
         $this->createdByUser = $_createdByUser;
@@ -102,7 +102,7 @@ function delete_faq(int $id, PDO $db) : bool
 }
 
 
-function get_faq(int $id, PDO $db) : FAQ
+function get_faq(int $id, PDO $db) : ?FAQ
 {
     $sql  = "SELECT * FROM FAQs WHERE id=:id";
     $stmt = $db->prepare($sql);
@@ -110,6 +110,10 @@ function get_faq(int $id, PDO $db) : FAQ
 
     $stmt->execute();
     $a = $stmt->fetch();
+    if ($a === false) {
+        return null;
+    }
+
     return new FAQ($a["id"], $a["createdByUser"], $a["title"], $a["content"]);
 
 }

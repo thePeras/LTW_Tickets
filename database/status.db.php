@@ -44,6 +44,25 @@ function get_all_status(PDO $db) : array
 }
 
 
+function get_status(string $name, PDO $db) : ?Status
+{
+    $sql  = "SELECT * FROM Status WHERE status=:status";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":status", $name);
+    $stmt->execute();
+
+    $a = $stmt->fetch();
+
+    if ($a === false) {
+        log_to_stdout("Something went wrong while getting $name", "e");
+        return null;
+    }
+
+    return new Status($a["status"], $a["color"], $a["backgroundColor"], $a["createdAt"]);
+
+}
+
+
 function add_status(string $status, string $color, string $backgroundColor, PDO $db) : bool
 {
     $sql = "INSERT INTO Status VALUES (:status, :color, :backgroundColor, :createdTime)";

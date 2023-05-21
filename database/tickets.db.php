@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 require_once __DIR__."/status.db.php";
 require_once __DIR__."/labels.db.php";
+require_once __DIR__.'/../database/faq.db.php';
+require_once "utils/datetime.php";
 
-
-class Ticket
+class Ticket implements JsonSerializable
 {
 
-    public readonly int $id;
+    public int $id;
 
-    public readonly string $title;
+    public string $title;
 
-    public readonly string $description;
+    public string $description;
 
-    public readonly Status $status;
+    public Status $status;
 
     public readonly array $labels;
 
-    public readonly ?string $assignee;
+    public ?Client $assignee;
 
-    public readonly string $createdByUser;
+    public string $createdByUser;
 
-    public readonly string $department;
+    public string $department;
 
-    public int $createdAt;
+    public Datetime $createdAt;
+
+    public FAQ $faq;
 
 
     public function jsonSerialize() : mixed
@@ -39,52 +42,26 @@ class Ticket
             "assignee"      => $this->assignee,
             "createdByUser" => $this->createdByUser,
             "createdAt"     => $this->createdAt,
-            "timeAgo"       => $this->getTimeAgo(),
+            "timeAgo"       => time_ago($this->createdAt),
             "department"    => $this->department,
-
         ];
 
     }
 
 
-    public function __construct($id, string $title, string $description, Status $status,
-        array $labels, ?string $assignee, string $createdByUser, string $department, ?int $_createdAt=null
+    public function __construct(string $title, string $description, int $_epoch, Status $status,
+        array $labels, int $id=0, ?Client $assignee=null, string $createdByUser="", string $department="", FAQ $faq=new FAQ(0)
     ) {
         $this->id            = $id;
         $this->title         = $title;
         $this->description   = $description;
         $this->status        = $status;
         $this->labels        = $labels;
-        $this->assignee      = ($assignee ?? null);
+        $this->assignee      = $assignee;
         $this->createdByUser = $createdByUser;
-        $this->createdAt     = ($_createdAt ?? time());
         $this->department    = $department;
-
-    }
-
-
-    public function getTimeAgo(): string
-    {
-        $createdAt = new DateTime('@'.$this->createdAt);
-        $now       = new DateTime('now');
-        $interval  = $createdAt->diff($now);
-
-        $timeAgo = '';
-        if ($interval->y > 0) {
-            $timeAgo = $interval->format('%y year(s) ago');
-        } elseif ($interval->m > 0) {
-            $timeAgo = $interval->format('%m month(s) ago');
-        } elseif ($interval->d > 0) {
-            $timeAgo = $interval->format('%d day(s) ago');
-        } elseif ($interval->h > 0) {
-            $timeAgo = $interval->format('%h hour(s) ago');
-        } elseif ($interval->i > 0) {
-            $timeAgo = $interval->format('%i minute(s) ago');
-        } elseif ($interval->s > 0) {
-            $timeAgo = $interval->format('%s second(s) ago');
-        }
-
-        return $timeAgo;
+        $this->createdAt     = new DateTime("@".$_epoch);
+        $this->faq           = $faq;
 
     }
 
@@ -126,16 +103,22 @@ function create_ticket_object(array $ticket, PDO $db) : Ticket
         $result
     );
 
+    $assignee = null;
+    if (isset($ticket["assignee"]) === true) {
+        $assignee = get_user($ticket["assignee"], $db);
+    }
+
     return new Ticket(
-        $ticket["id"],
         $ticket["title"],
         $ticket["description"],
+        $ticket["createdAt"],
         $status,
         $labels,
-        $ticket["assignee"],
+        $ticket["id"],
+        $assignee,
         $ticket["createdByUser"],
-        $ticket["department"],
-        $ticket["createdAt"]
+        ($ticket["department"] ?? ''),
+        (get_faq((int) $ticket['faq'], $db) ?? new FAQ(0))
     );
 
 };
@@ -144,7 +127,8 @@ function create_ticket_object(array $ticket, PDO $db) : Ticket
 function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
-    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+
+    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND (status != 'closed' OR status IS NULL) AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
@@ -168,7 +152,7 @@ function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): arra
 function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
-    $sql  = "SELECT * FROM tickets WHERE assignee = :username AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $sql  = "SELECT * FROM tickets WHERE assignee = :username AND status != 'closed' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":username", $username);
     $stmt->bindParam(":text", $text, PDO::PARAM_STR);
@@ -192,7 +176,7 @@ function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortO
 function getTicketsCreatedBy(string $username, PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
-    $sql  = "SELECT * FROM Tickets WHERE createdByUser = :username AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $sql  = "SELECT * FROM Tickets WHERE createdByUser = :username AND status != 'closed' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":username", $username);
     $stmt->bindParam(":text", $text, PDO::PARAM_STR);
@@ -239,7 +223,7 @@ function getAllTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
 {
     $text = "%$text%";
-    $sql  = "SELECT * FROM tickets WHERE status = 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $sql  = "SELECT * FROM tickets WHERE status = 'closed' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":text", $text, PDO::PARAM_STR);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
@@ -255,5 +239,99 @@ function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
     }
 
     return $tickets;
+
+}
+
+
+function insert_new_ticket(Session $session, Ticket $ticket, PDO $db) : int
+{
+    $sql = "INSERT INTO Tickets(title, description, createdByUser, createdAt, status) VALUES (:title, :description, :createByUser, :createdAt, 'open')";
+
+    $time = $ticket->createdAt->getTimestamp();
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':createByUser', $session->username, PDO::PARAM_STR);
+    $stmt->bindParam(':title', $ticket->title, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $ticket->description, PDO::PARAM_STR);
+    $stmt->bindParam(':createdAt', $time, PDO::PARAM_INT);
+
+    if ($stmt->execute() === false) {
+        return 0;
+    }
+
+    return (int) $db->lastInsertId();
+
+}
+
+
+function get_ticket(int $id, PDO $db) : ?Ticket
+{
+    $sql  = "SELECT * FROM Tickets WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    if ($result === false) {
+        return null;
+    }
+
+    return create_ticket_object($result, $db);
+
+}
+
+
+function update_ticket_department(Ticket $ticket, PDO $db) : bool
+{
+    if ($ticket->department === "") {
+        $sql = "UPDATE Tickets SET department = NULL WHERE id = :id";
+    } else {
+        $sql = "UPDATE Tickets SET department = :department WHERE id = :id";
+    }
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+
+    if ($ticket->department !== "") {
+        $stmt->bindParam(':department', $ticket->department, PDO::PARAM_STR);
+    }
+
+    return $stmt->execute();
+
+}
+
+
+function update_ticket_status(Ticket $ticket, PDO $db) : bool
+{
+    if ($ticket->faq->id !== 0) {
+        $sql  = "UPDATE Tickets SET status = :status, faq = :faq WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $ticket->status->status, PDO::PARAM_STR);
+        $stmt->bindParam(':faq', $ticket->faq->id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    $sql  = "UPDATE Tickets SET status = :status WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':status', $ticket->status->status, PDO::PARAM_STR);
+    return $stmt->execute();
+
+}
+
+
+function update_ticket_assignee(Ticket $ticket, PDO $db) : bool
+{
+    if ($ticket->assignee->username === "") {
+        $sql  = "UPDATE Tickets SET assignee = NULL WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    $sql  = "UPDATE Tickets SET assignee = :assignee WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+    $stmt->bindParam(':assignee', $ticket->assignee->username, PDO::PARAM_STR);
+    return $stmt->execute();
 
 }
