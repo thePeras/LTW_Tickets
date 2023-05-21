@@ -39,90 +39,71 @@ if ($tab === "unassigned" || $tab === null) {
 
 layout_start();
 
-ob_start();
-foreach ($tickets as $ticket) {
-    echo ticketCard($ticket);
-}
-
-$ticketListHTML = ob_get_clean();
-
 ?>
+<link rel="stylesheet" href="/css/tickets.css">
+<link rel="stylesheet" href="/components/ticket-card/ticket-card.css">
+<script src="/js/datetime.js"></script>
+<script src="/js/tickets.js"></script>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tickets</title>
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/remixicon.css">
-    <link rel="stylesheet" href="css/tickets.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="components/ticket-card/ticket-card.css">
+<h1>Tickets</h1>
+<ul id="buttons">
+    <li>
+        <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars($text); ?>">
+    </li>
+    <li>
+        <select id="sortSelect" onchange="handleSortOptionChange(this.value)">
+            <option value="lastCreated" <?php
+            if ($sortOrder === 'DESC') {
+                echo 'selected';
+            } ?>>Last Created</option>
+            <option value="firstCreated" <?php
+            if ($sortOrder === 'ASC') {
+                echo 'selected';
+            } ?>>First Created</option>
+        </select>
+    </li>
+    <li>
+        <button type="button" class="active">New ticket</button>
+    </li>
+</ul>
 
-    <script src="js/tickets.js"></script>
-</head>
-<body>
-    <main>
-        <h1>Tickets</h1>
-        <ul id="buttons">
-            <li>
-                <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars($text); ?>" onkeydown="handleKeyDown(event)">
-            </li>
-            <li>
-                <select id="sortSelect" onchange="handleSortOptionChange(this.value)">
-                    <option value="lastCreated" <?php
-                    if ($sortOrder === 'DESC') {
-                        echo 'selected';
-                    } ?>>Last Created</option>
-                    <option value="firstCreated" <?php
-                    if ($sortOrder === 'ASC') {
-                        echo 'selected';
-                    } ?>>First Created</option>
-                </select>
-            </li>
-            <li>
-                <button type="button" class="active">New ticket</button>
-            </li>
-        </ul>
+<ul class="tabSelector" id="filters">
+    <li <?php
+    if ($tab === "unassigned" || $tab === null) {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=unassigned&text=<?php echo urlencode($text); ?>">Unassigned</a>
+    </li>
+    <li <?php
+    if ($tab === "assignedToMe") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=assignedToMe&text=<?php echo urlencode($text); ?>">Assigned to me</a>
+    </li>
+    <li <?php
+    if ($tab === "createdByMe") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=createdByMe&text=<?php echo urlencode($text); ?>">Created by me</a>
+    </li>
+    <li <?php
+    if ($tab === "allTickets") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=allTickets&text=<?php echo urlencode($text); ?>">All tickets</a>
+    </li>
+    <li <?php
+    if ($tab === "archived") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=archived&text=<?php echo urlencode($text); ?>">Archived</a>
+    </li>
+</ul>
 
-        <ul class="tabSelector" id="filters">
-            <li <?php
-            if ($tab === "unassigned" || $tab === null) {
-                echo 'class="active"';
-            } ?>>
-                <a href="?tab=unassigned&text=<?php echo urlencode($text); ?>">Unassigned</a>
-            </li>
-            <li <?php
-            if ($tab === "assignedToMe") {
-                echo 'class="active"';
-            } ?>>
-                <a href="?tab=assignedToMe&text=<?php echo urlencode($text); ?>">Assigned to me</a>
-            </li>
-            <li <?php
-            if ($tab === "createdByMe") {
-                echo 'class="active"';
-            } ?>>
-                <a href="?tab=createdByMe&text=<?php echo urlencode($text); ?>">Created by me</a>
-            </li>
-            <li <?php
-            if ($tab === "allTickets") {
-                echo 'class="active"';
-            } ?>>
-                <a href="?tab=allTickets&text=<?php echo urlencode($text); ?>">All tickets</a>
-            </li>
-            <li <?php
-            if ($tab === "archived") {
-                echo 'class="active"';
-            } ?>>
-                <a href="?tab=archived&text=<?php echo urlencode($text); ?>">Archived</a>
-            </li>
-        </ul>
-
-        <div class="ticket-list">
-            <?php echo $ticketListHTML; ?>
-        </div>
-    </main>
-</body>
-</html>
+<div class="ticket-list">
+    <?php foreach ($tickets as $ticket) {
+        ticketCard($ticket);
+    } ?>
+</div>
+<?php
+layout_end();

@@ -2,33 +2,6 @@
 require_once "database/tickets.db.php";
 
 
-function ticketCardHardcoded()
-{
-    return <<<HTML
-        <link rel="stylesheet" type="text/css" href="components/ticket-card/ticket-card.css">
-        
-        <div class="ticket-card" data-id="1">
-            <h3>Cannot access the system</h3>
-            <h5>3h ago</h5>
-            <p>Life seasons open have. Air have of. Lights fill after let third darkness replenish fruitful let. Wherein set image. Creepeth said above gathered bring</p>
-            <footer>
-                <tags>
-                    <span class="tag urgent">Urgent</span>
-                    <span class="tag">a thing</span>
-                </tags>
-                <comments>
-                    <span class="ri-chat-1-line"></span>
-                    <span>3</span>
-                </comments>
-            </footer>
-        </div>
-
-        <script src="js/ticket-card.js"></script>
-    HTML;
-
-}
-
-
 function ticketCard(Ticket $ticket)
 {
     $id          = $ticket->id;
@@ -44,19 +17,18 @@ function ticketCard(Ticket $ticket)
     foreach ($hashtags as $hashtag) {
         $tags .= "<span class='tag'>$hashtag</span>";
     }
-
-    return <<<HTML
+    ?>
         <link rel="stylesheet" type="text/css" href="components/ticket-card/ticket-card.css">
         
-        <div class="ticket-card" data-id="$id">
-            <h3>#$id - $title</h3>
-            <h5>$timeAgo</h5>
-            <p>$description</p>
+        <div class="ticket-card" onclick="location.href = '/ticket/<?php echo $id?>'">
+            <h3>#<?php echo $id?> - <?php echo $title?></h3>
+            <h5><?php echo $timeAgo?></h5>
+            <p><?php echo $description?></p>
             <footer>
-                <tags>
-                    <span class="tag">$status</span>
-                    $tags
-                </tags>
+                <div>
+                    <span class="tag"><?php echo $status?></span>
+                    <?php echo $tags?>
+                </div>
                 <!---
                 <comments>
                     <span class="ri-chat-1-line"></span>
@@ -66,7 +38,6 @@ function ticketCard(Ticket $ticket)
             </footer>
         </div>
 
-        <script src="js/ticket-card.js"></script>
-    HTML;
+    <?php
 
 }

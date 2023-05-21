@@ -71,7 +71,7 @@ async function searchNewParam(event) {
     searchInput = event.target.value;
     var res = undefined;
     if (searchInput.length === 0) {
-        res = await fetch(`/api/faqs?limit=1&offset=0`,
+        res = await fetch(`/api/faqs?limit=10&offset=0`,
         { method: "GET" });
     }
     if (searchInput.length < 3 && searchInput.length >= 1) return;

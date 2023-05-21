@@ -1,8 +1,11 @@
 const currentSearchParams = new URLSearchParams((location.href.split("?")[1] ?? ''));
 var offset = currentSearchParams.get("offset") ?? 0;
+var tab = currentSearchParams.get("tab") ?? "unassigned"
 var end = false;
-var fetchingUsers = false;
-const limit = 4;
+var fetchingTickets = false;
+const limit = 10;
+var sortOrder = "";
+var searchInput = "";
 
 function isOnScreen(element) {
     const rect = element.getBoundingClientRect();
@@ -10,24 +13,31 @@ function isOnScreen(element) {
 
 }
 
+const debounce = (func, delay) => {
+    let timerId = null;
+    return (...args) => {
+        clearInterval(timerId);
+        timerId = setTimeout(() => func(...args), delay);
+    }
+}
+
 function drawNewTicketCard(jsonObject) {
-    const element = document.querySelector(".tabSelector");
+    const element = document.querySelector(".ticket-list");
     const card = document.createElement("div");
     card.classList.add("ticket-card");
-    card.setAttribute("data-id", jsonObject['id']);
+    card.onclick = () => { location.href = `/ticket/${jsonObject["id"]}` };
+    //TODO: time ago JS side
     card.innerHTML += `
         <h3>#${jsonObject['id']} - ${jsonObject['title']}</h3>
-        <h5>${jsonObject['timeAgo']}</h5>
+        <h5>${formatTimeDifference(jsonObject['createdAt'], (new Date().getTime()) / 1000)}</h5>
         <p>${jsonObject['description']}</p>
         <footer>
-            <tags>  
+            <div>  
                 <span class="tag">${jsonObject['status']}</span>
                 ${jsonObject['hashtags'].split(',').map(hashtag => `<span class="tag">${hashtag}</span>`).join('')}
-            </tags>
+            </div>
+            
         </footer>
-
-        <script src="js/ticket-card.js"></script>
-        <link rel="stylesheet" href="css/ticket-card.css">
     `;
 
     element.appendChild(card);
@@ -41,11 +51,10 @@ const getMoreTicketsData = async (ev) => {
     const element = document.querySelector(".tabSelector")
     if (element === null) return;
     if (element.lastElementChild === null) return;
-    var fetchingTickets = false;
     if (isOnScreen(element.lastElementChild) && !fetchingTickets) {
         fetchingTickets = true;
         console.log("fetching new ticket data...");
-        const res = await fetch(`/api/tickets?limit=10&offset=${offset + element.children.length}`,
+        const res = await fetch(`/api/tickets?limit=10&offset=${offset + element.children.length}${sortOrder !== '' ? `&sortOrder=${sortOrder}` : ''}&tab=${tab}${searchInput !== '' ? `&text=${searchInput}` : ''}`,
             { method: "GET" });
 
         if (res.status !== 200) {
@@ -65,69 +74,53 @@ const getMoreTicketsData = async (ev) => {
 document.addEventListener("scroll", getMoreTicketsData);
 
 
-function handleSortOptionChange(value) {
-    var sortOrder = value === 'lastCreated' ? 'DESC' : 'ASC';
-    var url = new URL(location.href);
-    url.searchParams.set("sortOrder", sortOrder);
-    window.location.href = url.toString();
+async function handleSortOptionChange(value) {
+    sortOrder = value === 'lastCreated' ? 'DESC' : 'ASC';
+    await fetchTickets();
 }
 
-function handleSearchEvent() {
-    var searchText = document.getElementById('search').value;
-    var url = new URL(location.href);
-  
-    url.searchParams.set("text", searchText);
-    url.searchParams.set("offset", "0");
-    url.searchParams.set("limit", "10");
-  
-    window.location.href = url.toString();
+async function searchNewParam(event) {
+    if (event.target.value.length < 3 && event.target.value.length > 1
+        && isNaN(event.target.value)) return;
+    searchInput = event.target.value;
+    offset = 0;
+    end = false;
+    await fetchTickets();
+
 }
-  
-//   function handleSearchInput() {
-//     var searchText = document.getElementById('search').value;
-//     var url = new URL(location.href);
-  
-//     url.searchParams.set("text", searchText);
-//     url.searchParams.set("offset", "0");
-  
-//     var xhr = new XMLHttpRequest();
-//     xhr.onreadystatechange = function () {
-//       if (xhr.readyState === XMLHttpRequest.DONE) {
-//         if (xhr.status === 200) {
-//           var responseHTML = xhr.responseText;
-//           var ticketListStart = responseHTML.indexOf('<div class="ticket-list">');
-//           var ticketListEnd = responseHTML.indexOf('</div>', ticketListStart);
-//           var ticketListHTML = responseHTML.slice(ticketListStart, ticketListEnd + 6);
-  
-//           var ticketList = document.querySelector('.ticket-list');
-//           ticketList.innerHTML = ticketListHTML;
-//         } else {
-//           console.error('Error: ' + xhr.status);
-//         }
-//       }
-//     };
-  
-//     xhr.open('GET', url.toString(), true);
-//     xhr.send();
-//   }
-  
-//   document.getElementById('search').addEventListener('input', handleSearchInput);
 
-  
-
-function handleKeyDown(event) {
-    if (event.key === "Enter") {
-        handleSearchInput();
-        event.preventDefault();
+async function fetchTickets() {
+    fetchingTickets = true;
+    var res = undefined;
+    if (searchInput.length === 0) {
+        res = await fetch(`/api/tickets?limit=10&offset=0${sortOrder !== '' ? `&sortOrder=${sortOrder}` : ''}&tab=${tab}${searchInput !== '' ? `&text=${searchInput}` : ''}`,
+            { method: "GET" });
     }
+
+    if (res === undefined) {
+        res = await fetch(`/api/tickets?limit=10&offset=${offset}${sortOrder !== '' ? `&sortOrder=${sortOrder}` : ''}&tab=${tab}${searchInput !== '' ? `&text=${searchInput}` : ''}`,
+            { method: "GET" });
+    }
+
+
+    if (res.status !== 200) {
+        console.log(`Something went wrong while fetching tickets search query with status ${res.status}`)
+        return;
+    }
+
+    const resJson = await res.json();
+    const ticketList = document.querySelector(".ticket-list");
+    while (ticketList.firstChild) {
+        ticketList.removeChild(ticketList.lastChild);
+    }
+
+    resJson.map(drawNewTicketCard);
+    fetchingTickets = false;
 }
 
-function handleSearchInput() {
-    var searchText = document.getElementById('search').value;
-    var url = new URL(location.href);
+const searchDebounce = debounce(searchNewParam, 300);
 
-    url.searchParams.set('text', searchText);
-    url.searchParams.set('offset', '0');
-
-    window.location.href = url.toString();
-}
+document.addEventListener("DOMContentLoaded", (ev) => {
+    const search = document.querySelector("#search");
+    search.addEventListener("input", searchDebounce);
+});
