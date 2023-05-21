@@ -110,7 +110,7 @@ $tab    = ($_GET["tab"] ?? "users");
     <h1>Admin page</h1>
     <ul class="tabSelector">
         <li <?php
-        if ($tab === "users" || $tab === null) {
+        if ($tab === "users") {
             echo 'class="active"';
         }?>>
             <a href="?tab=users">Users</a>
@@ -124,7 +124,7 @@ $tab    = ($_GET["tab"] ?? "users");
         </li>
     </ul>
 
-    <?php if ($tab === "users" || $_GET["tab"] === null) :?>
+    <?php if ($tab === "users") :?>
         <?php
         $clients = [];
         if (isset($_GET["sort"]) === false) {
@@ -147,7 +147,7 @@ $tab    = ($_GET["tab"] ?? "users");
             <script src="/js/department.js"></script>
 
             <div class="department-buttons">
-                <button onclick="makeAddDepartmentModal()" class="add-new">Add new...</button>
+                <button onclick="makeAddDepartmentModal()" class="primary">Add new department</button>
             </div>
             <?php drawDepartmentTable($departments);
         endif;?>

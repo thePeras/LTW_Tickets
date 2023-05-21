@@ -25,8 +25,8 @@
     navbar($db);
 
     $sign = '<div class = "sign">
-                <a href="/login">Sign up</a>
-                <a href="/register">Sign in for free</a>
+                <a href="/login">Sign in</a>
+                <a href="/register">Sign up for free</a>
             </div>';
 ?>
 <main>

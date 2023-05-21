@@ -1,40 +1,114 @@
 <?php
-    require_once 'components/navbar/navbar.php';
-    require_once 'components/ticket-card/ticket-card.php';
-    require_once 'database/database.php';
+require_once 'components/navbar/navbar.php';
+require_once 'components/ticket-card/ticket-card.php';
+require_once 'database/database.php';
+require_once 'database/tickets.db.php';
+require_once 'components/layout/layout.php';
+
+$db = get_database();
+
+$session = is_session_valid($db);
+if ($session === null) {
+    header("Location: /login");
+    exit();
+}
+
+$client = null;
+
+if ($session !== null) {
+    $client = get_user($session->username, $db);
+}
+
+$limit  = min(intval(($_GET["limit"] ?? 4)), 20);
+$offset = intval(($_GET["offset"] ?? 0));
+
+$sortOrder = ($_GET["sortOrder"] ?? 'DESC');
+if ($sortOrder !== 'ASC' && $sortOrder !== 'DESC') {
+    $sortOrder = 'DESC';
+}
+
+$text = ($_GET["text"] ?? '');
+
+$tab = ($_GET["tab"] ?? "unassigned");
+if ($tab === "unassigned" || $tab === null) {
+    $tickets = getUnassignedTickets($db, $limit, $offset, $sortOrder, $text);
+} else if ($tab === "assignedToMe") {
+    $tickets = getTicketsAssignedTo($client->username, $db, $limit, $offset, $sortOrder, $text);
+} else if ($tab === "createdByMe") {
+    $tickets = getTicketsCreatedBy($client->username, $db, $limit, $offset, $sortOrder, $text);
+} else if ($tab === "allTickets") {
+    $tickets = getAllTickets($db, $limit, $offset, $sortOrder, $text);
+} else if ($tab === "archived") {
+    $tickets = getArchivedTickets($db, $limit, $offset, $sortOrder, $text);
+}
+
+layout_start();
+
 ?>
+<link rel="stylesheet" href="/css/tickets.css">
+<link rel="stylesheet" href="/components/ticket-card/ticket-card.css">
+<script src="/js/datetime.js"></script>
+<script src="/js/tickets.js"></script>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tickets</title>
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/remixicon.css">
-    <link rel="stylesheet" href="css/tickets.css">
-</head>
-<body>
+<h1>Tickets</h1>
+<ul id="buttons">
+    <li>
+        <input type="text" id="search" placeholder="Search" value="<?php echo htmlspecialchars($text); ?>">
+    </li>
+    <li>
+        <select id="sortSelect" onchange="handleSortOptionChange(this.value)">
+            <option value="lastCreated" <?php
+            if ($sortOrder === 'DESC') {
+                echo 'selected';
+            } ?>>Last Created</option>
+            <option value="firstCreated" <?php
+            if ($sortOrder === 'ASC') {
+                echo 'selected';
+            } ?>>First Created</option>
+        </select>
+    </li>
+    <li>
+        <button type="button" class="active">New ticket</button>
+    </li>
+</ul>
 
+<ul class="tabSelector" id="filters">
+    <li <?php
+    if ($tab === "unassigned" || $tab === null) {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=unassigned&text=<?php echo urlencode($text); ?>">Unassigned</a>
+    </li>
+    <li <?php
+    if ($tab === "assignedToMe") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=assignedToMe&text=<?php echo urlencode($text); ?>">Assigned to me</a>
+    </li>
+    <li <?php
+    if ($tab === "createdByMe") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=createdByMe&text=<?php echo urlencode($text); ?>">Created by me</a>
+    </li>
+    <li <?php
+    if ($tab === "allTickets") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=allTickets&text=<?php echo urlencode($text); ?>">All tickets</a>
+    </li>
+    <li <?php
+    if ($tab === "archived") {
+        echo 'class="active"';
+    } ?>>
+        <a href="?tab=archived&text=<?php echo urlencode($text); ?>">Archived</a>
+    </li>
+</ul>
+
+<div class="ticket-list">
+    <?php foreach ($tickets as $ticket) {
+        ticketCard($ticket);
+    } ?>
+</div>
 <?php
-    $db = get_database();
-    echo navbar($db);
-?>
-<main>
-    <h1>Tickets</h1>
-    <ul id = "buttons">
-        <li><button type = "button"> Sort by</button></li>
-        <li><button type = "button" class = "active"> New ticket</button></li>
-    </ul>
-    <ul id = "filters">
-        <li class = "active">Unassigned</li>
-        <li>Assigned to me</li>
-        <li>All tickets</li>
-        <li>Archived</li>
-    </ul>
-    <?php echo ticketCard(); ?>
-</main>
-    
-</body>
-</html>
+layout_end();
