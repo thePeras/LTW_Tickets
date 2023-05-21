@@ -73,12 +73,14 @@ CREATE TABLE Tickets(
     hashtags TEXT,
     assignee TEXT,
     department TEXT,
+    faq INTEGER,
     createdByUser TEXT NOT NULL,
     createdAt NUMBER NOT NULL,
 
     FOREIGN KEY (assignee) REFERENCES Agents(username),
     FOREIGN KEY (createdByUser) REFERENCES Clients(username),
-    FOREIGN KEY (department) REFERENCES Departments(name)
+    FOREIGN KEY (department) REFERENCES Departments(name),
+    FOREIGN KEY (faq) REFERENCES FAQs(id)
 );
 
 CREATE TABLE Comments(

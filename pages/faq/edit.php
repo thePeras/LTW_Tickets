@@ -8,7 +8,11 @@ require_once 'database/database.php';
 
 $db = get_database();
 
-$session = is_session_valid($db);
+$session    = is_session_valid($db);
+$loggedUser = null;
+if ($session !== null) {
+    $loggedUser = get_user($session->username, $db);
+}
 
 if ($session === null) {
     header("Location /login");
@@ -66,28 +70,33 @@ layout_start();
 //TODO csrf
 ?>
 <link rel="stylesheet" type="text/css" href="/css/faq-new.css">
-<h1>Edit FAQ</h1>
-
-
+<script src="/js/faq.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/components.css">
+<h1>FAQ #<?php echo $faq->id?></h1>
 <hr>
 
 <form method="post" class="create-faq">
 
     <input type="hidden" name="id" value="<?php echo $faq->id?>">
     <label for="title">
-        <p>Title:</p>
+        <p>Title</p>
     </label>
-    <input type="text" name="title" required placeholder="Insert your title..." value="<?php echo $faq->title?>">
-
-
+    <input type="text" name="title" required placeholder="Insert your title..." value="<?php echo $faq->title?>" readonly />
 
     <label for="content">
-        <p>Content:</p>
+        <p>Content</p>
     </label>
-    <textarea class="content-area" name="content" rows="10" required placeholder="Insert your content..."><?php echo $faq->content?></textarea>
+    <textarea class="content-area" name="content" rows="10" required placeholder="Insert your content..." readonly><?php echo $faq->content?></textarea>
 
     <br>
-    <input type="submit" value="Edit">
+
+    <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
+        <button id="editButton" class="primary" onclick="handleEditClick(event)">Edit</button>
+        <div id = "editButtons">
+            <button id="cancelButton" style="display: none;" onclick="handleCancelClick(event)">Cancel</button>
+            <input type="submit" class="primary" id="saveButton" value="Save" style="display: none;">
+        </div>
+    <?php endif; ?>
 
 </form>
 

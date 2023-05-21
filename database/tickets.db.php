@@ -23,9 +23,11 @@ class Ticket
 
     public Datetime $createdAt;
 
+    public FAQ $faq;
+
 
     public function __construct(string $title, string $description, int $_epoch, $id=0, string $status="",
-        string $hashtags="", Client $assignee=new Client(""), string $createdByUser="", string $department="",
+        string $hashtags="", Client $assignee=new Client(""), string $createdByUser="", string $department="", FAQ $faq=new FAQ(0)
     ) {
         $this->id            = $id;
         $this->title         = $title;
@@ -36,6 +38,7 @@ class Ticket
         $this->createdByUser = $createdByUser;
         $this->department    = $department;
         $this->createdAt     = new DateTime("@".$_epoch);
+        $this->faq           = $faq;
 
     }
 
@@ -83,6 +86,7 @@ function get_ticket(int $id, PDO $db) : ?Ticket
         new Client(($result['username'] ?? ""), null, null, ($result['displayName'] ?? null), ($result['image'] ?? null)),
         ($result['createdByUser'] ?? ""),
         ($result['department'] ?? ""),
+        (get_faq((int) $result['faq'], $db) ?? new FAQ(0))
     );
 
 }
@@ -111,9 +115,18 @@ function update_ticket_department(Ticket $ticket, PDO $db) : bool
 function update_ticket_status(Ticket $ticket, PDO $db) : bool
 {
     if ($ticket->status === "") {
-        $sql  = "UPDATE Tickets SET status = NULL WHERE id = :id";
+        $sql  = "UPDATE Tickets SET status = NULL, faq = NULL WHERE id = :id";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    if ($ticket->faq->id !== 0) {
+        $sql  = "UPDATE Tickets SET status = :status, faq = :faq WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $ticket->status, PDO::PARAM_STR);
+        $stmt->bindParam(':faq', $ticket->faq->id, PDO::PARAM_INT);
         return $stmt->execute();
     }
 

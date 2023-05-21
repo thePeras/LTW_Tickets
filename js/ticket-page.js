@@ -227,6 +227,117 @@ async function makeDepartmentAssignModal(usertype) {
     }
 }
 
+async function makeFaqModal(usertype) {
+    if (usertype != "agent" && usertype != "admin") {
+        return snackbar("Only agents can close tickets", "warning");
+    }
+
+    const body = document.querySelector("body");
+    body.style.overflow = "hidden";
+
+    const modalElement = document.createElement("div");
+    modalElement.classList.add("modal");
+    modalElement.onclick = (event) => {
+        if (event.target === modalElement) closeModal();
+    }
+
+    const modalContentElement = document.createElement("div");
+    modalContentElement.classList.add("modal-content");
+
+    modalElement.appendChild(modalContentElement);
+    body.appendChild(modalElement);
+
+    //TODO: get csrf token
+
+    modalContentElement.innerHTML = `
+        <h2>Which FAQ?</h2>
+
+        <div class="main-edit-content">
+            
+
+            <div class="modal-buttons">
+                <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
+            </div>
+        </div>
+        `;
+
+    const searchField = document.createElement("input");
+    searchField.type = "text";
+    searchField.placeholder = "Search faq...";
+    searchField.style.zIndex = 1;
+
+    const suggestions = document.createElement("ul");
+    suggestions.classList.add("suggestions");
+
+    mainContent = modalContentElement.querySelector(".main-edit-content");
+    mainContent.parentNode.insertBefore(searchField, mainContent);
+    mainContent.parentNode.insertBefore(suggestions, mainContent);
+
+    searchField.addEventListener("input", async (e) => {
+        const searchValue = searchField.value;
+
+        const res = await fetch(`/api/faqs?q=${searchValue}`, { method: "GET" });
+
+        if (res.status !== 200) {
+            snackbar("Failed to get data", "error");
+            console.log(`failed to get data... with status ${res.status}`);
+            return;
+        }
+
+        const faqs = await res.json();
+
+        suggestions.innerHTML = "";
+        if (faqs.length !== 0) {
+            suggestions.classList.add("has-suggestions");
+            faqs.forEach((faq) => {
+                const suggestion = document.createElement("li");
+                suggestion.classList.add("suggestion");
+                suggestion.innerHTML = `
+                    <div>
+                        <h3>${faq.title}</h3>
+                        <p>${faq.content}</p>
+                    </div>
+                `;
+                // Assign an department to a ticket
+                suggestion.addEventListener("click", () => {
+                    console.log("clicked")
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.display = "none";
+                    const ticketId = document.querySelector("#ticketId").value;
+                    form.action = `/ticket?id=${ticketId}`;
+                    const input = document.createElement("input");
+                    input.name = "action";
+                    input.value = "close";
+                    form.appendChild(input);
+                    const input2 = document.createElement("input");
+                    input2.name = "faqId";
+                    input2.value = faq.id;
+                    form.appendChild(input2);
+                    const input3 = document.createElement("input");
+                    input3.name = "ticketId";
+                    input3.value = ticketId;
+                    form.appendChild(input3);
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+                suggestions.appendChild(suggestion);
+            });
+        } else {
+            suggestions.classList.remove("has-suggestions");
+        }
+    })
+
+    modalElement.style.display = "block";
+    modalElement.style.opacity = 0;
+    modalElement.animate([
+        { opacity: 0 },
+        { opacity: 1, visbility: "visible" },
+    ], { duration: 200, iterations: 1 }).onfinish = (event) => {
+        modalElement.style.opacity = 1;
+    }
+}
+
 async function makeLabelsModal(usertype) {
     if (usertype != "agent" && usertype != "admin") {
         return snackbar("Only agents can add labels", "warning");

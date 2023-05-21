@@ -5,6 +5,7 @@ require_once __DIR__.'/../database/tickets.db.php';
 require_once __DIR__.'/../database/comments.db.php';
 require_once __DIR__.'/../database/department.db.php';
 require_once __DIR__.'/../database/changes.db.php';
+require_once __DIR__.'/../database/faq.db.php';
 
 
 function create_ticket(string $title, string $description, PDO $db) : bool
@@ -118,7 +119,7 @@ function change_department(int $ticketId, string $department, PDO $db) : ?string
 }
 
 
-function close_ticket(int $ticketId, PDO $db) : ?string
+function close_ticket(int $ticketId, ?int $faqId, PDO $db) : ?string
 {
 
     $ticket = get_ticket($ticketId, $db);
@@ -128,6 +129,15 @@ function close_ticket(int $ticketId, PDO $db) : ?string
 
     if ($ticket->status === 'closed') {
         return 'Ticket is already closed';
+    }
+
+    if ($faqId !== null) {
+        $faq = get_faq($faqId, $db);
+        if ($faq === null) {
+            return "FAQ not found";
+        }
+
+        $ticket->faq = $faq;
     }
 
     $ticket->status = 'closed';

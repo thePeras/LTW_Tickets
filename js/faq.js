@@ -8,6 +8,27 @@ var currentUserType = '';
 
 const limit = 10;
 
+function handleCancelClick(e) {
+    e.preventDefault();
+    window.location.reload();
+}
+
+function handleEditClick(e) {
+    e.preventDefault();
+    const title = document.querySelector('input[name="title"]');
+    const content = document.querySelector('textarea[name="content"]');
+    title.readOnly = !content.readOnly;
+    content.readOnly = !content.readOnly;
+
+    var editButton = document.getElementById('editButton');
+    var saveButton = document.getElementById('saveButton');
+    var cancelButton = document.getElementById('cancelButton');
+
+    editButton.style.display = 'none';
+    saveButton.style.display = 'inline-block';
+    cancelButton.style.display = 'inline-block';
+}
+
 function isOnScreen(element) {
     const rect = element.getBoundingClientRect();
     return window.innerHeight > rect.top && rect.top >= 0;
@@ -36,7 +57,7 @@ async function buildResults(result) {
 
     const userJson = await userRes.json();
 
-    
+
     const editButton = `<button class="edit-button" onclick="location.href = '/faq/${result["id"]}'">Edit</button>`
     const deleteButton = `<button class="delete-button" onclick="makeDeleteModal(${result["id"]})">Delete</button>`
 
@@ -50,8 +71,8 @@ async function buildResults(result) {
     <header>
         <h2>#${result["id"]} - ${result["title"]}</h2>
         <div class="faq-buttons">
-            ${currentUserType == "agent" || currentUserType == "admin"  ? editButton : ''}
-            ${currentUserType == "agent" || currentUserType == "admin"  ? deleteButton : ''}
+            ${currentUserType == "agent" || currentUserType == "admin" ? editButton : ''}
+            ${currentUserType == "agent" || currentUserType == "admin" ? deleteButton : ''}
             <i class="ri-add-circle-line"></i>
         </div>
     </header>
@@ -72,7 +93,7 @@ async function searchNewParam(event) {
     var res = undefined;
     if (searchInput.length === 0) {
         res = await fetch(`/api/faqs?limit=1&offset=0`,
-        { method: "GET" });
+            { method: "GET" });
     }
     if (searchInput.length < 3 && searchInput.length >= 1) return;
     offset = 0;
@@ -108,7 +129,7 @@ const addResultClick = () => {
     console.log(faqQuestions);
 
     faqQuestions.forEach((faqQuestion) => {
-        if(faqQuestion.hasAttribute("click-listener")){
+        if (faqQuestion.hasAttribute("click-listener")) {
             return;
         }
         faqQuestion.toggleAttribute("click-listener", true);
@@ -165,9 +186,9 @@ document.addEventListener("DOMContentLoaded", (ev) => {
 document.addEventListener("scroll", getNewFaqs);
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const res = await fetch("/api/clients/me", {method: "get"});
+    const res = await fetch("/api/clients/me", { method: "get" });
 
-    if(res.status !== 200){
+    if (res.status !== 200) {
         console.log(`Something went wrong while getting current user type status: ${res.status}`);
         //assume that it is a client if something goes wrong
         currentUserType = "client";

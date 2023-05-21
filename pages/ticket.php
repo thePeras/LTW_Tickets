@@ -57,8 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         break;
 
-    case "close": //TODO: set changeStatus
+    case "close":
         $ticketId = ($_POST["ticketId"] ?? "");
+        $faqId    = ($_POST["faqId"] ?? null);
+        if ($faqId !== null) {
+            $faqId = intval($faqId);
+        }
+
         if ($ticketId === "") {
             $error = "Invalid ticket";
             break;
@@ -70,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "Ticket is already closed";
                 break;
             } else {
-                $error = close_ticket($ticketId, $db);
+                $error = close_ticket($ticketId, $faqId, $db);
                 if ($error === null) {
                     $success = "Ticket closed successfully";
                 }
@@ -144,7 +149,7 @@ if ($ticket === null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket #2</title>
+    <title>Ticket #<?php echo $ticket->id ?></title>
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/remixicon.css">
@@ -207,36 +212,55 @@ if ($ticket === null) {
                     </button></li>
                 </form>
             <?php } else { ?>
-                <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
-                    <input type="hidden" name="action" value="close">
-                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                    <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
-                        <i class="ri-archive-line"></i>
-                        Close ticket 
-                    </button></li>
-                </form>
+                <li>
+                    <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
+                        <input type="hidden" name="action" value="close">
+                        <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                        <button type = "button" onClick="submitFatherForm(event,this)"> 
+                            <i class="ri-archive-line"></i>
+                            Close ticket 
+                        </button>
+                    </form>
+
+                    <div class="change-status-options">
+                        <header>
+                            <i class="ri-arrow-down-s-line header"></i>
+                        </header>
+                        <ul class="content">
+                            <li>
+                                <button onclick="makeFaqModal(
+                                    <?php
+                                        echo "'$loggedUser->type'";
+                                    ?>
+                                )">Close with FAQ</button>
+                            </li>
+                            <!-- TODO: Add the others status here -->
+                        </ul>
+                    </div>
+                </li>
             <?php } ?>
         </ul>
 
-        <!-- Ticket description -->
-        <div class="ticket-comment">
-            <div class="user-comment">
-                <div class="user">
-                    <img class="avatar" src="<?php echo $author->image ?>" alt="user">
-                    <h3>
-                        <?php echo $author->displayName ?>
-                    </h3>
+        <div>
+            <!-- Ticket description -->
+            <div class="ticket-comment">
+                <div class="user-comment">
+                    <div class="user">
+                        <img class="avatar" src="<?php echo $author->image ?>" alt="user">
+                        <h3>
+                            <?php echo $author->displayName ?>
+                        </h3>
+                        <p>
+                            <?php echo time_ago($ticket->createdAt) ?>
+                        </p>
+                    </div>
                     <p>
-                        <?php echo time_ago($ticket->createdAt) ?>
+                        <?php echo $ticket->description ?>
                     </p>
                 </div>
-                <p>
-                    <?php echo $ticket->description ?>
-                </p>
             </div>
-        </div>
 
-        <div>
+            <!-- Ticket Changes and Comments -->
             <?php foreach ($all as $item) : ?>
                 <!-- Change --> 
                 <?php if (($item instanceof AssignedChange) === true) : ?> 
@@ -299,8 +323,35 @@ if ($ticket === null) {
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
+
+            <!-- Closed with FAQ -->
+            <?php if ($ticket->faq->id !== 0) :
+                $id = $ticket->faq->id;
+                ?>
+                <div class="ticket-comment">
+                    <div class="user-comment">
+                        <h3>
+                            <i class="ri-question-line"></i>
+                            Ticket closed with FAQ <a href="/faq/<?php echo $id ?>">#<?php echo $id ?></a>
+                        </h3>
+                        <?php
+                        $content = explode("\n", $ticket->faq->content);
+                        foreach ($content as $paragraph) : ?>
+                            <p>
+                                <?php echo $paragraph ?>
+                            </p>
+                        <?php endforeach; ?>
+                        <h3>
+                            From original question: 
+                        </h3>
+                        <p class="original-question">
+                            <?php echo $ticket->faq->title ?>
+                        </p>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
-        
+
         <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
             <div class="comment-box top-line">
                 <h3>New comment</h3>
