@@ -194,14 +194,17 @@ function get_clients(?int $limit, ?int $offset, PDO $db) : array
 {
     $sql = "";
     if ($limit === null) {
-        $sql = "SELECT * FROM Clients c)";
+        $sql = "SELECT * FROM Clients c";
     } else {
         $sql = "SELECT * FROM Clients c LIMIT :limit OFFSET :offset";
     }
 
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    if ($limit !== null) {
+        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    }
 
     $stmt->execute();
 
@@ -251,8 +254,11 @@ function get_clients_only(?int $limit, ?int $offset, PDO $db) : array
     }
 
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    if ($limit !== null) {
+        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    }
 
     $stmt->execute();
     $result = $stmt->fetchAll();
@@ -272,14 +278,17 @@ function get_agents(?int $limit, ?int $offset, PDO $db) : array
 {
     $sql = "";
     if ($limit === null) {
-        $sql = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username)";
+        $sql = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username";
     } else {
         $sql = "SELECT * FROM Clients c JOIN Agents a ON a.username = c.username LIMIT :limit OFFSET :offset";
     }
 
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    if ($limit !== null) {
+        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    }
 
     $stmt->execute();
     $result = $stmt->fetchAll();
@@ -299,14 +308,17 @@ function get_admins(int $limit, int $offset, PDO $db) : array
 {
     $sql = "";
     if ($limit === null) {
-        $sql = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username)";
+        $sql = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username";
     } else {
         $sql = "SELECT * FROM Clients c JOIN Admins a ON a.username = c.username LIMIT :limit OFFSET :offset";
     }
 
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    if ($limit !== null) {
+        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    }
 
     $stmt->execute();
     $result = $stmt->fetchAll();

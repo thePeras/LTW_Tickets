@@ -90,20 +90,19 @@ function get_ticket(int $id, PDO $db) : ?Ticket
 
 function update_ticket_department(Ticket $ticket, PDO $db) : bool
 {
-    $sql  = "UPDATE Tickets SET department = :department WHERE id = :id";
+    if ($ticket->department === "") {
+        $sql = "UPDATE Tickets SET department = NULL WHERE id = :id";
+    } else {
+        $sql = "UPDATE Tickets SET department = :department WHERE id = :id";
+    }
+
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
-    $stmt->bindParam(':department', $ticket->department, PDO::PARAM_STR);
-    return $stmt->execute();
 
-}
+    if ($ticket->department !== "") {
+        $stmt->bindParam(':department', $ticket->department, PDO::PARAM_STR);
+    }
 
-
-function remove_ticket_department(Ticket $ticket, PDO $db) : bool
-{
-    $sql  = "UPDATE Tickets SET department = NULL WHERE id = :id";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':id', $ticket->id, PDO::PARAM_INT);
     return $stmt->execute();
 
 }

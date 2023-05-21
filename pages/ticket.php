@@ -98,18 +98,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         break;
     case "changeDepartment":
-        $ticketId   = ($_POST["ticketId"] ?? "");
+        $ticketId   = ($_POST["ticketId"] ?? null);
+        $ticketId   = intval($ticketId);
         $department = ($_POST["department"] ?? "");
         $error      = change_department($ticketId, $department, $db);
-        if ($error !== null) {
-            http_response_code(400);
-            echo $error;
-            exit();
+        if ($error === null) {
+            if ($department === "") {
+                $success = "Department unassigned";
+            } else {
+                $success = "Department $department assigned";
+            }
         }
-
-        http_response_code(200);
-        echo "Department changed successfully";
-        exit();
         break;
     }
 }
@@ -203,7 +202,7 @@ if ($ticket === null) {
                     <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                         <input type="hidden" name="action" value="open">
                         <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                        <li><button type = "button" onClick="submitForm(event,this)"> 
+                        <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
                             <i class="ri-book-open-line"></i>
                             Reopen ticket 
                         </button></li>
@@ -212,7 +211,7 @@ if ($ticket === null) {
                     <form method="post" action="ticket?id=<?php echo $ticket->id ?>">
                         <input type="hidden" name="action" value="close">
                         <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                        <li><button type = "button" onClick="submitForm(event,this)"> 
+                        <li><button type = "button" onClick="submitGrandFatherForm(event,this)"> 
                             <i class="ri-archive-line"></i>
                             Close ticket 
                         </button></li>
@@ -314,35 +313,33 @@ if ($ticket === null) {
 
         <div class="action-panel">
             <div class="side-card">
-                <div>
-                    <h4 class="task-label">Assignee</h4>
-                    <?php if ($ticket->assignee->username !== "") : ?>
-                        <div class="user">
-                            <div>
-                                <img class="avatar" src="<?php echo $ticket->assignee->image ?>" alt="user">
-                                <?php echo $ticket->assignee->displayName ?>
-                            </div>
-                            <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
-                                <form method="POST" action="
-                                    <?php echo "ticket?id=$ticket->id" ?>
-                                ">
-                                    <input type="hidden" name="action" value="unassign">
-                                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
-                                    <i class="ri-close-line" onclick="removeAssignee(event, this)"></i>
-                                </form>
-                            <?php endif; ?>
+                <h4 class="task-label">Assignee</h4>
+                <?php if ($ticket->assignee->username !== "") : ?>
+                    <div class="user">
+                        <div>
+                            <img class="avatar" src="<?php echo $ticket->assignee->image ?>" alt="user">
+                            <?php echo $ticket->assignee->displayName ?>
                         </div>
-                    <?php else : ?>
-                    <p onclick="makeUserAssignModal(
-                        <?php
-                            echo "'$loggedUser->type'";
-                        ?>
-                    )">
-                        <i class="ri-account-circle-line"></i>
-                        Unassigned
-                    </p>
-                    <?php endif; ?>
-                </div>
+                        <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
+                            <form method="POST" action="
+                                <?php echo "ticket?id=$ticket->id" ?>
+                            ">
+                                <input type="hidden" name="action" value="unassign">
+                                <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                <i class="ri-close-line" onclick="submitFatherForm(event, this)"></i>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                <?php else : ?>
+                <p onclick="makeUserAssignModal(
+                    <?php
+                        echo "'$loggedUser->type'";
+                    ?>
+                )">
+                    <i class="ri-account-circle-line"></i>
+                    Unassigned
+                </p>
+                <?php endif; ?>
             </div>
             <div class="side-card">
                 <h4 class="task-label">Labels</h4>
@@ -359,16 +356,32 @@ if ($ticket === null) {
             </div>
             <div class="side-card">
                 <h4 class="task-label">Department</h4>
-                <div>
-                    <select name="departments" id="departmentSelect">
-                        <option value="">No department</option> 
-                        <?php foreach ($departments as $department) : ?>
-                            <option value="<?php echo $department->name ?>">
-                                <?php echo $department->name ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                <?php if ($ticket->department !== "") : ?>
+                        <div class="user">
+                            <div>
+                                <span><i class="ri-building-4-line"></i></span>
+                                <?php echo $ticket->department ?>
+                            </div>
+                            <?php if ($loggedUser->type === "admin" || $loggedUser->type === "agent") : ?>
+                                <form method="POST" action="
+                                    <?php echo "ticket?id=$ticket->id" ?>
+                                ">
+                                    <input type="hidden" name="action" value="changeDepartment">
+                                    <input type="hidden" name="ticketId" value="<?php echo $ticket->id ?>">
+                                    <i class="ri-close-line" onclick="submitFatherForm(event, this)"></i>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php else : ?>
+                    <p onclick="makeDepartmentAssignModal(
+                        <?php
+                            echo "'$loggedUser->type'";
+                        ?>
+                    )">
+                        <i class="ri-account-circle-line"></i>
+                        Unassigned
+                    </p>
+                    <?php endif; ?>
             </div>
         </div>
     </main>

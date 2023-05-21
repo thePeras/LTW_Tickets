@@ -25,7 +25,7 @@ class Department implements JsonSerializable
     }
 
 
-    public function __construct(string $_name, string $_description)
+    public function __construct(string $_name, ?string $_description="")
     {
         $this->name        = $_name;
         $this->description = $_description;
@@ -36,12 +36,19 @@ class Department implements JsonSerializable
 }
 
 
-function get_departments(int $limit, int $offset, PDO $db, $returnClients=true) : array
+function get_departments(?int $limit, int $offset, PDO $db, $returnClients=true) : array
 {
-    $sql  = "SELECT * FROM Departments LIMIT :limit OFFSET :offset";
+    $sql = "SELECT * FROM Departments";
+    if ($limit !== null) {
+        $sql .= " LIMIT :limit OFFSET :offset";
+    }
+
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    if ($limit !== null) {
+        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    }
 
     $stmt->execute();
 

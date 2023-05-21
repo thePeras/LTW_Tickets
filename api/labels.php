@@ -15,7 +15,7 @@ handle_api_route(
 
         //$labels = get_labels($query, $db);
 
-        //echo json_encode($labels);
+        //echo json_encode(array_values($labels));
     }
 );
 

@@ -92,9 +92,10 @@ function change_department(int $ticketId, string $department, PDO $db) : ?string
         return 'Ticket not found';
     }
 
-    // Reseting department
+    // Removing department
     if ($department === '') {
-        if (remove_ticket_department($ticket, $db) !== false) {
+        $ticket->department = '';
+        if (update_ticket_department($ticket, $db) === false) {
             return 'Error updating ticket';
         }
 
