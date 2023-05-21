@@ -69,7 +69,7 @@ function navbar(PDO $db)
         <nav class="sidebar sticky">
             <div class="inital-sidebar">
                 <div class="logo">
-                    <h1>Tickets Manager</h1>
+                    <h1>Aura</h1>
                 </div>
                 <ul>
                     <li <?php
