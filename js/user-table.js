@@ -91,8 +91,8 @@ function makeDeleteModal(username) {
 
     //TODO: inject CSRF token
     modalContentElement.innerHTML = `
-    <h1>Delete User</h1>
-    <p>Are you sure that you want to delete user <b>${username}</b>? This action is irreversible...</p>
+    <h1>Delete user</h1>
+    <p>Are you sure that you want to delete user <b>${username}</b>? <br/> This action is irreversible!</p>
     <div class="modal-buttons">
         <button class="cancel-button" onclick="closeModal()"><p>Cancel</p></button>
         <form method="post" action="admin">
@@ -140,7 +140,7 @@ async function makeEditModal(username) {
         <h2>Edit user</h2>
         <div class="main-edit-content">
             <div class="image-username">
-                <img class="user-photo" src="/assets/images/person.png" alt="user">
+                <img class="user-photo" src="${resJson["image"]}" alt="user">
                 <p class="username">${resJson["username"]}</p>
             </div>
             <form name="editUserForm", action="admin" class="edit-user-form" method="post">
@@ -172,7 +172,7 @@ async function makeEditModal(username) {
 
                 <div class="modal-buttons">
                     <input type="button" class="cancel-button" onclick="closeModal()" value="Cancel">
-                    <input type="submit" class="edit-button" value="Save">
+                    <input type="submit" class="primary" value="Save">
 
                 </div>
             </form>

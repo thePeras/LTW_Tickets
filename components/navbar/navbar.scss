@@ -1,8 +1,33 @@
-
 @import "../../css/theme.scss";
 
+#navbar-checkbox {
+    display: none;
+}
+
+label[for="navbar-checkbox"] {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+#navbar-open,
+#navbar-close {
+    display: none;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 3rem;
+    color: $black-color;
+    cursor: pointer;
+    z-index: 1000;
+}
+
 nav.sidebar {
+    position: fixed;
     padding: 2rem;
+    width: calc(280px - 4rem);
+    height: calc(100% - 4rem);
     border-right: 2px solid #e6e6ee;
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -10,9 +35,11 @@ nav.sidebar {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    > .inital-sidebar{
+
+    >.inital-sidebar {
         flex: 1;
     }
+
     div.logo {
         margin-bottom: 3rem;
     }
@@ -45,7 +72,7 @@ nav.sidebar {
             }
         }
 
-        li.active a {
+        li[data-active="true"] a {
             background-color: $primary-color;
             color: #fff;
         }
@@ -56,29 +83,68 @@ nav.sidebar {
         display: flex;
         align-items: center;
         gap: 0.3rem;
+        justify-content: space-between;
+        padding: 0.5rem;
+        border-radius: 8px;
 
-        img.avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        &:hover {
             cursor: pointer;
+            background-color: $hover-color;
+
+            h3:before,
+            p:before {
+                display: none;
+            }
         }
 
         div {
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
 
-            h3 {
-                font-size: 1rem;
-                font-weight: 500;
-                color: $black-color;
+            img.avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
             }
 
-            p {
-                font-size: 0.8rem;
-                font-weight: 400;
-                color: $black-secondary;
+            div {
+                display: block;
+                cursor: pointer;
+
+                h3 {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: $black-color;
+                    max-width: 120px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    position: relative;
+                }
+
+                p {
+                    font-size: 0.8rem;
+                    font-weight: 400;
+                    color: $black-secondary;
+                    position: relative;
+
+                }
+
+                // Text overflow fade effect
+                h3:before,
+                p:before {
+                    content: '';
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    background: linear-gradient(90deg, transparent 90px, #f9faff);
+                }
             }
         }
+
 
         .logout {
             cursor: pointer;
@@ -106,7 +172,63 @@ nav.sidebar {
 }
 
 @media screen and (max-width: 950px) {
-    nav.sidebar {
+
+    // Button 
+    #navbar-checkbox:checked~label>#navbar-close {
+        display: block;
+    }
+
+    #navbar-checkbox:not(:checked)~label>#navbar-open {
+        display: block;
+    }
+
+    // Navbar
+    #navbar-checkbox:checked~nav.sidebar {
+        display: flex;
+        gap: 2rem;
+    }
+
+    #navbar-checkbox:checked~main {
         display: none;
+    }
+
+
+    #navbar-checkbox:not(:checked)~nav.sidebar {
+        display: none;
+    }
+
+    nav.sidebar {
+        text-align: center;
+        min-height: 100vh;
+        overflow-y: scroll;
+        width: calc(100% - 4rem);
+        border: none;
+        align-items: center;
+        justify-content: center;
+
+        >.inital-sidebar {
+            flex: none;
+        }
+
+        ul {
+            li {
+                width: 200px;
+            }
+        }
+
+        div.user {
+            gap: 0.5rem;
+            margin: 0 auto;
+            justify-content: center;
+            text-align: left;
+
+            .logout {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.2rem;
+            }
+
+        }
     }
 }

@@ -8,7 +8,12 @@ require_once 'components/layout/layout.php';
 $db = get_database();
 
 $session = is_session_valid($db);
-$client  = null;
+if ($session === null) {
+    header("Location: /login");
+    exit();
+}
+
+$client = null;
 
 if ($session !== null) {
     $client = get_user($session->username, $db);

@@ -24,21 +24,22 @@ CREATE TABLE Sessions(
     user TEXT PRIMARY KEY,
     token TEXT UNIQUE NOT NULL,
     lastUsedDate INTEGER NOT NULL,
-    FOREIGN KEY(user) REFERENCES Clients(username)
+    FOREIGN KEY(user) REFERENCES Clients(username) ON DELETE CASCADE
 );
 CREATE TABLE Agents(
     username TEXT PRIMARY KEY,
-    FOREIGN KEY (username) REFERENCES Clients(username)
+    FOREIGN KEY (username) REFERENCES Clients(username) ON DELETE CASCADE
 );
 CREATE TABLE Admins(
     username TEXT PRIMARY KEY,
-    FOREIGN KEY (username) REFERENCES Agents(username)
+    FOREIGN KEY (username) REFERENCES Agents(username) ON DELETE CASCADE
 );
 CREATE TABLE FAQs(
     id INTEGER PRIMARY KEY NOT NULL,
-    createdByUser TEXT NOT NULL,
+    createdByUser TEXT,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
+
     FOREIGN KEY (createdByUser) REFERENCES Agents(username)
 );
 CREATE TABLE Departments(
@@ -49,8 +50,8 @@ CREATE TABLE AgentDepartments(
     agent TEXT NOT NULL,
     department TEXT NOT NULL,
     PRIMARY KEY (agent, department),
-    FOREIGN KEY (agent) REFERENCES Agents(username),
-    FOREIGN KEY (department) REFERENCES Departments(name)
+    FOREIGN KEY (agent) REFERENCES Agents(username) ON DELETE CASCADE,
+    FOREIGN KEY (department) REFERENCES Departments(name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE Tickets(
     id INTEGER PRIMARY KEY,
@@ -59,19 +60,20 @@ CREATE TABLE Tickets(
     status TEXT,
     hashtags TEXT,
     assignee TEXT,
-    createdByUser TEXT NOT NULL,
+    createdByUser TEXT,
     createdAt INTEGER NOT NULL,
-    department TEXT NOT NULL,
-    FOREIGN KEY (assignee) REFERENCES Agents(username),
-    FOREIGN KEY (createdByUser) REFERENCES Clients(username),
-    FOREIGN KEY (department) REFERENCES Departments(name)
+    department TEXT,
+
+    FOREIGN KEY (assignee) REFERENCES Agents(username) ON DELETE SET NULL,
+    FOREIGN KEY (createdByUser) REFERENCES Clients(username) ON DELETE SET NULL,
+    FOREIGN KEY (department) REFERENCES Departments(name) ON DELETE SET NULL
 );
 CREATE TABLE Comments(
     id INTEGER PRIMARY KEY,
     content TEXT NOT NULL,
-    createdByUser TEXT NOT NULL,
+    createdByUser TEXT,
     ticket INTEGER NOT NULL,
-    FOREIGN KEY (createdByUser) REFERENCES Clients(username),
+    FOREIGN KEY (createdByUser) REFERENCES  Clients(username),
     FOREIGN KEY (ticket) REFERENCES Tickets(id)
 );
 CREATE TABLE Changes(
@@ -79,6 +81,7 @@ CREATE TABLE Changes(
     timestamp INTEGER NOT NULL,
     user TEXT NOT NULL,
     FOREIGN KEY (user) REFERENCES Clients(username)
+
 );
 CREATE TABLE AssignedChanges(
     agent TEXT NOT NULL,

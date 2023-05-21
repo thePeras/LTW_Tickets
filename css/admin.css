@@ -1,12 +1,12 @@
 .tabSelector {
   display: flex;
   padding: 1rem;
+  gap: 1rem;
 }
 .tabSelector > li {
   list-style-type: none;
   flex: 1;
   border-radius: 8px;
-  margin: 0rem 0.5rem;
 }
 .tabSelector > li > a {
   padding: 1rem 0rem;
@@ -33,7 +33,18 @@
   color: rgba(65, 68, 73, 0.5137254902);
 }
 
+table th:first-child {
+  text-align: left;
+}
+table td {
+  text-align: center;
+}
+table td:first-child {
+  text-align: left;
+}
+
 .user-table {
+  width: 100%;
   border-collapse: collapse;
   padding: 1em 0em;
 }
@@ -52,6 +63,7 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+  padding-left: 0;
 }
 .user-table .user-photo {
   width: 40px;
@@ -87,9 +99,6 @@
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(202, 207, 218, 0.2352941176);
 }
-.user-table .role-filter > h3 {
-  padding: 1em 1em;
-}
 .user-table .role-filter > a {
   display: block;
   padding: 0.5em 1em;
@@ -104,24 +113,28 @@
 .department-buttons {
   display: flex;
   flex-direction: row;
-  justify-content: start;
-  padding: 1em 0em;
-}
-.department-buttons .add-new {
-  background-color: #06ad00;
-  color: white;
+  justify-content: end;
+  padding-right: 1em;
 }
 
 .department-table {
   border-collapse: collapse;
   padding: 1em 0em;
+  width: 100%;
 }
 .department-table th {
   padding: 0.5rem 1rem;
   border-bottom: 2px solid rgba(202, 207, 218, 0.2352941176);
 }
+.department-table th:first-child {
+  text-align: left;
+}
 .department-table td {
   padding: 0.5rem 1rem;
+  text-align: center;
+}
+.department-table td:first-child {
+  text-align: left;
 }
 .department-table .icon {
   font-size: 1.4em;

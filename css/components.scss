@@ -3,12 +3,14 @@
 $border-radius: 8px;
 $placeholder-color: #929292;
 
-button {
+button,
+input[type="button"],
+input[type="submit"],
+a.button {
     cursor: pointer;
     text-align: center;
     font-size: 1rem;
     font-weight: 500;
-    color: #363c4c;
     display: block;
     padding: 0.8rem;
     text-decoration: none;
@@ -16,6 +18,7 @@ button {
     border-radius: $border-radius;
     background-color: rgba(111, 113, 119, 0.235);
     border: none;
+    margin: 0;
 
     &:hover {
         background-color: rgba(111, 113, 119, 0.235);
@@ -29,6 +32,30 @@ button {
     &.primary:hover {
         background-color: desaturate($primary-color, 15%);
     }
+
+    &.cancel {
+        background-color: $hover-color;
+        color: $black-color;
+    }
+
+    &.cancel:hover {
+        background-color: #989ba13c;
+    }
+
+    &.delete {
+        background-color: $delete-color;
+        color: white;
+    }
+
+
+    &.delete:hover {
+        background-color: #a70d02;
+    }
+
+}
+
+.cancel-button:hover {
+    background-color: #989ba13c;
 
     &:focus {
         outline: none;
@@ -88,20 +115,6 @@ input {
 
     &::placeholder {
         color: $placeholder-color;
-    }
-}
-
-input[type="submit"] {
-    background-color: #5449f0;
-    color: white;
-    font-weight: bold;
-    padding: 0.5rem;
-    border-radius: $border-radius;
-    padding: 0.5rem 1.5rem;
-    cursor: pointer;
-
-    &:hover {
-        opacity: 0.8;
     }
 }
 

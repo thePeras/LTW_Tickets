@@ -36,12 +36,12 @@ async function buildResults(result) {
 
     const userJson = await userRes.json();
 
-    
-    const editButton = `<button class="edit-button" onclick="location.href = '/faq/${result["id"]}'">Edit</button>`
-    const deleteButton = `<button class="delete-button" onclick="makeDeleteModal(${result["id"]})">Delete</button>`
+
+    const editButton = `<i class="ri-edit-line" onclick="location.href = '/faq/${result["id"]}'"></i>`;
+    const deleteButton = `<i class="ri-delete-bin-line" onclick="makeDeleteModal(${result["id"]})"></i>`;
 
 
-    var contents = result["content"].split("\n");
+    var contents = result["content"].split("\r\n");
     contents = contents.map((value, _) => "<p>" + value + "</p>");
 
     question.classList.add("faq-question");
@@ -50,16 +50,16 @@ async function buildResults(result) {
     <header>
         <h2>#${result["id"]} - ${result["title"]}</h2>
         <div class="faq-buttons">
-            ${currentUserType == "agent" || currentUserType == "admin"  ? editButton : ''}
-            ${currentUserType == "agent" || currentUserType == "admin"  ? deleteButton : ''}
-            <i class="ri-add-circle-line"></i>
+            ${currentUserType == "agent" || currentUserType == "admin" ? editButton : ''}
+            ${currentUserType == "agent" || currentUserType == "admin" ? deleteButton : ''}
+            <i class="ri-add-circle-line open-close"></i>
         </div>
     </header>
     <div class="content">
-        ${contents}
+        ${contents.join("\n")}
         <div class="created-by">
             <p>By:</p>
-            <img class="avatar" src="/assets/images/person.png" alt="user">
+            <img class="avatar" src="/${userJson["image"]}" alt="user">
             <p class="display-name">${userJson["displayName"]}</p>
         </div>
     `;
@@ -105,23 +105,29 @@ const searchDebounce = debounce(searchNewParam, 300);
 
 const addResultClick = () => {
     const faqQuestions = document.querySelectorAll('.faq-question');
-    console.log(faqQuestions);
-
     faqQuestions.forEach((faqQuestion) => {
-        if(faqQuestion.hasAttribute("click-listener")){
-            return;
-        }
-        faqQuestion.toggleAttribute("click-listener", true);
         faqQuestion.addEventListener('click', (e) => {
             // Clicking in the content do nothing
-            if (e.target.classList.contains('content') || e.target.parentElement.classList.contains('content') || e.target.tagName == "BUTTON") {
+            if (e.target.classList.contains('content') ||
+                e.target.parentElement.classList.contains('content') ||
+                e.target.tagName == "BUTTON" ||
+                e.target.classList.contains('ri-edit-line') ||
+                e.target.classList.contains('ri-delete-bin-line')
+            ) {
                 return;
             }
 
-            //ri-add-circle-line: closed status
-            //ri-close-circle-line: open status
-            faqQuestion.querySelector('i').classList.toggle('ri-add-circle-line');
-            faqQuestion.querySelector('i').classList.toggle('ri-close-circle-line');
+            // Check if faqQuestion is active
+            if (!faqQuestion.classList.contains('active')) {
+                faqQuestions.forEach((faqQuestion) => {
+                    faqQuestion.querySelector('i.open-close').classList.remove('ri-close-circle-line');
+                    faqQuestion.querySelector('i.open-close').classList.add('ri-add-circle-line');
+                    faqQuestion.classList.remove('active');
+                });
+            }
+
+            faqQuestion.querySelector('i.open-close').classList.toggle('ri-add-circle-line');
+            faqQuestion.querySelector('i.open-close').classList.toggle('ri-close-circle-line');
             faqQuestion.classList.toggle('active');
         });
     })
@@ -157,7 +163,7 @@ async function getNewFaqs(ev) {
 document.addEventListener("DOMContentLoaded", addResultClick);
 
 document.addEventListener("DOMContentLoaded", (ev) => {
-    const searchInput = document.querySelector('.search-input');
+    const searchInput = document.querySelector('#fq-search');
 
     searchInput.addEventListener("input", searchDebounce);
 });
@@ -165,9 +171,9 @@ document.addEventListener("DOMContentLoaded", (ev) => {
 document.addEventListener("scroll", getNewFaqs);
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const res = await fetch("/api/clients/me", {method: "get"});
+    const res = await fetch("/api/clients/me", { method: "get" });
 
-    if(res.status !== 200){
+    if (res.status !== 200) {
         console.log(`Something went wrong while getting current user type status: ${res.status}`);
         //assume that it is a client if something goes wrong
         currentUserType = "client";
@@ -201,8 +207,6 @@ function makeDeleteModal(id) {
         <form method="post" action="faq">
             <input type="hidden" name="action" value="deleteFAQ">
             <input type="hidden" name="id" value="${id}">
-            <input type="hidden" name="lastHref" value="${location.href}">
-
 
             <input type="submit" class="delete-button" value="Delete">
         </form>

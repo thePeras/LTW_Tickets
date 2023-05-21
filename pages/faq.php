@@ -67,13 +67,13 @@ $faqs = get_FAQs($limit, $offset, $db);
     <h1>FAQ</h1>
     <p>Frequently Asked Questions</p>
     <div class="top-content">
+        <?php if (is_current_user_agent($db) === true) :?>
+            <button  type="button" class="primary" onclick="location.href= '/faq/new'">Create new FAQ</button>
+        <?php endif;?>
         <div class="search">
             <h4>Have Questions? We're here to help.</h4>
-            <input type="text" placeholder="Search" class="search-input" autocomplete="off">
+            <input type="text" placeholder="Search for the question" id="fq-search" autocomplete="off">
         </div>
-        <?php if (is_current_user_agent($db) === true) :?>
-            <button  type="button" class="create-faq primary" onclick="location.href= '/faq/new'">Create new...</button>
-        <?php endif;?>
     </div>
     <div class="faq-content">
         <?php foreach ($faqs as $faq) :
@@ -84,13 +84,12 @@ $faqs = get_FAQs($limit, $offset, $db);
                 <h2>#<?php echo $faq->id?> - <?php echo $faq->title?></h2>
                 <div class="faq-buttons">
                     <?php if (is_current_user_agent($db) === true) :?>
-                        <button class="edit-button" onclick="location.href = '/faq/<?php echo $faq->id?>'">Edit</button>
-
+                        <i class="ri-edit-line" onclick="location.href = '/faq/<?php echo $faq->id?>'"></i>
                     <?php endif;?>
                     <?php if (is_current_user_agent($db) === true) :?>
-                        <button class="delete-button" onclick="makeDeleteModal(<?php echo $faq->id?>)">Delete</button>
+                        <i class="ri-delete-bin-line" onclick="makeDeleteModal(<?php echo $faq->id?>)"></i>
                     <?php endif;?>
-                    <i class="ri-add-circle-line"></i>
+                    <i class="ri-add-circle-line open-close"></i>
                 </div>
             </header>
             <div class="content">
@@ -99,7 +98,7 @@ $faqs = get_FAQs($limit, $offset, $db);
                 <?php endforeach;?>
                 <div class="created-by">
                     <p>By:</p>
-                    <img class="avatar" src= <?php echo $user->image?> alt="user">
+                    <img class="avatar" src="/<?php echo $user->image?>" alt="user">
                     <p class="display-name"><?php echo $user->displayName?></p>
                 </div>
             </div>
@@ -109,8 +108,8 @@ $faqs = get_FAQs($limit, $offset, $db);
 
     <div class="faq-footer">
         <h2>Still have questions?</h2>
-        <p>Don't worry. Create an issue and we'll get back to you as soon as possible.</p>
-        <button type="button" class="primary">Create an Issue</button>
+        <p>Don't worry. Create a ticket and we'll get back to you as soon as possible.</p>
+        <a href="/newTicket" class="button">Create a ticket</a>
     </div>
 
 
