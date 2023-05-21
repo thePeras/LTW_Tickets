@@ -34,7 +34,7 @@
         <?php if ($session === null) {
             echo $sign;
         } ?>
-        <h1>Aura</h1>
+        <h1>Aura Tickets</h1>
         <h2>The easiest way to manage your work</h2>
     </header>
     <section>

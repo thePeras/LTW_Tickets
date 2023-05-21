@@ -4,6 +4,20 @@
     display: none;
 }
 
+nav{
+    .logo{
+        h1{
+            text-align: center;
+            a{
+                text-decoration: none;
+                color: $black-color;
+            }
+        }
+    }
+
+
+}
+
 label[for="navbar-checkbox"] {
     position: fixed;
     top: 0;

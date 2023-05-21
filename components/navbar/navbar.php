@@ -78,7 +78,9 @@ function navbar(PDO $db)
         <nav class="sidebar">
             <div class="inital-sidebar">
                 <div class="logo">
-                    <h1>Aura</h1>
+                    <h1>
+                        <a href="/">Aura Tickets</a>
+                    </h1>
                 </div>
                 <ul>
                     <li data-active="<?php echo $isActive("tickets"); ?>">
