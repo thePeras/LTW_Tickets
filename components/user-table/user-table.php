@@ -63,7 +63,7 @@ function drawUserTable(array $clients)
             <i class="ri-edit-line icon" onclick="makeEditModal('<?php echo $client->username?>')"></i>
         </td>
         <td>
-            <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo $client->username?>')")></i>
+            <i class="ri-delete-bin-line icon delete" onclick="makeDeleteModal('<?php echo $client->username?>')"></i>
         </td>
     </tr>
     <?php endforeach;?>
