@@ -1,28 +1,41 @@
 <?php
+require_once "database/tickets.db.php";
+require_once "utils/datetime.php";
 
 
-function ticketCard()
+function ticketCard(Ticket $ticket)
 {
-    return <<<HTML
-        <link rel="stylesheet" type="text/css" href="components/ticket-card/ticket-card.css">
-        
-        <div class="ticket-card" data-id="1">
-            <h3>Cannot access the system</h3>
-            <h5>3h ago</h5>
-            <p>Life seasons open have. Air have of. Lights fill after let third darkness replenish fruitful let. Wherein set image. Creepeth said above gathered bring</p>
+    $id          = $ticket->id;
+    $title       = htmlspecialchars($ticket->title);
+    $description = htmlspecialchars($ticket->description);
+    $status      = htmlspecialchars($ticket->status);
+    $hashtags    = htmlspecialchars($ticket->hashtags);
+
+    $hashtags = explode(",", $hashtags);
+
+    $tags = '';
+    foreach ($hashtags as $hashtag) {
+        $tags .= "<span class='tag'>$hashtag</span>";
+    }
+    ?>        
+        <div class="ticket-card" onclick="location.href = '/ticket?id=<?php echo $id?>'">
+            <h3>#<?php echo $id?> - <?php echo $title?></h3>
+            <h5><?php echo time_ago($ticket->createdAt)?></h5>
+            <p><?php echo $description?></p>
             <footer>
-                <tags>
-                    <span class="tag urgent">Urgent</span>
-                    <span class="tag">a thing</span>
-                </tags>
+                <div>
+                    <span class="tag"><?php echo $status?></span>
+                    <?php echo $tags?>
+                </div>
+                <!---
                 <comments>
                     <span class="ri-chat-1-line"></span>
                     <span>3</span>
                 </comments>
+                -->
             </footer>
         </div>
 
-        <script src="js/ticket-card.js"></script>
-    HTML;
+    <?php
 
 }

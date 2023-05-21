@@ -95,8 +95,12 @@ function get_departments(?int $limit, int $offset, PDO $db, $returnClients=true)
 }
 
 
-function get_department(string $name, PDO $db) : ?Department
+function get_department(?string $name, PDO $db) : ?Department
 {
+
+    if ($name === null || $name === "null") {
+        return new Department("Deleted department", "");
+    }
 
     $sql = "SELECT * FROM Departments WHERE name=:name";
 
@@ -171,18 +175,6 @@ function edit_department(string $name, string $description, array $members, PDO 
 
 function delete_department(string $name, PDO $db) : bool
 {
-    $sql = "DELETE FROM AgentDepartments WHERE department=:department";
-
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(":department", $name);
-
-    if ($stmt->execute() === false) {
-        log_to_stdout("Failed to remove agents from department ".$name, "e");
-        return false;
-    }
-
-    //TODO: make this delete cascade to a "deleted department"
-
     $sql  = "DELETE FROM Departments WHERE name=:name";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":name", $name);

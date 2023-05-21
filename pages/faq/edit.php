@@ -77,16 +77,16 @@ layout_start();
 
 <form method="post" class="create-faq">
 
-    <input type="hidden" name="id" value="<?php echo $faq->id?>">
+<input type="hidden" name="id" value="<?php echo $faq->id?>">
     <label for="title">
-        <p>Title</p>
+        <p>Question</p>
     </label>
-    <input type="text" name="title" required placeholder="Insert your title..." value="<?php echo $faq->title?>" readonly />
+    <input type="text" name="title" required placeholder="What is the question?" value="<?php echo $faq->title?>" readonly />
 
     <label for="content">
-        <p>Content</p>
+        <p>Answer</p>
     </label>
-    <textarea class="content-area" name="content" rows="10" required placeholder="Insert your content..." readonly><?php echo $faq->content?></textarea>
+    <textarea class="content-area" name="content" rows="10" required placeholder="Write the corresponding answer" readonly><?php echo $faq->content?></textarea>
 
     <br>
 

@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-class Ticket
+require_once __DIR__.'/../database/faq.db.php';
+require_once "utils/datetime.php";
+
+class Ticket implements JsonSerializable
 {
 
     public int $id;
@@ -26,6 +29,24 @@ class Ticket
     public FAQ $faq;
 
 
+    public function jsonSerialize() : mixed
+    {
+        return [
+            "id"            => $this->id,
+            "title"         => $this->title,
+            "description"   => $this->description,
+            "status"        => $this->status,
+            "hashtags"      => $this->hashtags,
+            "assignee"      => $this->assignee,
+            "createdByUser" => $this->createdByUser,
+            "createdAt"     => $this->createdAt,
+            "timeAgo"       => time_ago($this->createdAt),
+            "department"    => $this->department,
+        ];
+
+    }
+
+
     public function __construct(string $title, string $description, int $_epoch, $id=0, string $status="",
         string $hashtags="", Client $assignee=new Client(""), string $createdByUser="", string $department="", FAQ $faq=new FAQ(0)
     ) {
@@ -34,7 +55,7 @@ class Ticket
         $this->description   = $description;
         $this->status        = $status;
         $this->hashtags      = $hashtags;
-        $this->assignee      = $assignee;
+        $this->assignee      = ($assignee ?? null);
         $this->createdByUser = $createdByUser;
         $this->department    = $department;
         $this->createdAt     = new DateTime("@".$_epoch);
@@ -42,6 +63,179 @@ class Ticket
 
     }
 
+
+}
+
+
+function getUnassignedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
+{
+    $text = "%$text%";
+    $sql  = "SELECT * FROM Tickets WHERE assignee IS NULL AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $tickets = [];
+
+    foreach ($result as $ticket) {
+        $tickets[] = new Ticket(
+            $ticket['title'],
+            $ticket['description'],
+            (int) $ticket['createdAt'],
+            (int) $ticket['id'],
+            ($ticket['status'] ?? ""),
+            ($ticket['hashtags'] ?? ""),
+            (get_user($ticket['assignee'], $db)),
+            ($ticket['createdByUser'] ?? ""),
+            ($ticket['department'] ?? ""),
+            (get_faq((int) $ticket['faq'], $db) ?? new FAQ(0))
+        );
+    }
+
+    return $tickets;
+
+}
+
+
+function getTicketsAssignedTo(string $username, PDO $db, $limit, $offset, $sortOrder, $text): array
+{
+    $text = "%$text%";
+    $sql  = "SELECT * FROM tickets WHERE assignee = :username AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $tickets = [];
+
+    foreach ($result as $ticket) {
+        $tickets[] = new Ticket(
+            $ticket['title'],
+            $ticket['description'],
+            (int) $ticket['createdAt'],
+            (int) $ticket['id'],
+            ($ticket['status'] ?? ""),
+            ($ticket['hashtags'] ?? ""),
+            (get_user($ticket['assignee'], $db)),
+            ($ticket['createdByUser'] ?? ""),
+            ($ticket['department'] ?? ""),
+            (get_faq((int) $ticket['faq'], $db) ?? new FAQ(0))
+        );
+    }
+
+    return $tickets;
+
+}
+
+
+function getTicketsCreatedBy(string $username, PDO $db, $limit, $offset, $sortOrder, $text): array
+{
+    $text = "%$text%";
+    $sql  = "SELECT * FROM Tickets WHERE createdByUser = :username AND status != 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $tickets = [];
+
+    foreach ($result as $ticket) {
+        $tickets[] = new Ticket(
+            $ticket['title'],
+            $ticket['description'],
+            (int) $ticket['createdAt'],
+            (int) $ticket['id'],
+            ($ticket['status'] ?? ""),
+            ($ticket['hashtags'] ?? ""),
+            (get_user($ticket['assignee'], $db)),
+            ($ticket['createdByUser'] ?? ""),
+            ($ticket['department'] ?? ""),
+            (get_faq((int) $ticket['faq'], $db) ?? new FAQ(0))
+        );
+    }
+
+    return $tickets;
+
+}
+
+
+function getAllTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
+{
+    $text = "%$text%";
+    $sql  = "SELECT * FROM tickets WHERE (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $tickets = [];
+
+    foreach ($result as $ticket) {
+        $tickets[] = new Ticket(
+            $ticket['title'],
+            $ticket['description'],
+            (int) $ticket['createdAt'],
+            (int) $ticket['id'],
+            ($ticket['status'] ?? ""),
+            ($ticket['hashtags'] ?? ""),
+            (get_user($ticket['assignee'], $db)),
+            ($ticket['createdByUser'] ?? ""),
+            ($ticket['department'] ?? ""),
+            (get_faq((int) $ticket['faq'], $db) ?? new FAQ(0))
+        );
+    }
+
+    return $tickets;
+
+}
+
+
+function getArchivedTickets(PDO $db, $limit, $offset, $sortOrder, $text): array
+{
+    $text = "%$text%";
+    $sql  = "SELECT * FROM tickets WHERE status = 'archived' AND (id LIKE :text OR title LIKE :text OR description LIKE :text) ORDER BY createdAt $sortOrder LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":text", $text, PDO::PARAM_STR);
+    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $tickets = [];
+
+    foreach ($result as $ticket) {
+        $tickets[] = new Ticket(
+            $ticket['title'],
+            $ticket['description'],
+            (int) $ticket['createdAt'],
+            (int) $ticket['id'],
+            ($ticket['status'] ?? ""),
+            ($ticket['hashtags'] ?? ""),
+            (get_user($ticket['assignee'], $db)),
+            ($ticket['createdByUser'] ?? ""),
+            ($ticket['department'] ?? ""),
+            (get_faq((int) $ticket['faq'], $db) ?? new FAQ(0))
+        );
+    }
+
+    return $tickets;
 
 }
 

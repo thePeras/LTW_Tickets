@@ -95,8 +95,14 @@ function user_already_exists(string $username, PDO $db) : bool
 }
 
 
-function get_user(string $username, PDO $db) : ?Client
+function get_user(?string $username, PDO $db) : ?Client
 {
+    if ($username === null || $username === "null") {
+        $client       = new Client("null", "", "", "Deleted user");
+        $client->type = "client";
+        return $client;
+    }
+
     $sql  = "SELECT * FROM Clients WHERE username = :username";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -336,33 +342,13 @@ function get_admins(int $limit, int $offset, PDO $db) : array
 
 function delete_client(string $username, PDO $db) : bool
 {
-    //TODO: handle all other cases where an client might have an interaction and therefore it
-    //might not be succesful when deleting...
-    $sql  = "DELETE FROM Sessions WHERE user=:username";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(":username", $username);
-
-    $stmt->execute();
-
-    $sql  = "DELETE FROM Admins WHERE username=:username";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(":username", $username);
-
-    $stmt->execute();
-
-    $sql  = "DELETE FROM Agents WHERE username=:username";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(":username", $username);
-
-    $stmt->execute();
-
     $sql  = "DELETE FROM Clients WHERE username=:username";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(":username", $username);
 
     $stmt->execute();
 
-    return $stmt->rowCount() === 1;
+    return $stmt->rowCount() >= 1;
 
 }
 

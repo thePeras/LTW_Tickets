@@ -147,7 +147,7 @@ $tab    = ($_GET["tab"] ?? "users");
             <script src="/js/department.js"></script>
 
             <div class="department-buttons">
-                <button onclick="makeAddDepartmentModal()" class="add-new">Add new...</button>
+                <button onclick="makeAddDepartmentModal()" class="primary">Add new department</button>
             </div>
             <?php drawDepartmentTable($departments);
         endif;?>

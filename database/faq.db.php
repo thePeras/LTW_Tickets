@@ -7,14 +7,14 @@ class FAQ
 
     public int $id;
 
-    public string $createdByUser;
+    public ?string $createdByUser;
 
     public string $title;
 
     public string $content;
 
 
-    public function __construct(int $_id, ?string $_createdByUser="",
+    public function __construct(int $_id, ?string $_createdByUser=null,
         ?string $_title="", ?string $_content=""
     ) {
         $this->id            = $_id;

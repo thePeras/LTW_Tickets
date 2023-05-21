@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <div class="left">
-
+            <img src="assets/images/reset_illustration.svg" alt="illustration">
         </div>
         <div class="right">
             <h1>Reset Password</h1>
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" id="confirmPassword" name="confirmPassword" required>
 
                 <br>
-                <input type="submit" value="Reset" name="submitButton">
+                <input type="submit" class="primary" value="Reset" name="submitButton">
             </form>
         </div>
     </div>

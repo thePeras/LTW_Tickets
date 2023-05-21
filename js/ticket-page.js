@@ -75,9 +75,8 @@ async function makeUserAssignModal(usertype) {
                     <span>${user.displayName}</span>
                 `;
                 suggestion.addEventListener("click", () => {
-                    // Creating a form and submit it
-                    console.log("clicked");
                     const form = document.createElement("form");
+                    form.display = "none";
                     form.method = "POST";
                     form.display = "none";
                     const ticketId = document.querySelector("#ticketId").value;
@@ -189,8 +188,8 @@ async function makeDepartmentAssignModal(usertype) {
                 `;
                 // Assign an department to a ticket
                 suggestion.addEventListener("click", () => {
-                    console.log("clicked")
                     const form = document.createElement("form");
+                    form.display = "none";
                     form.method = "POST";
                     form.display = "none";
                     const ticketId = document.querySelector("#ticketId").value;
@@ -300,8 +299,8 @@ async function makeFaqModal(usertype) {
                 `;
                 // Assign an department to a ticket
                 suggestion.addEventListener("click", () => {
-                    console.log("clicked")
                     const form = document.createElement("form");
+                    form.display = "none";
                     form.method = "POST";
                     form.display = "none";
                     const ticketId = document.querySelector("#ticketId").value;
