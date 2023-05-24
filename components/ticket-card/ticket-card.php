@@ -33,7 +33,7 @@ function ticketCard(Ticket $ticket)
                         background-color: <?php echo htmlspecialchars($statusBackgroundColor)?>;">
                         <?php echo htmlspecialchars($status)?>
                     </span>
-                    <?php echo htmlspecialchars($tags)?>
+                    <?php echo $tags?>
                 </div>
                 <!---
                 <comments>
