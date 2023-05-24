@@ -98,7 +98,7 @@ $faqs = get_FAQs($limit, $offset, $db);
                 <?php endforeach;?>
                 <div class="created-by">
                     <p>By:</p>
-                    <img class="avatar" src="/<?php echo htmlspecialchars($user->image)?>" alt="user">
+                    <img class="avatar" src="<?php echo htmlspecialchars($user->image)?>" alt="user">
                     <p class="display-name"><?php echo htmlspecialchars($user->displayName)?></p>
                 </div>
             </div>
